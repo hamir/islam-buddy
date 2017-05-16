@@ -2,7 +2,7 @@
 
 Islam Buddy allows you to quickly and conveniently find local Prayer Times and masjid Iqama times.
 
-### Setup
+## Setup ##
 
 Load the virtual environment
 ```
@@ -15,7 +15,7 @@ $ export FLASK_APP=main.py
 $ flask run
 ```
 
-### Directories
+## Directories ##
 
 /server - Flask server that serves prayer and iqama times
 

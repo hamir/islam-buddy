@@ -15,7 +15,7 @@ $ export FLASK_APP=main.py
 $ flask run
 ```
 
-## Directories ##
+### Directories
 
 /server - Flask server that serves prayer and iqama times
 

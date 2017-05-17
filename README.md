@@ -11,7 +11,7 @@ $ . venv/bin/activate
 
 Run the server (inside /server)
 ```
-$ export FLASK_APP=main.py
+$ export FLASK_APP=api.py
 $ flask run
 ```
 

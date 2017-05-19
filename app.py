@@ -2,11 +2,11 @@
 from flask import Flask
 from flask import request
 from flask import make_response
-#from salah.daily_prayer import DailyPrayer
+from salah.daily_prayer import DailyPrayer
 
 
 app = Flask(__name__)
-#daily_prayer = DailyPrayer()
+daily_prayer = DailyPrayer()
 
 
 @app.route('/')
@@ -34,8 +34,8 @@ def get_salah():
   if not params.has_key('lat') or not params.has_key('lng'):
     return 'Please provide a lat and lng.'
 
-  #prayer_times = \
-    #daily_prayer.GetPrayerTimes(params.get('lat'), params.get('lng'))
+  prayer_times = \
+    daily_prayer.GetPrayerTimes(params.get('lat'), params.get('lng'))
 
 
   r = make_response(json.dumps(prayer_times, indent=4))
@@ -43,8 +43,4 @@ def get_salah():
   return r
 
 if __name__ == "__main__":
-  port = int(os.getenv('PORT', 5000))
-
-  print("Starting app on port %d" % port)
-
-  app.run(debug=False, port=port, host='0.0.0.0')
+  app.run()

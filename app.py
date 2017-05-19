@@ -1,13 +1,12 @@
 #!/usr/bin/env python
-import json
 from flask import Flask
 from flask import request
 from flask import make_response
-from salah.daily_prayer import DailyPrayer
+#from salah.daily_prayer import DailyPrayer
 
 
 app = Flask(__name__)
-daily_prayer = DailyPrayer()
+#daily_prayer = DailyPrayer()
 
 
 @app.route('/')
@@ -35,8 +34,8 @@ def get_salah():
   if not params.has_key('lat') or not params.has_key('lng'):
     return 'Please provide a lat and lng.'
 
-  prayer_times = \
-    daily_prayer.GetPrayerTimes(params.get('lat'), params.get('lng'))
+  #prayer_times = \
+    #daily_prayer.GetPrayerTimes(params.get('lat'), params.get('lng'))
 
 
   r = make_response(json.dumps(prayer_times, indent=4))

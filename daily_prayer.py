@@ -17,6 +17,7 @@ class PrayerInfo(object):
         prayer times
     """
     prayer_times = salah_com_fetcher.GetDailyPrayerTimes(lat, lng)
+    print '[GetPrayerTimes] salah.com scrape result = ', prayer_times
     result = {}
 
     for key in prayer_times:

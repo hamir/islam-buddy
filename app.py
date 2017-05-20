@@ -45,7 +45,7 @@ def get_salah():
   #  daily_prayer.GetPrayerTimes(params.get('lat'), params.get('lng'))
   prayer_times = \
      daily_prayer.GetPrayerTimes(37.3541079,-121.9552355)
-  prayer_time = {"speech": "The time for " + prayer + " is " + prayer_times.get(prayer)} 
+  prayer_time = {"speech": "The time for " + prayer + " is " + prayer_times.get(prayer) + "."} 
   
   return util.json_response(prayer_time)
 

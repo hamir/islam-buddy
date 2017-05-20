@@ -23,6 +23,7 @@ def get_salah():
     params = {
       'lat': request.args.get('lat'),
       'lng': request.args.get('lng'),
+      'prayer': request.args.get('prayer'),
     }
     print 'params = ', params
   elif request.method == 'POST':
@@ -30,20 +31,22 @@ def get_salah():
     print params
     print '============================'
     print 'params = ', params
-    location = params.get('location')
-    print 'location = ', location
-    print 'lat = ', params.get('location').get('latitude')
-    print 'lng = ', params.get('location').get('longitude')
+    prayer = params.get("result").get("parameters").get("prayer-name")
+    #location = params.get('location')
+    #print 'location = ', location
+    #print 'lat = ', params.get('location').get('latitude')
+    #print 'lng = ', params.get('location').get('longitude')
 
-  if not params.get('lat') or not params.get('lng'):
-    return util.json_error('Please provide a lat and lng.')
+  #if not params.get('lat') or not params.get('lng'):
+  #  return util.json_error('Please provide a lat and lng.')
 
+  #prayer_times = \
+  #  daily_prayer.GetPrayerTimes(params.get('lat'), params.get('lng'))
   prayer_times = \
-    daily_prayer.GetPrayerTimes(params.get('lat'), params.get('lng'))
-
-  print 'prayer times = ', prayer_times
-
-  return util.json_response(prayer_times)
+     daily_prayer.GetPrayerTimes(37.3541079,-121.9552355)
+  prayer_time = {"speech": "The time for " + prayer + " is " + prayer_times.get(prayer)} 
+  
+  return util.json_response(prayer_time)
 
 
 if __name__ == "__main__":

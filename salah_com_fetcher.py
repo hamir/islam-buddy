@@ -16,7 +16,7 @@ The 'salah.com' API provides a response in the following format:
 }
 The depth of the useful information (prayer times) is at level 4
 '''
-_PRAYER_TIMES_RESPONSE_DEPTH = 4
+_PRAYER_TIMES_RESPONSE_DEPTH = 3
 
 
 def GetDailyPrayerTimes(lat, lng):
@@ -38,7 +38,7 @@ def GetDailyPrayerTimes(lat, lng):
     'lg': lng,
   }
   request = requests.post(_SALAH_API_URL, data=post_data)
-  response = json.loads(request.text)
+  response = json.loads(request.text).get("Prayers")
   print 'response from salah.com API', response
   # dig into the response until we find the prayer times
   for i in range(_PRAYER_TIMES_RESPONSE_DEPTH):

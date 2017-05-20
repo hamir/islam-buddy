@@ -61,9 +61,6 @@ _KEY_NAME_TO_PRAYER = {
 def GetPrayerKeyName(daily_prayer):
   """Gets the name of a daily prayer (ex: "fajr")."""
   print daily_prayer
-  print _PRAYER_METADATA
-  print _PRAYER_METADATA.get(daily_prayer)
-  print _PRAYER_METADATA.get(daily_prayer).get('key_name')
   return _PRAYER_METADATA.get(daily_prayer).get('key_name')
 
 def StringToDailyPrayer(prayer_str):

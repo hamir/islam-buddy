@@ -29,3 +29,4 @@ class PrayerInfo(object):
 
     print "[exit][GetPrayerTimes]"
     return result
+

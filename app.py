@@ -4,19 +4,19 @@ import pprint
 
 from flask import Flask
 from flask import request
-#from daily_prayer import DailyPrayer
+from daily_prayer import DailyPrayer
 import util
 
 
 app = Flask(__name__)
-#daily_prayer = DailyPrayer()
+daily_prayer = DailyPrayer()
 
 
 @app.route('/')
 def hello_world():
   return 'Welcome to the Islam Buddy API!'
 
-"""
+
 @app.route('/salah', methods=['POST', 'GET'])
 def get_salah():
   if request.method == 'GET':
@@ -45,7 +45,6 @@ def get_salah():
   print 'prayer times = ', prayer_times
 
   return util.json_response(prayer_times)
-"""
 
 
 if __name__ == '__main__':

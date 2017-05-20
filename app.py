@@ -29,28 +29,27 @@ def get_salah():
       'prayer': request.args.get('prayer'),
     }
     print 'params = ', params
+
+    if not params.get('lat') or not params.get('lng'):
+      return util.json_error('Please provide a lat and lng.')
+
+    prayer_times = \
+      daily_prayer.GetPrayerTimes(params.get('lat'), params.get('lng'))
+
+    return util.json_response(daily_prayer.GetPrayerTimes())
   elif request.method == 'POST':
     print 'received POST request'
     params = request.get_json(silent=True, force=True)
-    print params
-    print '============================'
     print 'params = ', params
-    prayer = params.get("result").get("parameters").get("prayer-name")
-
+    prayer = params.get("result").get("parameters").get("PrayerName")
+    print 'prayer = ', prayer
     #location = params.get('location')
     #print 'location = ', location
     #print 'lat = ', params.get('location').get('latitude')
     #print 'lng = ', params.get('location').get('longitude')
-
-  #if not params.get('lat') or not params.get('lng'):
-  #  return util.json_error('Please provide a lat and lng.')
-
-  #prayer_times = \
-  #  daily_prayer.GetPrayerTimes(params.get('lat'), params.get('lng'))
-
-  prayer_times = daily_prayer.GetPrayerTimes(37.3541079,-121.9552355)
-  prayer_time = {"speech": "The time for " + prayer  + " is  " + prayer_times.get(prayer)}
-  return util.json_response(prayer_time)
+    prayer_times = daily_prayer.GetPrayerTimes(37.3541079,-121.9552355)
+    prayer_time = {"speech": "The time for " + prayer  + " is  " + prayer_times.get(prayer)}
+    return util.json_response(prayer_time)
 
 
 if __name__ == '__main__':

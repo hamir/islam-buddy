@@ -1,0 +1,33 @@
+{"result":  {
+    "fulfillment": {
+        "speech": "", 
+        "messages": [
+            {"type": 0, "speech": ""}
+        ]}, 
+        "speech": "", 
+        "actionIncomplete": false, 
+        "source": "agent", 
+        "score": 1.0, 
+        "metadata": {
+            "intentName": "When is $PrayerName?", 
+            "webhookUsed": "true", 
+            "intentId": "b0e1f8dc-1b44-42cb-b7d7-9c595a6bd3e6", 
+            "webhookForSlotFillingUsed": "true"
+        }, 
+        "action": "", 
+        "parameters": {
+            "PrayerName": "Fajr"
+        }, 
+        "resolvedQuery": "when is fajr", 
+        "contexts": []
+    }, 
+    "sessionId": "86c6ace1-5305-4b36-ba11-51f49b42d68d", 
+    "id": "4c3ba631-6707-4720-805d-e401be55e946", 
+    "lang": "en", 
+    "timestamp": "2017-05-20T10:42:16.944Z", 
+    "status": {
+        "errorType": "success", 
+        "code": 200
+    }
+}
+

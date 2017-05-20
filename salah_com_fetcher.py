@@ -42,7 +42,6 @@ def GetDailyPrayerTimes(lat, lng):
   print 'response from salah.com API', response
   # dig into the response until we find the prayer times
   for i in range(_PRAYER_TIMES_RESPONSE_DEPTH):
-    print 'at layer ', i, 'response is', response
     response = response.itervalues().next()
   return response
 

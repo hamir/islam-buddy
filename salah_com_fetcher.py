@@ -43,3 +43,4 @@ def GetDailyPrayerTimes(lat, lng):
   for i in range(_PRAYER_TIMES_RESPONSE_DEPTH):
     response = response.itervalues().next()
   return response
+

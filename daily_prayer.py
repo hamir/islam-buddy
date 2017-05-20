@@ -1,9 +1,10 @@
 """Computes daily salah times based on location."""
 
 import salah_com_fetcher
+import util
 
 
-class DailyPrayer(object):
+class PrayerInfo(object):
 
   def GetPrayerTimes(self, lat, lng):
     """Gets the daily prayer times for a given lat/lng.
@@ -12,6 +13,15 @@ class DailyPrayer(object):
       lat: a double representing the latitude
       lng: a double representing the longitude
 
-    Returns: a dict containing of daily prayer times
+    Returns: a dict containing (DailyPrayer -> string) of daily 
+        prayer times
     """
-    return salah_com_fetcher.GetDailyPrayerTimes(lat, lng)
+    prayer_times = salah_com_fetcher.GetDailyPrayerTimes(lat, lng)
+    result = {}
+
+    for key in prayer_times:
+      result[util.StringToDailyPrayer(key)] = prayer_times[key]
+
+    print '[GetPrayerTimes] prayer times = ', result 
+
+    return result

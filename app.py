@@ -1,11 +1,9 @@
 #!/usr/bin/env python
-import os
-import pprint
-
+import json
 from flask import Flask
 from flask import request
+from flask import make_response
 from daily_prayer import DailyPrayer
-import util
 
 
 app = Flask(__name__)
@@ -28,7 +26,7 @@ def get_salah():
     }
     print 'params = ', params
   elif request.method == 'POST':
-    params = request.get_json()
+    params = request.get_json(silent=True, force=True)
     print params
     print '============================'
     print 'params = ', params
@@ -43,17 +41,11 @@ def get_salah():
 
   #prayer_times = \
   #  daily_prayer.GetPrayerTimes(params.get('lat'), params.get('lng'))
-  prayer_times = \
-     daily_prayer.GetPrayerTimes(37.3541079,-121.9552355)
-  prayer_time = {"speech": "The time for " + prayer + " is " + prayer_times.get(prayer)} 
-  
-  return util.json_response(prayer_time)
+  prayer_times = daily_prayer.GetPrayerTimes(37.3541079,-121.9552355)
+  prayer_time = {"speech": "The time for " + prayer  + " is  " + prayer_times.get(prayer)}
+  r = make_response(json.dumps(prayer_time, indent=4))
+  r.headers['Content-Type'] = 'application/json'
+  return r
 
-
-if __name__ == '__main__':
-    port = int(os.getenv('PORT', 5000))
-
-    print("Starting app on port %d" % port)
-
-    app.run(debug=False, port=port, host='0.0.0.0')
-
+if __name__ == "__main__":
+  app.run()

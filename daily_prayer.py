@@ -16,6 +16,8 @@ class PrayerInfo(object):
     Returns: a dict containing (DailyPrayer -> string) of daily 
         prayer times
     """
+    print "[enter][GetPrayerTimes]"
+
     prayer_times = salah_com_fetcher.GetDailyPrayerTimes(lat, lng)
     print '[GetPrayerTimes] salah.com scrape result = ', prayer_times
     result = {}
@@ -25,4 +27,5 @@ class PrayerInfo(object):
 
     print '[GetPrayerTimes] prayer times = ', result 
 
+    print "[exit][GetPrayerTimes]"
     return result

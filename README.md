@@ -4,19 +4,17 @@ Islam Buddy allows you to quickly and conveniently find local Prayer Times and m
 
 ## Setup ##
 
-Load the virtual environment
+Install the required packages.
 ```
-$ . venv/bin/activate
+$ pip install -r requirements.txt
 ```
 
 Run the server (inside /server)
 ```
-$ export FLASK_APP=api.py
-$ flask run
+$ ./run_server
 ```
 
-## Directories ##
-
-/server - Flask server that serves prayer and iqama times
-
-/venv - this will be the shared virtual environment that the server will run on (this allows us to all have the same environment when testing locally and for deployments)
+To make a sample request, try:
+```
+$ ./run_query
+```

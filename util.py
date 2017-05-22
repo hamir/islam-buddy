@@ -65,8 +65,5 @@ def GetPrayerKeyName(daily_prayer):
 def StringToDailyPrayer(prayer_str):
   """Infers a DailyPrayer out of a string."""
   prayer_str = str(prayer_str).lower()
-  if prayer_str in _KEY_NAME_TO_PRAYER:
-    return _KEY_NAME_TO_PRAYER[prayer_str]
-  else:
-    return DailyPrayer.UNSPECIFIED
+  return _KEY_NAME_TO_PRAYER[prayer_str]
 

@@ -54,7 +54,9 @@ def GetSalah():
     if (post_params.get('result').get('metadata').get('intentName') 
         == 'prayer-times' and 'location' not in device_params):
       print 'Could not find location in request, so responding with a permission request.'
-      server_response = response_builder.RequestLocationPermission();
+      server_response = {
+        'data': response_builder.RequestLocationPermission(),
+      }
 
     else:
       contexts_index = \
@@ -96,12 +98,16 @@ def GetSalah():
                 prayer_params.get('lat'),
                 prayer_params.get('lng'))
 
-        prayer_time = all_prayer_times.get(util.StringToDailyPrayer(prayer_params.get('prayer')))
+        prayer_time = \
+            all_prayer_times.get(util.StringToDailyPrayer(prayer_params.get('prayer')))
         print 'prayer_times[', prayer_params.get('prayer'), "] = ", prayer_time
 
         # this also needs to be less hacky - @hamir maybe a json response formater class?
         speech = "The time for %s is %s." % (prayer_params.get('prayer'), prayer_time)
-        server_response = {"speech": speech}
+        server_response = {
+            "speech": speech,
+            "data": response_builder.RequestLocationPermission()
+        }
 
     print 'server response = ', server_response
     return util.JsonResponse(server_response)

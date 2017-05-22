@@ -103,7 +103,7 @@ def GetSalah():
         speech = "The time for %s is %s." % (prayer_params.get('prayer'), prayer_time)
         server_response = {"speech": speech}
 
-    print 'server response = ', json.load(server_response)
+    print 'server response = ', server_response
     return util.JsonResponse(server_response)
 
 if __name__ == '__main__':

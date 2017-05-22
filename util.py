@@ -48,6 +48,7 @@ _PRAYER_METADATA = {
   },
 }
 
+
 _KEY_NAME_TO_PRAYER = {
   'fajr': DailyPrayer.FAJR,
   'dhuhr': DailyPrayer.DHUHR,
@@ -58,15 +59,27 @@ _KEY_NAME_TO_PRAYER = {
   'unspecified': DailyPrayer.UNSPECIFIED,
 }
 
+
 def GetPrayerKeyName(daily_prayer):
   """Gets the name of a daily prayer (ex: "fajr")."""
   return _PRAYER_METADATA.get(daily_prayer).get('key_name')
 
+
+def _StringToEnum(str_value, str_to_enum, default):
+  """Converts a string to an enum based on provided dict."""
+  str_value = str(str_value).lower()
+  if str_value in str_to_enum:
+    return str_to_enum[str_value]
+  else:
+    return default
+
+
 def StringToDailyPrayer(prayer_str):
   """Infers a DailyPrayer out of a string."""
-  prayer_str = str(prayer_str).lower()
-  if prayer_str in _KEY_NAME_TO_PRAYER:
-    return _KEY_NAME_TO_PRAYER[prayer_str]
-  else:
-    return DailyPrayer.UNSPECIFIED
+  return _StringToEnum(prayer_str, _KEY_NAME_TO_PRAYER, DailyPrayer.UNSPECIFIED)
+
+
+def StringToIntent(intent_str):
+  """Infers an Intent out of a string."""
+  return _StringToEnum(prayer_str, _KEY_NAME_TO_PRAYER, DailyPrayer.UNSPECIFIED)
 

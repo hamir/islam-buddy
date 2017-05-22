@@ -7,3 +7,8 @@ class DailyPrayer(object):
   ISHA = 5;
   QIYAM = 6;
 
+class Intent(object):
+  UNSPECIFIED = 0
+  WHEN_IS_PRAYER = 1
+  WHEN_IS_PRAYER_NAME = 2
+

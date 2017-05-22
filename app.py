@@ -41,6 +41,7 @@ def GetSalah():
       output_prayer_times[util.GetPrayerKeyName(key)] = prayer_times[key]
 
     return util.JsonResponse(output_prayer_times)
+
   elif request.method == 'POST':
     print 'received POST request'
     params = request.get_json(silent=True, force=True)

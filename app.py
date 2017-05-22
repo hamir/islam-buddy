@@ -7,6 +7,7 @@ from flask import Flask, request, make_response
 from daily_prayer import PrayerInfo
 import util
 from common import DailyPrayer
+import response_builder 
 
 
 app = Flask(__name__)
@@ -43,27 +44,18 @@ def GetSalah():
     return util.JsonResponse(output_prayer_times)
   elif request.method == 'POST':
     print 'received POST request'
+
     post_params = request.get_json(silent=True, force=True)
+    print 'post_params = ', pprint.pprint(post_params)
+
     device_params = post_params.get('originalRequest').get('data').get('device')
     # this needs to be less hacky - @hamdy maybe a request extractor class?
     # we need a request extractor class
     if (post_params.get('result').get('metadata').get('intentName') 
         == 'prayer-times' and 'location' not in device_params):
-      server_response = {
-        "data":{
-          "google":{
-            "expectUserResponse": 1,
-            "systemIntent": {
-              "intent":"actions.intent.PERMISSION",
-              "data":{
-                "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
-                "optContext":"To get you accurate timings",
-                "permissions":["DEVICE_PRECISE_LOCATION"]
-              }
-            }
-          }
-        }
-      }
+      print 'Could not find location in request, so reponding with a permission request.'
+      server_response = response_builder.RequestLocationPermission();
+
     else:
       contexts_index = \
           next(
@@ -111,6 +103,7 @@ def GetSalah():
         speech = "The time for %s is %s." % (prayer_params.get('prayer'), prayer_time)
         server_response = {"speech": speech}
 
+    print 'server response = ', json.load(server_response)
     return util.JsonResponse(server_response)
 
 if __name__ == '__main__':

@@ -47,27 +47,70 @@ def GetSalah():
     device_params = post_params.get('originalRequest').get('data').get('device')
     # this needs to be less hacky - @hamdy maybe a request extractor class?
     # we need a request extractor class
-    if post_params.get('result').get('metadata').get('intentName') == 'prayer-times' and 'location' not in device_params:
-      server_response = {"data":{"google":{"expectUserResponse": 1,"systemIntent": {"intent":"actions.intent.PERMISSION","data":{"@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec","optContext":"To get you accurate timings","permissions":["DEVICE_PRECISE_LOCATION"]}}}}}
+    if (post_params.get('result').get('metadata').get('intentName') 
+        == 'prayer-times' and 'location' not in device_params):
+      server_response = {
+        "data":{
+          "google":{
+            "expectUserResponse": 1,
+            "systemIntent": {
+              "intent":"actions.intent.PERMISSION",
+              "data":{
+                "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
+                "optContext":"To get you accurate timings",
+                "permissions":["DEVICE_PRECISE_LOCATION"]
+              }
+            }
+          }
+        }
+      }
     else:
-      contexts_index = next(index for (index, d) in enumerate(post_params.get('result').get('contexts')) if d["name"] == "request_permission")
+      contexts_index = \
+          next(
+            index for (index, d) in \
+                enumerate(post_params.get('result').get('contexts')) \
+                if d["name"] == "request_permission"
+          )
       try:
         contexts_index
       except NameError:
         print "Cannot fine request_permission in result.contexts in post parameters."
       else:
         prayer_params = {
-         'prayer': post_params.get('result').get('contexts')[contexts_index].get('parameters').get('PrayerName'),
-         'lat': post_params.get('originalRequest').get('data').get('device').get('location').get('coordinates').get('latitude'),
-         'lng': post_params.get('originalRequest').get('data').get('device').get('location').get('coordinates').get('longitude'),
+         'prayer': \
+             post_params.get('result') \
+                 .get('contexts')[contexts_index] \
+                 .get('parameters') \
+                 .get('PrayerName'),
+         'lat': \
+             post_params.get('originalRequest') \
+                 .get('data') \
+                 .get('device') \
+                 .get('location') \
+                 .get('coordinates') \
+                 .get('latitude'),
+         'lng': \
+             post_params \
+                .get('originalRequest') \
+                .get('data') \
+                .get('device') \
+                .get('location') \
+                .get('coordinates') \
+                .get('longitude'),
         }
-        all_prayer_times = prayer_info.GetPrayerTimes(prayer_params.get('lat'),prayer_params.get('lng'))
-        #prayer_times = prayer_info.GetPrayerTimes(37.3541079,-121.9552355)
+
+        all_prayer_times = \
+            prayer_info.GetPrayerTimes(
+                prayer_params.get('lat'),
+                prayer_params.get('lng'))
+
         prayer_time = all_prayer_times.get(util.StringToDailyPrayer(prayer_params.get('prayer')))
         print 'prayer_times[', prayer_params.get('prayer'), "] = ", prayer_time
+
         # this also needs to be less hacky - @hamir maybe a json response formater class?
         speech = "The time for %s is %s." % (prayer_params.get('prayer'), prayer_time)
         server_response = {"speech": speech}
+
     return util.JsonResponse(server_response)
 
 if __name__ == '__main__':

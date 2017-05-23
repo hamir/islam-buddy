@@ -51,6 +51,7 @@ def GetSalah():
     device_params = post_params.get('originalRequest').get('data').get('device')
     # this needs to be less hacky - @hamdy maybe a request extractor class?
     # we need a request extractor class
+    print 'intent_name = ', post_params.get('result').get('metadata').get('intentName') 
     if (post_params.get('result').get('metadata').get('intentName') 
         == 'WHEN_IS_START_TIME_INTENT' and 'location' not in device_params):
       print 'Could not find location in request, so responding with a permission request.'

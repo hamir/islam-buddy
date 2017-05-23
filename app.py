@@ -58,6 +58,7 @@ def GetSalah():
       server_response = {
         'data': response_builder.RequestLocationPermission(),
       }
+      print 'server_response = ', server_response
 
     else:
       print 'trying to get contexts index'
@@ -108,7 +109,6 @@ def GetSalah():
         speech = "The time for %s is %s." % (prayer_params.get('prayer'), prayer_time)
         server_response = {
             "speech": speech,
-            "data": response_builder.RequestLocationPermission()
         }
 
     print 'server response = ', server_response

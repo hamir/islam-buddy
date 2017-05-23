@@ -5,8 +5,11 @@ from common import DailyPrayer
 
 def JsonResponse(response_dict):
   """Constructs a JSON response object."""
+  print 'JsonResponse'
   response = make_response(json.dumps(response_dict, indent=4))
+  print 'JsonResponse'
   response.headers['Content-Type'] = 'application/json'
+  print 'JsonResponse'
   return response
 
 
@@ -76,10 +79,9 @@ def _StringToEnum(str_value, str_to_enum, default):
 
 def StringToDailyPrayer(prayer_str):
   """Infers a DailyPrayer out of a string."""
-  return _StringToEnum(prayer_str, _KEY_NAME_TO_PRAYER, DailyPrayer.UNSPECIFIED)
-
-
-def StringToIntent(intent_str):
-  """Infers an Intent out of a string."""
-  return _StringToEnum(prayer_str, _KEY_NAME_TO_PRAYER, DailyPrayer.UNSPECIFIED)
+  prayer_str = str(prayer_str).lower()
+  if prayer_str in _KEY_NAME_TO_PRAYER:
+    return _KEY_NAME_TO_PRAYER[prayer_str]
+  else:
+    return ''
 

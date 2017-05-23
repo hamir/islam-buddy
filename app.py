@@ -4,9 +4,10 @@ import pprint
 import json
 
 from flask import Flask, request, make_response
-from daily_prayer import PrayerInfo 
+from daily_prayer import PrayerInfo
 import util
 from common import DailyPrayer
+import response_builder 
 
 
 app = Flask(__name__)
@@ -44,29 +45,72 @@ def GetSalah():
 
   elif request.method == 'POST':
     print 'received POST request'
-    params = request.get_json(silent=True, force=True)
 
+    post_params = request.get_json(silent=True, force=True)
+    print 'post_params = ', pprint.pprint(post_params)
+
+    device_params = post_params.get('originalRequest').get('data').get('device')
     # this needs to be less hacky - @hamdy maybe a request extractor class?
-    prayer = params.get("result").get("parameters").get("PrayerName")
-    print 'prayer = ', prayer
+    # we need a request extractor class
+    print 'intent_name = ', post_params.get('result').get('metadata').get('intentName') 
+    if (post_params.get('result').get('metadata').get('intentName') 
+        == 'WHEN_IS_START_TIME_INTENT' and 'location' not in device_params):
+      print 'Could not find location in request, so responding with a permission request.'
+      server_response = response_builder.RequestLocationPermission()
+    else:
+      print 'trying to get contexts index'
+      relevant_context = {}
+      for candidate in post_params.get('result').get('contexts'):
+        if 'requ' in candidate['name']:
+          relevant_context = candidate
+      
+      if relevant_context:
+        print 'relevant_context = ', relevant_context
+        prayer_params = {
+         'prayer': \
+             relevant_context.get('parameters').get('PrayerName'),
+         'lat': \
+             post_params.get('originalRequest') \
+                 .get('data') \
+                 .get('device') \
+                 .get('location') \
+                 .get('coordinates') \
+                 .get('latitude'),
+         'lng': \
+             post_params \
+                .get('originalRequest') \
+                .get('data') \
+                .get('device') \
+                .get('location') \
+                .get('coordinates') \
+                .get('longitude'),
+        }
 
-    #location = params.get('location')
-    #print 'location = ', location
-    #print 'lat = ', params.get('location').get('latitude')
-    #print 'lng = ', params.get('location').get('longitude')
+        all_prayer_times = \
+            prayer_info.GetPrayerTimes(
+                prayer_params.get('lat'),
+                prayer_params.get('lng'))
 
-    prayer_times = prayer_info.GetPrayerTimes(37.3541079,-121.9552355)
-    prayer_time = prayer_times.get(util.StringToDailyPrayer(prayer))
-    print 'prayer_times[', prayer, "] = ", prayer_time 
+        prayer_time = \
+            all_prayer_times.get(util.StringToDailyPrayer(prayer_params.get('prayer')))
+        print 'prayer_times[', prayer_params.get('prayer'), "] = ", prayer_time
 
-    speech = "The time for %s is %s." % (prayer, prayer_time)
-    return util.JsonResponse({"speech": speech})
+        # this also needs to be less hacky - @hamir maybe a json response formater class?
+        speech = "The time for %s is %s." % (prayer_params.get('prayer'), prayer_time)
+        server_response = {
+            "speech": speech,
+        }
+      else:
+        print 'Could not find relevant context..'
 
+    print 'server response = ', server_response
+    return util.JsonResponse(server_response)
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
 
     print("Starting app on port %d" % port)
 
-    app.run(debug=False, port=port, host='0.0.0.0')
-
+    # use this for heroku deployments.
+    #app.run(debug=False, port=port, host='0.0.0.0')
+    app.run()

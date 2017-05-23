@@ -46,7 +46,7 @@ def GetSalah():
     print 'received POST request'
 
     post_params = request.get_json(silent=True, force=True)
-    print 'post_params = ', pprint.pprint(post_params)
+    print 'post_params = \n', json.dumps(post_params, indent=2)
 
     device_params = post_params.get('originalRequest').get('data').get('device')
     # this needs to be less hacky - @hamdy maybe a request extractor class?

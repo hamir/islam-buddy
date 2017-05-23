@@ -112,9 +112,11 @@ def GetSalah():
     print 'server response = ', server_response
     return util.JsonResponse(server_response)
 
-@app.route('/auth', methods=['POST','GET'])
-def testEndpoint():
-    print 'auth'
+
+@app.route('/auth', methods=['GET'])
+def Authenticate():
+  return util.JsonResponse('auth')
+
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))

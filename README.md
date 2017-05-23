@@ -1,5 +1,5 @@
 # Islam Buddy #
-#messing arround#
+
 Islam Buddy allows you to quickly and conveniently find local Prayer Times and masjid Iqama times.
 
 ## Setup ##

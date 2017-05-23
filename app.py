@@ -4,7 +4,7 @@ import pprint
 import json
 
 from flask import Flask, request, make_response
-from daily_prayer import PrayerInfo 
+from prayer_info import PrayerInfo 
 import util
 from common import DailyPrayer
 

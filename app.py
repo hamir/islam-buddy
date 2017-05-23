@@ -55,30 +55,19 @@ def GetSalah():
     if (post_params.get('result').get('metadata').get('intentName') 
         == 'WHEN_IS_START_TIME_INTENT' and 'location' not in device_params):
       print 'Could not find location in request, so responding with a permission request.'
-      server_response = {
-        'data': response_builder.RequestLocationPermission(),
-      }
-      print 'server_response = ', server_response
-
+      server_response = response_builder.RequestLocationPermission()
     else:
       print 'trying to get contexts index'
-      contexts_index = \
-          next(
-            index for (index, d) in \
-                enumerate(post_params.get('result').get('contexts')) \
-                if d["name"] == "request_permission"
-          )
-      try:
-        contexts_index
-      except NameError:
-        print "Cannot fine request_permission in result.contexts in post parameters."
-      else:
+      relevant_context = {}
+      for candidate in post_params.get('result').get('contexts'):
+        if 'requ' in candidate['name']:
+          relevant_context = candidate
+      
+      if relevant_context:
+        print 'relevant_context = ', relevant_context
         prayer_params = {
          'prayer': \
-             post_params.get('result') \
-                 .get('contexts')[contexts_index] \
-                 .get('parameters') \
-                 .get('PrayerName'),
+             relevant_context.get('parameters').get('PrayerName'),
          'lat': \
              post_params.get('originalRequest') \
                  .get('data') \
@@ -110,6 +99,8 @@ def GetSalah():
         server_response = {
             "speech": speech,
         }
+      else:
+        print 'Could not find relevant context..'
 
     print 'server response = ', server_response
     return util.JsonResponse(server_response)
@@ -119,4 +110,6 @@ if __name__ == '__main__':
 
     print("Starting app on port %d" % port)
 
-    app.run(debug=False, port=port, host='0.0.0.0')
+    # use this for heroku deployments.
+    #app.run(debug=False, port=port, host='0.0.0.0')
+    app.run()

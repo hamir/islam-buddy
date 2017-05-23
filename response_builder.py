@@ -1,15 +1,17 @@
 """Helps build reponses in a format API.AI understands."""
 
 def RequestLocationPermission():
-  return { 
-    "google":{
-      "expectUserResponse": 1,
-      "systemIntent": {
-        "intent":"actions.intent.PERMISSION",
-        "data":{
-          "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
-          "optContext":"To get you accurate timings",
-          "permissions":["DEVICE_PRECISE_LOCATION"]
+  return {
+    "data": {
+      "google":{
+        "expectUserResponse": 1,
+        "systemIntent": {
+          "intent":"actions.intent.PERMISSION",
+          "data":{
+            "@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
+            "optContext":"To get you accurate timings",
+            "permissions":["DEVICE_PRECISE_LOCATION"]
+          }
         }
       }
     }

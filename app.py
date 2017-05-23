@@ -52,7 +52,7 @@ def GetSalah():
     # this needs to be less hacky - @hamdy maybe a request extractor class?
     # we need a request extractor class
     if (post_params.get('result').get('metadata').get('intentName') 
-        == 'prayer-times' and 'location' not in device_params):
+        == 'WHEN_IS_START_TIME_INTENT' and 'location' not in device_params):
       print 'Could not find location in request, so responding with a permission request.'
       server_response = {
         'data': response_builder.RequestLocationPermission(),

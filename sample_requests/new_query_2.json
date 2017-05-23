@@ -1,0 +1,125 @@
+{u'id': u'd5db3584-0b8a-4a49-a8b5-a190fce49740',
+01:27:31.423
+ u'lang': u'en',
+01:27:31.423
+ u'originalRequest': {u'data': {u'conversation': {u'conversationId': u'1495528043592',
+01:27:31.425
+                                                  u'conversationToken': u'["requ"]',
+01:27:31.426
+                                                  u'type': u'ACTIVE'},
+01:27:31.426
+                                u'device': {u'locale': u'en-US',
+01:27:31.426
+                                            u'location': {u'city': u'Mountain View',
+01:27:31.427
+                                                          u'coordinates': {u'latitude': 37.422365999999997,
+01:27:31.427
+                                                                           u'longitude': -122.084406
+01:27:31.429
+},
+01:27:31.429
+                                                          u'formattedAddress': u'1600 Amphitheatre Parkway, Mountain View, CA 94043, United States',
+01:27:31.429
+                                                          u'zipCode': u'94043'}},
+01:27:31.430
+                                u'inputs': [{u'arguments': [{u'name': u'PERMISSION',
+01:27:31.449
+                                                             u'rawText': u'yes',
+01:27:31.449
+                                                             u'textValue': u'true'}],
+01:27:31.449
+                                             u'intent': u'actions.intent.PERMISSION',
+01:27:31.449
+                                             u'rawInputs': [{u'inputType': u'VOICE',
+01:27:31.450
+                                                             u'query': u'yes'}]}],
+01:27:31.450
+                                u'isInSandbox': True,
+01:27:31.451
+                                u'surface': 
+01:27:31.453
+{u'capabilities': [{u'name': u'actions.capability.AUDIO_OUTPUT'}]},
+01:27:31.454
+                                u'user': {u'userId': u'S+KYJr/VGTE6qdR03QX6tA1vqMGM545A61cRbuCARsM='}},
+01:27:31.454
+                      u'source': u'google',
+01:27:31.454
+                      u'version': u'2'},
+01:27:31.454
+ u'result': {u'action': u'',
+01:27:31.455
+             u'actionIncomplete': False,
+01:27:31.455
+             u'contexts': [{u'lifespan': 4,
+01:27:31.455
+                            u'name': u'requ',
+01:27:31.455
+                            u'parameters': {u'PrayerName': 
+01:27:31.457
+u'Asr',
+01:27:31.457
+                                            u'PrayerName.original': u'asr',
+01:27:31.457
+                                            u'geo-city': [],
+01:27:31.457
+                                            u'geo-city.original': u'',
+01:27:31.457
+                                            u'geo-country': u'',
+01:27:31.458
+                                            u'geo-country.original': u'',
+01:27:31.458
+                                            u'geo-state-us': u'',
+01:27:31.458
+                                            u'geo-state-us.original': u''}},
+01:27:31.458
+                           {u'lifespan': 0,
+01:27:31.458
+                            u'name': u'actions_intent_permission',
+01:27:31.459
+                            u'parameters': {u'PERMISSION': u'true'}},
+01:27:31.459
+                           {u'lifespan': 0,
+01:27:31.459
+                            u'name': 
+01:27:31.460
+u'google_assistant_input_type_voice',
+01:27:31.461
+                            u'parameters': {}},
+01:27:31.461
+                           {u'lifespan': 0,
+01:27:31.461
+                            u'name': u'actions_capability_audio_output',
+01:27:31.461
+                            u'parameters': {}}],
+01:27:31.462
+             u'fulfillment': {u'messages': [{u'speech': u'', u'type': 0}],
+01:27:31.463
+                              u'speech': u''},
+01:27:31.463
+             u'metadata': {u'intentId': u'c3e4b7bd-65f9-4859-99d3-4ee0432ba996',
+01:27:31.463
+                           u'intentName': u'permission-intent',
+01:27:31.464
+                           u'nluResponseTime': 
+01:27:31.465
+1,
+01:27:31.465
+                           u'webhookForSlotFillingUsed': u'false',
+01:27:31.465
+                           u'webhookUsed': u'true'},
+01:27:31.465
+             u'parameters': {},
+01:27:31.465
+             u'resolvedQuery': u'actions_intent_PERMISSION',
+01:27:31.466
+             u'score': 1.0,
+01:27:31.466
+             u'source': u'agent',
+01:27:31.466
+             u'speech': u''},
+01:27:31.466
+ u'sessionId': u'1495528043592',
+01:27:31.466
+ u'status': {u'code': 200, u'errorType': u'success'},
+01:27:31.467
+ u'timestamp': u'2017-05-23T08:27:31.357Z'}

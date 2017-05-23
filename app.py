@@ -60,6 +60,7 @@ def GetSalah():
       }
 
     else:
+      print 'trying to get contexts index'
       contexts_index = \
           next(
             index for (index, d) in \

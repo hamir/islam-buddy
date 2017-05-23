@@ -3,7 +3,7 @@ import os
 import pprint
 import json
 
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, render_template
 from daily_prayer import PrayerInfo
 import util
 from common import DailyPrayer
@@ -116,6 +116,11 @@ def GetSalah():
 @app.route('/auth', methods=['GET'])
 def Authenticate():
   return util.JsonResponse('auth')
+
+
+@app.route('/privacy', methods=['GET'])
+def render_privacy():
+  return render_template('privacy.html')
 
 
 if __name__ == '__main__':

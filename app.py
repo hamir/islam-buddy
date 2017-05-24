@@ -2,22 +2,20 @@
 import os
 import pprint
 import json
+import util
 
 from flask import Flask, request, make_response
 from daily_prayer import PrayerInfo
-import util
 from common import DailyPrayer
 import response_builder 
-
+import gmaps_API
 
 app = Flask(__name__)
 prayer_info = PrayerInfo()
 
-
 @app.route('/')
 def hello_world():
   return 'Welcome to the Islam Buddy API!'
-
 
 @app.route('/salah', methods=['POST', 'GET'])
 def GetSalah():
@@ -53,11 +51,45 @@ def GetSalah():
     # this needs to be less hacky - @hamdy maybe a request extractor class?
     # we need a request extractor class
     print 'intent_name = ', post_params.get('result').get('metadata').get('intentName') 
-    if (post_params.get('result').get('metadata').get('intentName') 
-        == 'WHEN_IS_START_TIME_INTENT' and 'location' not in device_params):
+    
+    post_intent_name = post_params.get('result').get('metadata').get('intentName')
+    post_prayer = post_params.get('result').get('parameters').get('PrayerName')
+    post_geo_city = (post_params.get('result').get('parameters').get('geo-city'))
+
+    if (post_intent_name == 'WHEN_IS_START_TIME_INTENT' 
+        and 'location' not in device_params
+        and not post_geo_city):
       print 'Could not find location in request, so responding with a permission request.'
       server_response = response_builder.RequestLocationPermission()
-    else:
+    elif (post_geo_city and 'location' not in device_params):
+      post_geo_city = ' '.join(post_geo_city).encode('utf-8')
+      post_geo_country = ' '.join(post_params.get('result').get('parameters')\
+        .get('geo-country')).encode('utf-8')
+      post_geo_state_us = ' '.join(post_params.get('result').get('parameters')\
+        .get('geo-state-us')).encode('utf-8')
+      print 'city:', post_geo_city
+      print 'country:', post_geo_country
+      print 'state:', post_geo_state_us
+      location_coordinates = gmaps_API.GetGeocode(
+          post_geo_city,
+          post_geo_country,
+          post_geo_state_us) 
+
+      all_prayer_times = \
+          prayer_info.GetPrayerTimes(
+              location_coordinates.get('lat'),
+              location_coordinates.get('lng'))
+
+      prayer_time = \
+         all_prayer_times.get(util.StringToDailyPrayer(post_prayer))
+      print 'prayer_times[', post_prayer, "] = ", prayer_time
+      speech = "The time for %s is %s in %s." % \
+          (post_prayer, prayer_time,post_geo_city)
+      server_response = {
+          "speech": speech,
+      }
+
+    elif ('location' in device_params):
       print 'trying to get contexts index'
       relevant_context = {}
       for candidate in post_params.get('result').get('contexts'):
@@ -84,6 +116,13 @@ def GetSalah():
                 .get('location') \
                 .get('coordinates') \
                 .get('longitude'),
+        'city': \
+             post_params \
+                .get('originalRequest') \
+                .get('data') \
+                .get('device') \
+                .get('location') \
+                .get('city'),
         }
 
         all_prayer_times = \
@@ -96,20 +135,26 @@ def GetSalah():
         print 'prayer_times[', prayer_params.get('prayer'), "] = ", prayer_time
 
         # this also needs to be less hacky - @hamir maybe a json response formater class?
-        speech = "The time for %s is %s." % (prayer_params.get('prayer'), prayer_time)
+        speech = "The time for %s is %s in %s." % \
+            (prayer_params.get('prayer'), prayer_time,prayer_params.get('city'))
         server_response = {
             "speech": speech,
         }
       else:
         print 'Could not find relevant context..'
+    else:
+      server_response = {
+          "speech": "Sorry, Prayer Pal cannot process this request." \
+          " Please try again later.",
+      }
 
     print 'server response = ', server_response
     return util.JsonResponse(server_response)
 
 if __name__ == '__main__':
-    port = int(os.getenv('PORT', 5000))
+    #port = int(os.getenv('PORT', 5000))
 
-    print("Starting app on port %d" % port)
+    #print("Starting app on port %d" % port)
 
     # use this for heroku deployments.
     #app.run(debug=False, port=port, host='0.0.0.0')

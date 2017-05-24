@@ -6,14 +6,17 @@ import util
 from flask import Flask, request, make_response, render_template, redirect
 from flask_assistant import Assistant, tell
 from oauth2.tokengenerator import URandomTokenGenerator
+
 from daily_prayer import PrayerInfo
 from common import DailyPrayer
 import response_builder 
 import gmaps_API
+from start_time_intent_handler import StartTimeIntentHandler
 
 app = Flask(__name__)
 prayer_info = PrayerInfo()
 token_generator = URandomTokenGenerator(20)
+start_time_handler = StartTimeIntentHandler()
 
 @app.route('/')
 def hello_world():
@@ -50,104 +53,15 @@ def GetSalah():
     print 'post_params = \n', json.dumps(post_params, indent=2)
 
     device_params = post_params.get('originalRequest').get('data').get('device')
-    # this needs to be less hacky - @hamdy maybe a request extractor class?
-    # we need a request extractor class
-    print 'intent_name = ', post_params.get('result').get('metadata').get('intentName') 
-    
     post_intent_name = post_params.get('result').get('metadata').get('intentName')
-    post_prayer = post_params.get('result').get('parameters').get('PrayerName')
-    post_geo_city = (post_params.get('result').get('parameters').get('geo-city'))
+    print 'intent_name = ', post_intent_name
 
-    if (post_intent_name == 'WHEN_IS_START_TIME_INTENT' 
-        and 'location' not in device_params
-        and not post_geo_city):
-      print 'Could not find location in request, so responding with a permission request.'
-      server_response = response_builder.RequestLocationPermission()
-    elif (post_geo_city and 'location' not in device_params):
-      post_geo_city = ' '.join(post_geo_city).encode('utf-8')
-      post_geo_country = ' '.join(post_params.get('result').get('parameters')\
-        .get('geo-country')).encode('utf-8')
-      post_geo_state_us = ' '.join(post_params.get('result').get('parameters')\
-        .get('geo-state-us')).encode('utf-8')
-      print 'city:', post_geo_city
-      print 'country:', post_geo_country
-      print 'state:', post_geo_state_us
-      location_coordinates = gmaps_API.GetGeocode(
-          post_geo_city,
-          post_geo_country,
-          post_geo_state_us) 
-
-      all_prayer_times = \
-          prayer_info.GetPrayerTimes(
-              location_coordinates.get('lat'),
-              location_coordinates.get('lng'))
-
-      prayer_time = \
-         all_prayer_times.get(util.StringToDailyPrayer(post_prayer))
-      print 'prayer_times[', post_prayer, "] = ", prayer_time
-      speech = "The time for %s is %s in %s." % \
-          (post_prayer, prayer_time,post_geo_city)
-      server_response = {
-          "speech": speech,
-      }
-
-    elif ('location' in device_params):
-      print 'trying to get contexts index'
-      relevant_context = {}
-      for candidate in post_params.get('result').get('contexts'):
-        if 'requ' in candidate['name']:
-          relevant_context = candidate
-      
-      if relevant_context:
-        print 'relevant_context = ', relevant_context
-        prayer_params = {
-         'prayer': \
-             relevant_context.get('parameters').get('PrayerName'),
-         'lat': \
-             post_params.get('originalRequest') \
-                 .get('data') \
-                 .get('device') \
-                 .get('location') \
-                 .get('coordinates') \
-                 .get('latitude'),
-         'lng': \
-             post_params \
-                .get('originalRequest') \
-                .get('data') \
-                .get('device') \
-                .get('location') \
-                .get('coordinates') \
-                .get('longitude'),
-        'city': \
-             post_params \
-                .get('originalRequest') \
-                .get('data') \
-                .get('device') \
-                .get('location') \
-                .get('city'),
-        }
-
-        all_prayer_times = \
-            prayer_info.GetPrayerTimes(
-                prayer_params.get('lat'),
-                prayer_params.get('lng'))
-
-        prayer_time = \
-            all_prayer_times.get(util.StringToDailyPrayer(prayer_params.get('prayer')))
-        print 'prayer_times[', prayer_params.get('prayer'), "] = ", prayer_time
-
-        # this also needs to be less hacky - @hamir maybe a json response formater class?
-        speech = "The time for %s is %s in %s." % \
-            (prayer_params.get('prayer'), prayer_time,prayer_params.get('city'))
-        server_response = {
-            "speech": speech,
-        }
-      else:
-        print 'Could not find relevant context..'
+    if post_intent_name == StartTimeIntentHandler.INTENT_NAME:
+      server_response = start_time_handler.HandleIntent(device_params, post_params)
     else:
       server_response = {
           "speech": "Sorry, Prayer Pal cannot process this request." \
-          " Please try again later.",
+                    " Please try again later.",
       }
 
     print 'server response = ', server_response

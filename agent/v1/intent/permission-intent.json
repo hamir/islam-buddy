@@ -1,0 +1,29 @@
+{
+  "templates": [],
+  "userSays": [],
+  "id": "c3e4b7bd-65f9-4859-99d3-4ee0432ba996",
+  "name": "permission-intent",
+  "auto": false,
+  "contexts": [
+    "requ"
+  ],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "",
+      "affectedContexts": [],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "speech": []
+        }
+      ]
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": true,
+  "events": []
+}

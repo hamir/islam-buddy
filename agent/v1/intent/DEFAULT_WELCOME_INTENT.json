@@ -1,0 +1,113 @@
+{
+  "templates": [
+    "talk to islam buddy",
+    "salaam",
+    "hello",
+    "a salaam alaikum",
+    "assalamualaikum",
+    "as-salaam alaikum",
+    "Assalamu Alaykum"
+  ],
+  "userSays": [
+    {
+      "id": "3fa2a4c8-8c28-472e-8908-7eecec7c5eed",
+      "data": [
+        {
+          "text": "talk to islam buddy"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "3d82e4eb-82c5-41d8-8831-fc5c826bb475",
+      "data": [
+        {
+          "text": "salaam"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "75a05bd4-df26-495b-9fcb-7b9cc7d15d60",
+      "data": [
+        {
+          "text": "hello"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "c1105fd1-4d92-47e5-bc0b-0c9291cf28fd",
+      "data": [
+        {
+          "text": "a salaam alaikum"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "3bc34601-1afe-4d8c-bc59-981239a80894",
+      "data": [
+        {
+          "text": "assalamualaikum"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "3afd0c9f-5bd3-4baa-ba7e-4a856cbce46c",
+      "data": [
+        {
+          "text": "as-salaam alaikum"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "d4413ce0-dc6e-4c0d-a1bf-123095013810",
+      "data": [
+        {
+          "text": "Assalamu Alaykum"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    }
+  ],
+  "id": "7c0773b5-08e8-4d8e-bd55-de71e703826f",
+  "name": "DEFAULT_WELCOME_INTENT",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "input.welcome",
+      "affectedContexts": [],
+      "parameters": [],
+      "messages": [
+        {
+          "type": 0,
+          "speech": "Assalamu alaykum! To get started, ask me about a prayer time."
+        }
+      ]
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [
+    {
+      "name": "WELCOME"
+    },
+    {
+      "name": "GOOGLE_ASSISTANT_WELCOME"
+    }
+  ]
+}

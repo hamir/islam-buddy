@@ -1,0 +1,330 @@
+{
+  "templates": [
+    "when is the start time of @prayer-name:PrayerName in @sys.geo-city:geo-city ",
+    "when is the start of @prayer-name:PrayerName prayer in @sys.geo-city:geo-city ",
+    "@prayer-name:PrayerName in @sys.geo-city:geo-city  @sys.geo-state-us:geo-state-us ",
+    "what time is @prayer-name:PrayerName in @sys.geo-city:geo-city ",
+    "when is maghrib in @sys.geo-city:geo-city  @sys.geo-country:geo-country ",
+    "when is fajr in @sys.geo-city:geo-city  @sys.geo-state-us:geo-state-us  @sys.geo-country:geo-country ",
+    "when is @prayer-name:PrayerName ?",
+    "when will it be time to pray @prayer-name:PrayerName ",
+    "what time is @prayer-name:PrayerName ",
+    "when is @prayer-name:PrayerName ",
+    "when is @prayer-name:PrayerName "
+  ],
+  "userSays": [
+    {
+      "id": "3bce98c6-3a94-4551-8139-dbd9b8841f43",
+      "data": [
+        {
+          "text": "when is the start time of "
+        },
+        {
+          "text": "maghrib",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": true
+        },
+        {
+          "text": " in "
+        },
+        {
+          "text": "cupertino",
+          "alias": "geo-city",
+          "meta": "@sys.geo-city",
+          "userDefined": true
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "6f80589d-3d0e-4e94-896b-6318d77f6aad",
+      "data": [
+        {
+          "text": "when is the start of "
+        },
+        {
+          "text": "isha",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": true
+        },
+        {
+          "text": " prayer in "
+        },
+        {
+          "text": "mountain view",
+          "alias": "geo-city",
+          "meta": "@sys.geo-city",
+          "userDefined": true
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "e477f069-0a7a-4ff6-88b8-3a673af94f3e",
+      "data": [
+        {
+          "text": "maghrib",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": true
+        },
+        {
+          "text": " in "
+        },
+        {
+          "text": "mountain view",
+          "alias": "geo-city",
+          "meta": "@sys.geo-city",
+          "userDefined": true
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "california",
+          "alias": "geo-state-us",
+          "meta": "@sys.geo-state-us",
+          "userDefined": true
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "a06a35c0-8d9e-4640-a589-eab8a1300a68",
+      "data": [
+        {
+          "text": "what time is "
+        },
+        {
+          "text": "isha",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": true
+        },
+        {
+          "text": " in "
+        },
+        {
+          "text": "union city",
+          "alias": "geo-city",
+          "meta": "@sys.geo-city",
+          "userDefined": true
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "4016c2b5-0b8b-47c5-8c5a-07cdad352806",
+      "data": [
+        {
+          "text": "when is maghrib in "
+        },
+        {
+          "text": "waterloo",
+          "alias": "geo-city",
+          "meta": "@sys.geo-city",
+          "userDefined": true
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "canada",
+          "alias": "geo-country",
+          "meta": "@sys.geo-country",
+          "userDefined": true
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "5f87558b-4c14-42c7-88bd-0014ec7e3be6",
+      "data": [
+        {
+          "text": "when is fajr in "
+        },
+        {
+          "text": "fremont",
+          "alias": "geo-city",
+          "meta": "@sys.geo-city",
+          "userDefined": true
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "california",
+          "alias": "geo-state-us",
+          "meta": "@sys.geo-state-us",
+          "userDefined": true
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "usa",
+          "alias": "geo-country",
+          "meta": "@sys.geo-country",
+          "userDefined": true
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "a2c25d4e-97e1-41cf-862c-c486b89cd255",
+      "data": [
+        {
+          "text": "when is "
+        },
+        {
+          "text": "iftar",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": true
+        },
+        {
+          "text": "?"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "55917753-9a74-4425-8b28-134228b25c8e",
+      "data": [
+        {
+          "text": "when will it be time to pray "
+        },
+        {
+          "text": "zuhr",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": true
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "8201d6c2-709e-40c8-ad77-df857eb16e7e",
+      "data": [
+        {
+          "text": "what time is "
+        },
+        {
+          "text": "maghrib",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": true
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "a266d399-60f4-4b2f-8f8c-979e739afdd0",
+      "data": [
+        {
+          "text": "when is "
+        },
+        {
+          "text": "isha",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": true
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "f442b0e8-4095-4ee4-bbce-ccf8a631d8ff",
+      "data": [
+        {
+          "text": "when is "
+        },
+        {
+          "text": "fajr",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": true
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    }
+  ],
+  "id": "45051800-7d4f-4d0f-ae59-ed3bd84ff342",
+  "name": "WHEN_IS_START_TIME_INTENT",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "",
+      "affectedContexts": [
+        {
+          "name": "requ",
+          "parameters": {},
+          "lifespan": 5
+        }
+      ],
+      "parameters": [
+        {
+          "required": true,
+          "dataType": "@prayer-name",
+          "name": "PrayerName",
+          "value": "$PrayerName",
+          "prompts": [
+            "Which prayer are you talking about?",
+            "Which prayer are you referring to?",
+            "Sorry, which prayer was that again?",
+            "Sorry, I didn\u0027t catch which prayer you were talking about. Try again?"
+          ],
+          "isList": false
+        },
+        {
+          "dataType": "@sys.geo-city",
+          "name": "geo-city",
+          "value": "$geo-city",
+          "isList": true
+        },
+        {
+          "dataType": "@sys.geo-state-us",
+          "name": "geo-state-us",
+          "value": "$geo-state-us",
+          "isList": false
+        },
+        {
+          "dataType": "@sys.geo-country",
+          "name": "geo-country",
+          "value": "$geo-country",
+          "isList": false
+        }
+      ],
+      "messages": [
+        {
+          "type": 0,
+          "speech": []
+        }
+      ]
+    }
+  ],
+  "priority": 500000,
+  "cortanaCommand": {
+    "navigateOrService": "NAVIGATE",
+    "target": ""
+  },
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": []
+}

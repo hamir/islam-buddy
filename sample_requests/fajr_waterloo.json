@@ -1,0 +1,168 @@
+ng": "en", 
+  "status": {
+    "errorType": "success", 
+    "code": 200
+  }, 
+  "timestamp": "2017-05-24T09:15:31.793Z", 
+  "sessionId": "1495617331685", 
+  "result": {
+    "parameters": {
+      "geo-state-us": "", 
+      "PrayerName": "Isha", 
+      "geo-city": [
+        "Waterloo"
+      ], 
+      "geo-country": ""
+    }, 
+    "contexts": [
+      {
+        "name": "google_assistant_welcome", 
+        "parameters": {
+          "PrayerName.original": "isha", 
+          "PrayerName": "Isha", 
+          "geo-state-us": "", 
+          "geo-city": [
+            "Waterloo"
+          ], 
+          "geo-country": "", 
+          "geo-city.original": "waterloo", 
+          "geo-state-us.original": "", 
+          "geo-country.original": ""
+        }, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "requ", 
+        "parameters": {
+          "PrayerName.original": "isha", 
+          "PrayerName": "Isha", 
+          "geo-state-us": "", 
+          "geo-city": [
+            "Waterloo"
+          ], 
+          "geo-country": "", 
+          "geo-city.original": "waterloo", 
+          "geo-state-us.original": "", 
+          "geo-country.original": ""
+        }, 
+        "lifespan": 5
+      }, 
+      {
+        "name": "actions_capability_screen_output", 
+        "parameters": {
+          "PrayerName.original": "isha", 
+          "PrayerName": "Isha", 
+          "geo-state-us": "", 
+          "geo-city": [
+            "Waterloo"
+          ], 
+          "geo-country": "", 
+          "geo-city.original": "waterloo", 
+          "geo-state-us.original": "", 
+          "geo-country.original": ""
+        }, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "actions_capability_audio_output", 
+        "parameters": {
+          "PrayerName.original": "isha", 
+          "PrayerName": "Isha", 
+          "geo-state-us": "", 
+          "geo-city": [
+            "Waterloo"
+          ], 
+          "geo-country": "", 
+          "geo-city.original": "waterloo", 
+          "geo-state-us.original": "", 
+          "geo-country.original": ""
+        }, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "google_assistant_input_type_keyboard", 
+        "parameters": {
+          "PrayerName.original": "isha", 
+          "PrayerName": "Isha", 
+          "geo-state-us": "", 
+          "geo-city": [
+            "Waterloo"
+          ], 
+          "geo-country": "", 
+          "geo-city.original": "waterloo", 
+          "geo-state-us.original": "", 
+          "geo-country.original": ""
+        }, 
+        "lifespan": 0
+      }
+    ], 
+    "resolvedQuery": "when is isha in waterloo", 
+    "source": "agent", 
+    "score": 1.0, 
+    "speech": "", 
+    "fulfillment": {
+      "messages": [
+        {
+          "speech": "", 
+          "type": 0
+        }
+      ], 
+      "speech": ""
+    }, 
+    "actionIncomplete": false, 
+    "action": "", 
+    "metadata": {
+      "intentId": "45051800-7d4f-4d0f-ae59-ed3bd84ff342", 
+      "nluResponseTime": 53, 
+      "webhookForSlotFillingUsed": "false", 
+      "intentName": "WHEN_IS_START_TIME_INTENT", 
+      "webhookUsed": "true"
+    }
+  }, 
+  "id": "58edded6-2786-4c32-bdf6-0049b1a4d9b2", 
+  "originalRequest": {
+    "source": "google", 
+    "version": "2", 
+    "data": {
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "ask prayerpaltest when is isha in waterloo", 
+              "inputType": "KEYBOARD"
+            }
+          ], 
+          "intent": "actions.intent.MAIN", 
+          "arguments": [
+            {
+              "rawText": "when is isha in waterloo", 
+              "textValue": "when is isha in waterloo", 
+              "name": "trigger_query"
+            }
+          ]
+        }
+      ], 
+      "isInSandbox": true, 
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          }, 
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          }
+        ]
+      }, 
+      "conversation": {
+        "conversationId": "1495617331685", 
+        "type": "NEW"
+      }, 
+      "user": {
+        "userId": "MmtdIf77tCKMRPdYEteAtv8EAWAj830zF5kQY9CB7HE="
+      }, 
+      "device": {
+        "locale": "en-US"
+      }
+    }
+  }
+}

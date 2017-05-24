@@ -1,2 +1,4 @@
 Flask==0.10.1
 requests==2.13.0
+flask-assistant==0.2.5
+python-oauth2==1.0.1

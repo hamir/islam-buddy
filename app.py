@@ -3,7 +3,9 @@ import os
 import pprint
 import json
 
-from flask import Flask, request, make_response, render_template
+from flask import Flask, request, make_response, render_template, redirect
+from flask_assistant import Assistant, tell
+from oauth2.tokengenerator import URandomTokenGenerator
 from daily_prayer import PrayerInfo
 import util
 from common import DailyPrayer
@@ -12,6 +14,7 @@ import response_builder
 
 app = Flask(__name__)
 prayer_info = PrayerInfo()
+token_generator = URandomTokenGenerator(20)
 
 
 @app.route('/')
@@ -114,9 +117,15 @@ def GetSalah():
 
 
 @app.route('/auth', methods=['GET'])
-def Authenticate():
-  return util.JsonResponse('auth')
+def authenticate():
+  redirect_uri = request.args.get('redirect_uri')
+  state = request.args.get('state')
+  access_token = token_generator.generate()
+  full_redirect_uri = '{}#access_token={}&token_type=bearer&state={}'.format(redirect_uri, access_token, state)
 
+  print 'FULL REDIRECT URI: ', full_redirect_uri
+
+  return redirect(full_redirect_uri)
 
 @app.route('/privacy', methods=['GET'])
 def render_privacy():
@@ -128,4 +137,4 @@ if __name__ == '__main__':
 
     print("Starting app on port %d" % port)
 
-    app.run(debug=False, port=port, host='0.0.0.0')
+    app.run(debug=True, port=port, host='0.0.0.0')

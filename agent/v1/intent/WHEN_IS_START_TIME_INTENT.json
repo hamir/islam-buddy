@@ -1,5 +1,15 @@
 {
   "templates": [
+    "What time can l @prayer-name:PrayerName ?",
+    "What time do I @prayer-name:PrayerName ?",
+    "When can I @prayer-name:PrayerName ?",
+    "When shall I @prayer-name:PrayerName ?",
+    "Tell me what time is @prayer-name:PrayerName ?",
+    "Time for @prayer-name:PrayerName ?",
+    "When is @prayer-name:PrayerName at?",
+    "What time shall I pray @prayer-name:PrayerName ?",
+    "What time is @prayer-name:PrayerName ?",
+    "When is @prayer-name:PrayerName ?",
     "when is the start time of @prayer-name:PrayerName in @sys.geo-city:geo-city ",
     "when is the start of @prayer-name:PrayerName prayer in @sys.geo-city:geo-city ",
     "@prayer-name:PrayerName in @sys.geo-city:geo-city  @sys.geo-state-us:geo-state-us ",
@@ -260,6 +270,196 @@
       ],
       "isTemplate": false,
       "count": 0
+    },
+    {
+      "id": "9ad71feb-d4e9-42f0-b7c1-9902779031ea",
+      "data": [
+        {
+          "text": "What time can l "
+        },
+        {
+          "text": "start eating",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": false
+        },
+        {
+          "text": "?"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "a710f575-b0f6-446a-b653-ec86899b16a7",
+      "data": [
+        {
+          "text": "What time do I "
+        },
+        {
+          "text": "stop eating",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": false
+        },
+        {
+          "text": "?"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "4a33ff12-2233-43ea-a7a8-aa8d47817636",
+      "data": [
+        {
+          "text": "When can I "
+        },
+        {
+          "text": "break my fast",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": false
+        },
+        {
+          "text": "?"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "b0898467-656c-41ce-87b9-c98af019b04f",
+      "data": [
+        {
+          "text": "When shall I "
+        },
+        {
+          "text": "break my fast",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": false
+        },
+        {
+          "text": "?"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "f687dec6-096d-4570-95b6-54eb098bd756",
+      "data": [
+        {
+          "text": "Tell me what time is "
+        },
+        {
+          "text": "isha",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": false
+        },
+        {
+          "text": "?"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "3c1a220e-cda0-4191-9880-fcacaebe0d99",
+      "data": [
+        {
+          "text": "Time for "
+        },
+        {
+          "text": "maghrib",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": false
+        },
+        {
+          "text": "?"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "be300874-f242-4a1e-ac5a-1930feed2f83",
+      "data": [
+        {
+          "text": "When is "
+        },
+        {
+          "text": "zuhr",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": false
+        },
+        {
+          "text": " at?"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "07f4a52e-2bab-48e7-8f43-c2b3f7ea305e",
+      "data": [
+        {
+          "text": "What time shall I pray "
+        },
+        {
+          "text": "zuhr",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": false
+        },
+        {
+          "text": "?"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "04810e0f-348a-42c7-9595-4a07376e0acc",
+      "data": [
+        {
+          "text": "What time is "
+        },
+        {
+          "text": "Asr",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": false
+        },
+        {
+          "text": "?"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
+    },
+    {
+      "id": "be88434b-d8eb-422b-b7dc-a7199b9ba3b7",
+      "data": [
+        {
+          "text": "When is "
+        },
+        {
+          "text": "Asr",
+          "alias": "PrayerName",
+          "meta": "@prayer-name",
+          "userDefined": false
+        },
+        {
+          "text": "?"
+        }
+      ],
+      "isTemplate": false,
+      "count": 0
     }
   ],
   "id": "45051800-7d4f-4d0f-ae59-ed3bd84ff342",
@@ -284,10 +484,18 @@
           "name": "PrayerName",
           "value": "$PrayerName",
           "prompts": [
+            "Which prayer time do you want me to list?",
+            "Which prayer are interested in knowing the time for?",
+            "Tell me which prayer are you interested in.",
+            "What is the prayer name?",
             "Which prayer are you talking about?",
             "Which prayer are you referring to?",
             "Sorry, which prayer was that again?",
-            "Sorry, I didn\u0027t catch which prayer you were talking about. Try again?"
+            "Sorry, I didn\u0027t catch which prayer you were talking about. Try again?",
+            "Which prayer time do you want me to list?",
+            "Which prayer are interested in knowing the time for?",
+            "Tell me which prayer are you interested in.",
+            "What is the prayer name?"
           ],
           "isList": false
         },

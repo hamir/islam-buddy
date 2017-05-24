@@ -16,7 +16,7 @@ from start_time_intent_handler import StartTimeIntentHandler
 app = Flask(__name__)
 prayer_info = PrayerInfo()
 token_generator = URandomTokenGenerator(20)
-start_time_handler = StartTimeIntentHandler()
+start_time_handler = StartTimeIntentHandler(prayer_info)
 
 @app.route('/')
 def hello_world():
@@ -56,7 +56,7 @@ def GetSalah():
     post_intent_name = post_params.get('result').get('metadata').get('intentName')
     print 'intent_name = ', post_intent_name
 
-    if post_intent_name == StartTimeIntentHandler.INTENT_NAME:
+    if post_intent_name in StartTimeIntentHandler.INTENTS_HANDLED:
       server_response = start_time_handler.HandleIntent(device_params, post_params)
     else:
       server_response = {

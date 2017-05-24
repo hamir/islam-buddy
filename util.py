@@ -5,8 +5,11 @@ from common import DailyPrayer
 
 def JsonResponse(response_dict):
   """Constructs a JSON response object."""
+  print 'JsonResponse'
   response = make_response(json.dumps(response_dict, indent=4))
+  print 'JsonResponse'
   response.headers['Content-Type'] = 'application/json'
+  print 'JsonResponse'
   return response
 
 
@@ -48,6 +51,7 @@ _PRAYER_METADATA = {
   },
 }
 
+
 _KEY_NAME_TO_PRAYER = {
   'fajr': DailyPrayer.FAJR,
   'dhuhr': DailyPrayer.DHUHR,
@@ -58,9 +62,20 @@ _KEY_NAME_TO_PRAYER = {
   'unspecified': DailyPrayer.UNSPECIFIED,
 }
 
+
 def GetPrayerKeyName(daily_prayer):
   """Gets the name of a daily prayer (ex: "fajr")."""
   return _PRAYER_METADATA.get(daily_prayer).get('key_name')
+
+
+def _StringToEnum(str_value, str_to_enum, default):
+  """Converts a string to an enum based on provided dict."""
+  str_value = str(str_value).lower()
+  if str_value in str_to_enum:
+    return str_to_enum[str_value]
+  else:
+    return default
+
 
 def StringToDailyPrayer(prayer_str):
   """Infers a DailyPrayer out of a string."""

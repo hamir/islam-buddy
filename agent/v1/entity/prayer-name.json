@@ -1,0 +1,77 @@
+{
+  "id": "2e9f7ff6-3761-4408-8172-3dcb58e9ca6e",
+  "name": "prayer-name",
+  "isOverridable": true,
+  "entries": [
+    {
+      "value": "Fajr",
+      "synonyms": [
+        "fajr",
+        "fayr"
+      ]
+    },
+    {
+      "value": "Sunrise",
+      "synonyms": [
+        "sunrise",
+        "duha"
+      ]
+    },
+    {
+      "value": "Dhuhr",
+      "synonyms": [
+        "duhr",
+        "zuhr",
+        "dhuhr",
+        "dohor",
+        "zohor"
+      ]
+    },
+    {
+      "value": "Asr",
+      "synonyms": [
+        "asr",
+        "asir",
+        "aser"
+      ]
+    },
+    {
+      "value": "Maghrib",
+      "synonyms": [
+        "maghreb",
+        "maghrib",
+        "sunset"
+      ]
+    },
+    {
+      "value": "Isha",
+      "synonyms": [
+        "isha",
+        "esha"
+      ]
+    },
+    {
+      "value": "iftar",
+      "synonyms": [
+        "iftar",
+        "break my fast",
+        "fast break",
+        "fast break time",
+        "break fast",
+        "start eating"
+      ]
+    },
+    {
+      "value": "Suhur",
+      "synonyms": [
+        "Suhur",
+        "stop eating",
+        "start fasting",
+        "begin my fast",
+        "fast begin"
+      ]
+    }
+  ],
+  "isEnum": false,
+  "automatedExpansion": false
+}

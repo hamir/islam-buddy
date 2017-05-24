@@ -3,6 +3,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.py.swp
+*.swp
 
 # C extensions
 *.so
@@ -16,7 +18,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -25,6 +26,7 @@ venv/
 *.egg-info/
 .installed.cfg
 *.egg
+.DS_STORE
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

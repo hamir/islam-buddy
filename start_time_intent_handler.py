@@ -103,20 +103,23 @@ class StartTimeIntentHandler(object):
         print 'Could not find relevant context!'
 
     all_prayer_times = self.prayer_info_.GetPrayerTimes(lat, lng)
+    canonical_prayer = util.StringToDailyPrayer(desired_prayer)
     prayer_time = \
-       all_prayer_times.get(util.StringToDailyPrayer(desired_prayer))
+       all_prayer_times.get(canonical_prayer)
     print 'prayer_times[', desired_prayer, "] = ", prayer_time 
 
-    return self._MakeSpeechResponse(desired_prayer, prayer_time, city)
+    return self._MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, city)
 
 
-  def _MakeSpeechResponse(self, desired_prayer, prayer_time, city):
+  def _MakeSpeechResponse(self, canonical_prayer, desired_prayer, prayer_time, city):
     if desired_prayer.lower() == 'suhur':
       return {'speech': 'Suhur ends at %s in %s' % (prayer_time, city)}
+    elif desired_prayer.lower() == 'iftar':
+      return {'speech': 'Today, iftar is at %s in %s' % (prayer_time, city)}
     else:
       return {
         'speech': 
             ('The time for %s is %s in %s.' % 
-             (desired_prayer, prayer_time, city))
+             (util.GetPronunciation(canonical_prayer), prayer_time, city))
       }
 

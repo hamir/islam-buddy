@@ -19,7 +19,13 @@ def GetGeocode(city, state, country):
   Returns: a dict containing the longitude and latitude
   """
   
-  address_params = city + " " + state + " " + country
+  address_params = ''
+  if city:
+    address_params += city + " "
+  if state:
+    address_params += state + " "
+  if country:
+    address_params += country + " "
   
   # set up the parameters in the format expected by the Google Maps Geocode API
   post_params = {

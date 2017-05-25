@@ -22,7 +22,7 @@ def JsonError(error_text):
 
 _PRAYER_METADATA = {
   DailyPrayer.FAJR: {
-    'key_name': 'fajr',
+    'key_name': 'fajer',
     'proper_name': 'Fajr',
   },
   DailyPrayer.DHUHR: {
@@ -53,10 +53,12 @@ _PRAYER_METADATA = {
 
 
 _KEY_NAME_TO_PRAYER = {
-  'fajr': DailyPrayer.FAJR,
+  'suhur': DailyPrayer.FAJR,
+  'fajer': DailyPrayer.FAJR,
   'dhuhr': DailyPrayer.DHUHR,
   'asr': DailyPrayer.ASR,
   'maghrib': DailyPrayer.MAGHRIB,
+  'iftar': DailyPrayer.MAGHRIB,
   'isha': DailyPrayer.ISHA,
   'qiyam': DailyPrayer.QIYAM,
   'unspecified': DailyPrayer.UNSPECIFIED,

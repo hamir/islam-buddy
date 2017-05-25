@@ -26,8 +26,9 @@ class PrayerInfo(object):
 
     for key in prayer_times:
       prayer = util.StringToDailyPrayer(key)
-      if prayer:		
+      if prayer:
         result[prayer] = prayer_times[key]
+        
     print '[GetPrayerTimes] prayer times = ', result
 
     print "[exit][GetPrayerTimes]"

@@ -7,16 +7,18 @@ from flask import Flask, request, make_response, render_template, redirect
 from flask_assistant import Assistant, tell
 from oauth2.tokengenerator import URandomTokenGenerator
 
-from daily_prayer import PrayerInfo
+from flask import Flask, request, make_response
+from prayer_info import PrayerInfo
+import util
 from common import DailyPrayer
 import response_builder 
 import gmaps_API
 from start_time_intent_handler import StartTimeIntentHandler
 
 app = Flask(__name__)
-prayer_info = PrayerInfo()
+_prayer_info = PrayerInfo()
 token_generator = URandomTokenGenerator(20)
-start_time_handler = StartTimeIntentHandler(prayer_info)
+start_time_handler = StartTimeIntentHandler(_prayer_info)
 
 @app.route('/')
 def hello_world():
@@ -37,7 +39,7 @@ def GetSalah():
       return util.JsonError('Please provide a lat and lng.')
 
     prayer_times = \
-      prayer_info.GetPrayerTimes(params.get('lat'), params.get('lng'))
+      _prayer_info.GetPrayerTimes(params.get('lat'), params.get('lng'))
 
     # convert from map<PrayerTime, string> to map<string, string>
     output_prayer_times = {}

@@ -24,37 +24,44 @@ _PRAYER_METADATA = {
   DailyPrayer.FAJR: {
     'key_name': 'fajer',
     'proper_name': 'Fajr',
+    'pronunciation': 'Fajer',
   },
   DailyPrayer.DHUHR: {
     'key_name': 'dhuhr',
     'proper_name': 'Dhuhr',
+    'pronunciation': 'Dhuhr',
   },
   DailyPrayer.ASR: {
     'key_name': 'asr',
     'proper_name': 'Asr',
+    'pronunciation': 'Usser',
   },
   DailyPrayer.MAGHRIB: {
     'key_name': 'maghrib',
     'proper_name': 'Maghrib',
+    'pronunciation': 'Mugreb',
   },
   DailyPrayer.ISHA: {
     'key_name': 'isha',
     'proper_name': 'Isha',
+    'pronunciation': 'Isha',
   },
   DailyPrayer.QIYAM: {
     'key_name': 'qiyam',
-    'proper_name': 'Qiyam'
+    'proper_name': 'Qiyam',
+    'pronunciation': 'Qiyam',
   },
   DailyPrayer.UNSPECIFIED: {
     'key_name': 'unpsecified',
-    'proper_name': 'unspecified'
+    'proper_name': 'unspecified',
+    'pronunciation': 'unspecified',
   },
 }
 
 
 _KEY_NAME_TO_PRAYER = {
   'suhur': DailyPrayer.FAJR,
-  'fajer': DailyPrayer.FAJR,
+  'fajr': DailyPrayer.FAJR,
   'dhuhr': DailyPrayer.DHUHR,
   'asr': DailyPrayer.ASR,
   'maghrib': DailyPrayer.MAGHRIB,
@@ -86,4 +93,7 @@ def StringToDailyPrayer(prayer_str):
     return _KEY_NAME_TO_PRAYER[prayer_str]
   else:
     return ''
+
+def GetPronunciation(daily_prayer):
+  return _PRAYER_METADATA[daily_prayer].get('pronunciation')
 

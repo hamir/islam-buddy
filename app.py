@@ -7,7 +7,7 @@ from flask import Flask, request, make_response
 from prayer_info import PrayerInfo 
 import util
 from common import DailyPrayer
-import response_builder 
+import response_builder
 
 
 app = Flask(__name__)
@@ -35,6 +35,8 @@ def GetSalah():
 
     prayer_times = \
       prayer_info.GetPrayerTimes(params.get('lat'), params.get('lng'))
+    if prayer_times == {}:
+        return util.JsonResponse("Error, the latitude and longitude entered might be wrong..")
 
     # convert from map<PrayerTime, string> to map<string, string>
     output_prayer_times = {}
@@ -52,8 +54,8 @@ def GetSalah():
     device_params = post_params.get('originalRequest').get('data').get('device')
     # this needs to be less hacky - @hamdy maybe a request extractor class?
     # we need a request extractor class
-    print 'intent_name = ', post_params.get('result').get('metadata').get('intentName') 
-    if (post_params.get('result').get('metadata').get('intentName') 
+    print 'intent_name = ', post_params.get('result').get('metadata').get('intentName')
+    if (post_params.get('result').get('metadata').get('intentName')
         == 'WHEN_IS_START_TIME_INTENT' and 'location' not in device_params):
       print 'Could not find location in request, so responding with a permission request.'
       server_response = response_builder.RequestLocationPermission()
@@ -63,7 +65,7 @@ def GetSalah():
       for candidate in post_params.get('result').get('contexts'):
         if 'requ' in candidate['name']:
           relevant_context = candidate
-      
+
       if relevant_context:
         print 'relevant_context = ', relevant_context
         prayer_params = {

@@ -16,9 +16,9 @@ import gmaps_API
 from start_time_intent_handler import StartTimeIntentHandler
 
 app = Flask(__name__)
-prayerInfo = PrayerInfo()
+_prayer_info = PrayerInfo()
 token_generator = URandomTokenGenerator(20)
-start_time_handler = StartTimeIntentHandler(prayerInfo)
+start_time_handler = StartTimeIntentHandler(_prayer_info)
 
 @app.route('/')
 def hello_world():
@@ -39,7 +39,7 @@ def GetSalah():
       return util.JsonError('Please provide a lat and lng.')
 
     prayer_times = \
-      prayerInfo.GetPrayerTimes(params.get('lat'), params.get('lng'))
+      _prayer_info.GetPrayerTimes(params.get('lat'), params.get('lng'))
 
     # convert from map<PrayerTime, string> to map<string, string>
     output_prayer_times = {}

@@ -14,12 +14,14 @@ class PrayerInfo(object):
       lat: a double representing the latitude
       lng: a double representing the longitude
 
-    Returns: a dict containing (DailyPrayer -> string) of daily 
+    Returns: a dict containing (DailyPrayer -> string) of daily
         prayer times
     """
     print "[enter][GetPrayerTimes]"
 
     prayer_times = salah_com_fetcher.GetDailyPrayerTimes(lat, lng)
+    if prayer_times == {}:
+      return {}
     print '[GetPrayerTimes] salah.com scrape result = ', prayer_times
     result = {}
 
@@ -28,8 +30,7 @@ class PrayerInfo(object):
       if prayer:
         result[prayer] = prayer_times[key]
 
-    print '[GetPrayerTimes] prayer times = ', result 
+    print '[GetPrayerTimes] prayer times = ', result
 
     print "[exit][GetPrayerTimes]"
     return result
-

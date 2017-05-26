@@ -7,7 +7,7 @@ import json
 _SALAH_API_URL = 'http://www.salah.com/times/get'
 '''
 The 'salah.com' API provides a response in the following format:
-"Prayers": { 
+"Prayers": {
   "2017": { "5": { 17": {
     # actual prayer times yere
     "Fajr": "5 AM"
@@ -39,6 +39,8 @@ def GetDailyPrayerTimes(lat, lng):
   }
   print 'post_data = ', post_data
   request = requests.post(_SALAH_API_URL, data=post_data)
+  if request.status_code == 500:
+    return {}
   print 'here = ', request.text
   response = json.loads(request.text).get("Prayers")
   print 'response from salah.com API', response
@@ -46,4 +48,3 @@ def GetDailyPrayerTimes(lat, lng):
   for i in range(_PRAYER_TIMES_RESPONSE_DEPTH):
     response = response.itervalues().next()
   return response
-

@@ -11,7 +11,7 @@ from flask import Flask, request, make_response
 from prayer_info import PrayerInfo
 import util
 from common import DailyPrayer
-import response_builder 
+import response_builder
 import gmaps_API
 from start_time_intent_handler import StartTimeIntentHandler
 
@@ -40,6 +40,8 @@ def GetSalah():
 
     prayer_times = \
       _prayer_info.GetPrayerTimes(params.get('lat'), params.get('lng'))
+    if prayer_times == {}:
+      return util.JsonResponse("Error, the latitude and longitude entered might be wrong..")
 
     # convert from map<PrayerTime, string> to map<string, string>
     output_prayer_times = {}

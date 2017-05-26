@@ -22,7 +22,7 @@ def JsonError(error_text):
 
 _PRAYER_METADATA = {
   DailyPrayer.FAJR: {
-    'key_name': 'fajer',
+    'key_name': 'fajr',
     'proper_name': 'Fajr',
     'pronunciation': 'Fajer',
   },

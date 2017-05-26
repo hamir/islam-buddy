@@ -40,9 +40,19 @@ class StartTimeIntentHandler(object):
 
     # filled if we have the user's lat/lng
     has_location = 'location' in device_params
+    # this will only be populated if the intent type is PERMISSION_REQUEST
+    permission_context = None
 
-    # this should always be filled since its a required parameter to the intent
-    desired_prayer = params.get('PrayerName')
+    if not has_location:
+      # this should always be filled since its a required parameter to the intent
+      # the only time it won't be filled is on PERMISSION_REQUEST intents
+      desired_prayer = params.get('PrayerName')
+    else:
+      # this should be filled on PERMISSION_REQUEST intents in the relevant context
+      permission_context = self._GetContext(post_params, 'requ')
+      print 'permission context = ', permission_context 
+      desired_prayer = permission_context.get('parameters').get('PrayerName')
+      
 
     # this should also always be available
     user_id = post_params.get('originalRequest').get('data').get('user').get('userId')
@@ -102,11 +112,7 @@ class StartTimeIntentHandler(object):
 
     # if we have a device location, then use it
     elif has_location:
-      relevant_context = self._GetContext(post_params, 'requ')
-      print 'rel context = ', relevant_context
-      if relevant_context:
-        print 'relevant_context = ', relevant_context
-
+      if permission_context:
         location = device_params.get('location')
         city = location.get('city')
         lat = location.get('coordinates').get('latitude')
@@ -114,10 +120,6 @@ class StartTimeIntentHandler(object):
         user_info = {'city': city, 'lat': lat, 'lng': lng}
         fake_db.AddUser(user_id, user_info)
 
-        # Since this is a follow-on query, we won't actually have the
-        # prayer name in the 'result.parameters.PrayerName'. Instead
-        # we must pull it from the context.
-        desired_prayer = relevant_context.get('parameters').get('PrayerName')
       else:
         print 'Could not find relevant context!'
 

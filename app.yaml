@@ -8,4 +8,4 @@ libraries:
 
 handlers:
 - url: /.*
-  script: app.app
+  script: main.app

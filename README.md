@@ -9,6 +9,11 @@ Install the required packages.
 $ pip install -r requirements.txt
 ```
 
+Initialize the database
+```
+$ ./create_db
+```
+
 Run the server (inside /server)
 ```
 $ ./run_server

@@ -22,7 +22,7 @@ def JsonError(error_text):
 
 _PRAYER_METADATA = {
   DailyPrayer.FAJR: {
-    'key_name': 'fajr',
+    'key_name': 'fajer',
     'proper_name': 'Fajr',
     'pronunciation': 'Fajer',
   },
@@ -95,5 +95,6 @@ def StringToDailyPrayer(prayer_str):
     return ''
 
 def GetPronunciation(daily_prayer):
+  print 'GetPronunciation: ', _PRAYER_METADATA[daily_prayer]
   return _PRAYER_METADATA[daily_prayer].get('pronunciation')
 

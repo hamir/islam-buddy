@@ -4,6 +4,7 @@ import response_builder
 import gmaps_API
 from prayer_info import PrayerInfo
 import util
+import fake_db
 
 
 class StartTimeIntentHandler(object):
@@ -31,14 +32,20 @@ class StartTimeIntentHandler(object):
   def HandleIntent(self, device_params, post_params):
     """Returns a server response as a dictionary."""
     
-    # we have the user's city
+    # filled if we have the user's city, country and/or state
     params = post_params.get('result').get('parameters')
     city = params.get('geo-city')
     country = params.get('geo-country')
     state = params.get('geo-state-us')
 
-    # we have the user's lat/lng
+    # filled if we have the user's lat/lng
     has_location = 'location' in device_params
+
+    # this should always be filled since its a required parameter to the intent
+    desired_prayer = params.get('PrayerName')
+
+    # this should also always be available
+    user_id = post_params.get('originalRequest').get('data').get('user').get('userId')
 
     # if there is no city or location, we won't be able to do anything
     # so request the user for permissions to use their location
@@ -56,15 +63,25 @@ class StartTimeIntentHandler(object):
       if state or country:
         return {'speech': ('Sorry, I don\'t have enough information. Please try '
                            'again with a city next time.')}
+      
+      # at this stage, we don't know anything about the user's location - try
+      # checking our db for a stored location
+      user_info = fake_db.GetUserInfo(user_id)
+      if user_info and user_info.get('lat') and user_info.get('lng') and user_info.get('city'):
+        print 'found user ', user_id, ' in databse, so location request is not necesary'
+        lat = user_info.get('lat')
+        lng = user_info.get('lng')
+        city = user_info.get('city')
+        return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city)
 
-      print ('Could not find location in request, '
-             'so responding with a permission request.')
-      return response_builder.RequestLocationPermission()
+      else:
+        print ('Could not find location in request, '
+               'so responding with a permission request.')
+        return response_builder.RequestLocationPermission()
 
     # we must fill these parameters in order to make a query to salah.com
     lat = None
     lng = None
-    desired_prayer = params.get('PrayerName')
 
     # if we have a city, then use this
     if city:
@@ -94,6 +111,8 @@ class StartTimeIntentHandler(object):
         city = location.get('city')
         lat = location.get('coordinates').get('latitude')
         lng = location.get('coordinates').get('longitude')
+        user_info = {'city': city, 'lat': lat, 'lng': lng}
+        fake_db.AddUser(user_id, user_info)
 
         # Since this is a follow-on query, we won't actually have the
         # prayer name in the 'result.parameters.PrayerName'. Instead
@@ -102,6 +121,10 @@ class StartTimeIntentHandler(object):
       else:
         print 'Could not find relevant context!'
 
+    return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city)
+
+
+  def _ComputePrayerTimeAndRespond(self, desired_prayer, lat, lng, city):
     all_prayer_times = self.prayer_info_.GetPrayerTimes(lat, lng)
     canonical_prayer = util.StringToDailyPrayer(desired_prayer)
     prayer_time = \
@@ -112,11 +135,13 @@ class StartTimeIntentHandler(object):
 
 
   def _MakeSpeechResponse(self, canonical_prayer, desired_prayer, prayer_time, city):
+    print '_MakeSpeechResponse: ', canonical_prayer, desired_prayer, prayer_time, city
     if desired_prayer.lower() == 'suhur':
       return {'speech': 'Suhur ends at %s in %s' % (prayer_time, city)}
     elif desired_prayer.lower() == 'iftar':
       return {'speech': 'Today, iftar is at %s in %s' % (prayer_time, city)}
     else:
+      print 'The time for %s is %s in %s.' % (util.GetPronunciation(canonical_prayer), prayer_time, city)
       return {
         'speech': 
             ('The time for %s is %s in %s.' % 

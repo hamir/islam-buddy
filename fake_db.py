@@ -9,17 +9,14 @@
     }
 """
 
-class FakeDb(object):
+_USER_TABLE = {}
 
-  USER_TABLE_ = {
-  }
+def GetUserInfo(user_id):
+  return _USER_TABLE.get(user_id, {})
 
-  def GetUserInfo(self, user_id):
-    return self.USER_TABLE_.get(user_id)
+def AddOrUpdateUser(user_id, user_info):
+  _USER_TABLE[user_id] = user_info
 
-  def AddOrUpdateUser(self, user_id, user_info):
-    self.USER_TABLE_[user_id] = user_info
-
-  def DeleteUser(self, user_id):
-    if user_id in self.USER_TABLE_:
-      del self.USER_TABLE_[user_id]
+def DeleteUser(user_id):
+  if user_id in _USER_TABLE:
+    del _USER_TABLE[user_id]

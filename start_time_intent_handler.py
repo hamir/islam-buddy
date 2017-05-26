@@ -77,11 +77,11 @@ class StartTimeIntentHandler(object):
       # at this stage, we don't know anything about the user's location - try
       # checking our db for a stored location
       user_info = self.fake_db_.GetUserInfo(user_id)
-      if user_info and user_info.get('lat') and user_info.get('lng') and user_info.get('city'):
-        print 'found user ', user_id, ' in databse, so location request is not necesary'
-        lat = user_info.get('lat')
-        lng = user_info.get('lng')
-        city = user_info.get('city')
+      lat = user_info.get('lat')
+      lng = user_info.get('lng')
+      city = user_info.get('city')
+      if lat and lng and city:
+        print 'found user ', user_id, ' in database, so location request is not necesary'
         return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city)
 
       else:

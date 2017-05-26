@@ -7,6 +7,7 @@ from flask import Flask, request, make_response, render_template, redirect
 from flask_assistant import Assistant, tell
 from oauth2.tokengenerator import URandomTokenGenerator
 
+from fake_db import FakeDb
 from flask import Flask, request, make_response
 from prayer_info import PrayerInfo
 import util
@@ -15,10 +16,12 @@ import response_builder
 import gmaps_API
 from start_time_intent_handler import StartTimeIntentHandler
 
+
 app = Flask(__name__)
 _prayer_info = PrayerInfo()
-token_generator = URandomTokenGenerator(20)
-start_time_handler = StartTimeIntentHandler(_prayer_info)
+_fake_db = FakeDb()
+_token_generator = URandomTokenGenerator(20)
+_start_time_handler = StartTimeIntentHandler(_prayer_info, _fake_db)
 
 @app.route('/')
 def hello_world():
@@ -61,7 +64,13 @@ def GetSalah():
     print 'intent_name = ', post_intent_name
 
     if post_intent_name in StartTimeIntentHandler.INTENTS_HANDLED:
-      server_response = start_time_handler.HandleIntent(device_params, post_params)
+      server_response = _start_time_handler.HandleIntent(device_params, post_params)
+    elif post_intent_name == 'CLEAR_LOCATION':
+      user_id = post_params.get('originalRequest').get('data').get('user').get('userId')
+      _fake_db.DeleteUser(user_id)
+      server_response = {
+          "speech": "OK, your location has been cleared.",
+      }
     else:
       server_response = {
           "speech": "Sorry, Prayer Pal cannot process this request." \
@@ -76,7 +85,7 @@ def GetSalah():
 def authenticate():
   redirect_uri = request.args.get('redirect_uri')
   state = request.args.get('state')
-  access_token = token_generator.generate()
+  access_token = _token_generator.generate()
   full_redirect_uri = '{}#access_token={}&token_type=bearer&state={}'.format(redirect_uri, access_token, state)
 
   print 'FULL REDIRECT URI: ', full_redirect_uri

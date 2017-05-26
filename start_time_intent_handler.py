@@ -4,7 +4,6 @@ import response_builder
 import gmaps_API
 from prayer_info import PrayerInfo
 import util
-import fake_db
 
 
 class StartTimeIntentHandler(object):
@@ -14,8 +13,9 @@ class StartTimeIntentHandler(object):
       'PERMISSION_INTENT',
   ]
 
-  def __init__(self, prayer_info):
+  def __init__(self, prayer_info, fake_db):
     self.prayer_info_ = prayer_info
+    self.fake_db_ = fake_db
 
 
   def _EncodeParameter(self, param):
@@ -76,7 +76,7 @@ class StartTimeIntentHandler(object):
       
       # at this stage, we don't know anything about the user's location - try
       # checking our db for a stored location
-      user_info = fake_db.GetUserInfo(user_id)
+      user_info = self.fake_db_.GetUserInfo(user_id)
       if user_info and user_info.get('lat') and user_info.get('lng') and user_info.get('city'):
         print 'found user ', user_id, ' in databse, so location request is not necesary'
         lat = user_info.get('lat')
@@ -118,7 +118,7 @@ class StartTimeIntentHandler(object):
         lat = location.get('coordinates').get('latitude')
         lng = location.get('coordinates').get('longitude')
         user_info = {'city': city, 'lat': lat, 'lng': lng}
-        fake_db.AddUser(user_id, user_info)
+        self.fake_db_.AddOrUpdateUser(user_id, user_info)
 
       else:
         print 'Could not find relevant context!'

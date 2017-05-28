@@ -23,37 +23,37 @@ def JsonError(error_text):
 _PRAYER_METADATA = {
   DailyPrayer.FAJR: {
     'key_name': 'fajr',
-    'proper_name': 'Fajr',
+    'display_name': 'Fajr',
     'pronunciation': 'Fajer',
   },
   DailyPrayer.DHUHR: {
     'key_name': 'dhuhr',
-    'proper_name': 'Dhuhr',
+    'display_name': 'Dhuhr',
     'pronunciation': 'Dhuhr',
   },
   DailyPrayer.ASR: {
     'key_name': 'asr',
-    'proper_name': 'Asr',
+    'display_name': 'Asr',
     'pronunciation': 'Usser',
   },
   DailyPrayer.MAGHRIB: {
     'key_name': 'maghrib',
-    'proper_name': 'Maghrib',
+    'display_name': 'Maghrib',
     'pronunciation': 'Mugreb',
   },
   DailyPrayer.ISHA: {
     'key_name': 'isha',
-    'proper_name': 'Isha',
+    'display_name': 'Isha',
     'pronunciation': 'Isha',
   },
   DailyPrayer.QIYAM: {
     'key_name': 'qiyam',
-    'proper_name': 'Qiyam',
+    'display_name': 'Qiyam',
     'pronunciation': 'Qiyam',
   },
   DailyPrayer.UNSPECIFIED: {
     'key_name': 'unpsecified',
-    'proper_name': 'unspecified',
+    'display_name': 'unspecified',
     'pronunciation': 'unspecified',
   },
 }
@@ -97,4 +97,7 @@ def StringToDailyPrayer(prayer_str):
 def GetPronunciation(daily_prayer):
   print 'GetPronunciation: ', _PRAYER_METADATA[daily_prayer]
   return _PRAYER_METADATA[daily_prayer].get('pronunciation')
+
+def GetDisplayText(daily_prayer):
+  return _PRAYER_METADATA[daily_prayer].get('display_name')
 

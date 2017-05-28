@@ -161,8 +161,10 @@ class StartTimeIntentHandler(object):
     speech = ''
     if city:
       speech = 'The time for %s is %s in %s.' % (util.GetPronunciation(canonical_prayer), prayer_time, city)
+      display_text = 'The time for %s is %s in %s.' % (util.GetDisplayText(canonical_prayer), prayer_time, city)
     else:
       speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), prayer_time)
+      display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
 
-    return {'speech': speech}
+    return {'speech': speech, 'displayText': display_text}
 

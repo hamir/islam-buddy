@@ -1,5 +1,6 @@
 # Intent handler for 'WHEN_IS_START_TIME_INTENT'
 
+import json
 import response_builder
 import gmaps_API
 from prayer_info import PrayerInfo
@@ -29,7 +30,7 @@ class StartTimeIntentHandler(object):
     return None
 
 
-  def HandleIntent(self, device_params, post_params):
+  def HandleIntent(self, post_params):
     """Returns a server response as a dictionary."""
     
     # filled if we have the user's city, country and/or state
@@ -39,6 +40,9 @@ class StartTimeIntentHandler(object):
     state = params.get('geo-state-us')
 
     # filled if we have the user's lat/lng
+    device_params = {}
+    if 'originalRequest' in post_params:
+      device_params = post_params.get('originalRequest').get('data').get('device')
     has_location = 'location' in device_params
     # this will only be populated if the intent type is PERMISSION_REQUEST
     permission_context = None
@@ -77,6 +81,7 @@ class StartTimeIntentHandler(object):
       # at this stage, we don't know anything about the user's location - try
       # checking our db for a stored location
       user_info = self.fake_db_.GetUserInfo(user_id)
+      print 'user info for ', user_id, ' is ', user_info
       if user_info and user_info.get('lat') and user_info.get('lng') and user_info.get('city'):
         print 'found user ', user_id, ' in databse, so location request is not necesary'
         lat = user_info.get('lat')
@@ -113,11 +118,15 @@ class StartTimeIntentHandler(object):
     # if we have a device location, then use it
     elif has_location:
       if permission_context:
+        print 'permission context'
         location = device_params.get('location')
-        city = location.get('city')
         lat = location.get('coordinates').get('latitude')
         lng = location.get('coordinates').get('longitude')
+        city = location.get('city')
+        if not city:
+          city = gmaps_API.LatLngToCity(lat, lng)
         user_info = {'city': city, 'lat': lat, 'lng': lng}
+        print 'caching user location for ', user_id, ' as ', json.dumps(user_info)
         self.fake_db_.AddOrUpdateUser(user_id, user_info)
 
       else:
@@ -142,11 +151,12 @@ class StartTimeIntentHandler(object):
       return {'speech': 'Suhur ends at %s in %s' % (prayer_time, city)}
     elif desired_prayer.lower() == 'iftar':
       return {'speech': 'Today, iftar is at %s in %s' % (prayer_time, city)}
+    
+    speech = ''
+    if city:
+      speech = 'The time for %s is %s in %s.' % (uti.GetPronunciation(canonical_prayer), prayer_time, city)
     else:
-      print 'The time for %s is %s in %s.' % (util.GetPronunciation(canonical_prayer), prayer_time, city)
-      return {
-        'speech': 
-            ('The time for %s is %s in %s.' % 
-             (util.GetPronunciation(canonical_prayer), prayer_time, city))
-      }
+      speech = 'The time for %s is %s.' % (uti.GetPronunciation(canonical_prayer), prayer_time)
+
+    return {'speech': speech}
 

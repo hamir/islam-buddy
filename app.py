@@ -59,12 +59,11 @@ def GetSalah():
     post_params = request.get_json(silent=True, force=True)
     print 'post_params = \n', json.dumps(post_params, indent=2)
 
-    device_params = post_params.get('originalRequest').get('data').get('device')
     post_intent_name = post_params.get('result').get('metadata').get('intentName')
     print 'intent_name = ', post_intent_name
 
     if post_intent_name in StartTimeIntentHandler.INTENTS_HANDLED:
-      server_response = _start_time_handler.HandleIntent(device_params, post_params)
+      server_response = _start_time_handler.HandleIntent(post_params)
     elif post_intent_name == 'CLEAR_LOCATION':
       user_id = post_params.get('originalRequest').get('data').get('user').get('userId')
       _fake_db.DeleteUser(user_id)

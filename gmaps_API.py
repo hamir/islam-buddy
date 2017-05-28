@@ -39,3 +39,6 @@ def GetGeocode(city, state, country):
   print 'response from GMAPS Geocode API', response
   return response
 
+def LatLngToCity(lat, lng):
+  # TODO(hamdy): make appropriate call to gmaps
+  return 'santa clara'

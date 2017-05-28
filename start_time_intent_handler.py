@@ -79,10 +79,16 @@ class StartTimeIntentHandler(object):
                            'again with a city next time.')}
       
       # at this stage, we don't know anything about the user's location - try
-      # checking our db for a stored location
+      # checking our db for a cached location
+
+      # however, do not use the user's cached location if user has explicitly requested
+      # that their current location be used
+      explicit_location_requested = 'user-current-location' in params
+
       user_info = self.fake_db_.GetUserInfo(user_id)
       print 'user info for ', user_id, ' is ', user_info
-      if user_info and user_info.get('lat') and user_info.get('lng') and user_info.get('city'):
+      if (not explicit_location_requested and user_info and 
+          user_info.get('lat') and user_info.get('lng') and user_info.get('city')):
         print 'found user ', user_id, ' in databse, so location request is not necesary'
         lat = user_info.get('lat')
         lng = user_info.get('lng')

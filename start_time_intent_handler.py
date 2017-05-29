@@ -69,10 +69,11 @@ class StartTimeIntentHandler(object):
     if masjid:
       print 'masjid: ',masjid
       canonical_prayer = util.StringToDailyPrayer(desired_prayer)
-      iqama_time = GetIqamaTime(canonical_prayer, masjid)
-      print 'iqama_time[', desired_prayer, "] = ", iqama_time
-      return self._MakeSpeechResponse(canonical_prayer, desired_prayer, iqama_time, 
-        (Locality.MASJID, masjid))
+      if not desired_prayer.lower() == 'suhur':
+        iqama_time = GetIqamaTime(canonical_prayer, masjid)
+        print 'iqama_time[', desired_prayer, "] = ", iqama_time
+        return self._MakeSpeechResponse(canonical_prayer, desired_prayer, iqama_time, 
+          (Locality.MASJID, masjid))
     
     # if there is no city or location, we won't be able to do anything
     # so request the user for permissions to use their location

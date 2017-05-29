@@ -1,0 +1,460 @@
+# WHEN IS MAGHRIB
+{
+  "lang": "en", 
+  "status": {
+    "errorType": "success", 
+    "code": 200
+  }, 
+  "timestamp": "2017-05-29T21:36:48.483Z", 
+  "sessionId": "1496093808398", 
+  "result": {
+    "parameters": {
+      "PrayerName": "Maghrib", 
+      "geo-state-us": "", 
+      "MasjidName": "", 
+      "user-current-location": "", 
+      "geo-country": "", 
+      "date": "", 
+      "geo-city": []
+    }, 
+    "contexts": [
+      {
+        "name": "google_assistant_welcome", 
+        "parameters": {
+          "PrayerName.original": "maghrib", 
+          "PrayerName": "Maghrib", 
+          "geo-state-us.original": "", 
+          "geo-state-us": "", 
+          "MasjidName.original": "", 
+          "MasjidName": "", 
+          "user-current-location": "", 
+          "geo-country.original": "", 
+          "user-current-location.original": "", 
+          "geo-country": "", 
+          "date": "", 
+          "geo-city.original": "", 
+          "date.original": "", 
+          "geo-city": []
+        }, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "requ", 
+        "parameters": {
+          "PrayerName.original": "maghrib", 
+          "PrayerName": "Maghrib", 
+          "geo-state-us.original": "", 
+          "geo-state-us": "", 
+          "MasjidName.original": "", 
+          "MasjidName": "", 
+          "user-current-location": "", 
+          "geo-country.original": "", 
+          "user-current-location.original": "", 
+          "geo-country": "", 
+          "date": "", 
+          "geo-city.original": "", 
+          "date.original": "", 
+          "geo-city": []
+        }, 
+        "lifespan": 5
+      }, 
+      {
+        "name": "actions_capability_screen_output", 
+        "parameters": {
+          "PrayerName.original": "maghrib", 
+          "PrayerName": "Maghrib", 
+          "geo-state-us.original": "", 
+          "geo-state-us": "", 
+          "MasjidName.original": "", 
+          "MasjidName": "", 
+          "user-current-location": "", 
+          "geo-country.original": "", 
+          "user-current-location.original": "", 
+          "geo-country": "", 
+          "date": "", 
+          "geo-city.original": "", 
+          "date.original": "", 
+          "geo-city": []
+        }, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "actions_capability_audio_output", 
+        "parameters": {
+          "PrayerName.original": "maghrib", 
+          "PrayerName": "Maghrib", 
+          "geo-state-us.original": "", 
+          "geo-state-us": "", 
+          "MasjidName.original": "", 
+          "MasjidName": "", 
+          "user-current-location": "", 
+          "geo-country.original": "", 
+          "user-current-location.original": "", 
+          "geo-country": "", 
+          "date": "", 
+          "geo-city.original": "", 
+          "date.original": "", 
+          "geo-city": []
+        }, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "google_assistant_input_type_keyboard", 
+        "parameters": {
+          "PrayerName.original": "maghrib", 
+          "PrayerName": "Maghrib", 
+          "geo-state-us.original": "", 
+          "geo-state-us": "", 
+          "MasjidName.original": "", 
+          "MasjidName": "", 
+          "user-current-location": "", 
+          "geo-country.original": "", 
+          "user-current-location.original": "", 
+          "geo-country": "", 
+          "date": "", 
+          "geo-city.original": "", 
+          "date.original": "", 
+          "geo-city": []
+        }, 
+        "lifespan": 0
+      }
+    ], 
+    "resolvedQuery": "when is maghrib", 
+    "source": "agent", 
+    "score": 1.0, 
+    "speech": "", 
+    "fulfillment": {
+      "messages": [
+        {
+          "speech": "", 
+          "type": 0
+        }
+      ], 
+      "speech": ""
+    }, 
+    "actionIncomplete": false, 
+    "action": "", 
+    "metadata": {
+      "intentId": "45051800-7d4f-4d0f-ae59-ed3bd84ff342", 
+      "nluResponseTime": 51, 
+      "webhookForSlotFillingUsed": "false", 
+      "intentName": "WHEN_IS_START_TIME_INTENT", 
+      "webhookUsed": "true"
+    }
+  }, 
+  "id": "308c2cdc-c7e5-40bb-be81-bc8fad4066be", 
+  "originalRequest": {
+    "source": "google", 
+    "version": "2", 
+    "data": {
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "ask prayer pal when is maghrib", 
+              "inputType": "KEYBOARD"
+            }
+          ], 
+          "intent": "WHEN_IS_START_TIME_INTENT", 
+          "arguments": [
+            {
+              "rawText": "maghrib", 
+              "textValue": "Maghrib", 
+              "name": "PrayerName"
+            }, 
+            {
+              "rawText": "when is maghrib", 
+              "textValue": "when is maghrib", 
+              "name": "trigger_query"
+            }
+          ]
+        }
+      ], 
+      "isInSandbox": true, 
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          }, 
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          }
+        ]
+      }, 
+      "conversation": {
+        "conversationId": "1496093808398", 
+        "type": "NEW"
+      }, 
+      "user": {
+        "locale": "en-US", 
+        "userId": "6CVWkb0YHEhrcxsP6nh4LQm1iHD1+T6jv2we7VVLaz0="
+      }, 
+      "device": {}
+    }
+  }
+}
+
+
+# YES 
+{
+  "lang": "en", 
+  "status": {
+    "errorType": "success", 
+    "code": 200
+  }, 
+  "timestamp": "2017-05-29T21:53:34.949Z", 
+  "sessionId": "1496094809594", 
+  "result": {
+    "parameters": {}, 
+    "contexts": [
+      {
+        "name": "requ", 
+        "parameters": {
+          "PrayerName.original": "maghrib", 
+          "PrayerName": "Maghrib", 
+          "geo-state-us.original": "", 
+          "geo-state-us": "", 
+          "MasjidName.original": "", 
+          "MasjidName": "", 
+          "user-current-location": "", 
+          "geo-country.original": "", 
+          "user-current-location.original": "", 
+          "geo-country": "", 
+          "date": "", 
+          "geo-city.original": "", 
+          "date.original": "", 
+          "geo-city": []
+        }, 
+        "lifespan": 4
+      }, 
+      {
+        "name": "actions_capability_screen_output", 
+        "parameters": {}, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "actions_intent_permission", 
+        "parameters": {
+          "PERMISSION": "true"
+        }, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "actions_capability_audio_output", 
+        "parameters": {}, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "google_assistant_input_type_keyboard", 
+        "parameters": {}, 
+        "lifespan": 0
+      }
+    ], 
+    "resolvedQuery": "actions_intent_PERMISSION", 
+    "source": "agent", 
+    "score": 1.0, 
+    "speech": "", 
+    "fulfillment": {
+      "messages": [
+        {
+          "speech": "", 
+          "type": 0
+        }
+      ], 
+      "speech": ""
+    }, 
+    "actionIncomplete": false, 
+    "action": "", 
+    "metadata": {
+      "intentId": "c3e4b7bd-65f9-4859-99d3-4ee0432ba996", 
+      "nluResponseTime": 2, 
+      "webhookForSlotFillingUsed": "false", 
+      "intentName": "PERMISSION_INTENT", 
+      "webhookUsed": "true"
+    }
+  }, 
+  "id": "b9d1caf2-3c65-49cc-8c18-208de5937dcf", 
+  "originalRequest": {
+    "source": "google", 
+    "version": "2", 
+    "data": {
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "yes", 
+              "inputType": "KEYBOARD"
+            }
+          ], 
+          "intent": "actions.intent.PERMISSION", 
+          "arguments": [
+            {
+              "rawText": "yes", 
+              "textValue": "true", 
+              "name": "PERMISSION"
+            }
+          ]
+        }
+      ], 
+      "isInSandbox": true, 
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          }, 
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          }
+        ]
+      }, 
+      "conversation": {
+        "conversationId": "1496094809594", 
+        "type": "ACTIVE", 
+        "conversationToken": "[\"requ\"]"
+      }, 
+      "user": {
+        "locale": "en-US", 
+        "userId": "6CVWkb0YHEhrcxsP6nh4LQm1iHD1+T6jv2we7VVLaz0="
+      }, 
+      "device": {
+        "location": {
+          "city": "Mountain View", 
+          "formattedAddress": "1600 Amphitheatre Parkway, Mountain View, CA 94043, United States", 
+          "zipCode": "94043", 
+          "coordinates": {
+            "latitude": 37.422365999999997, 
+            "longitude": -122.084406
+          }
+        }
+      }
+    }
+  }
+})
+
+
+# NO
+{
+  "lang": "en", 
+  "status": {
+    "errorType": "success", 
+    "code": 200
+  }, 
+  "timestamp": "2017-05-29T22:04:40.068Z", 
+  "sessionId": "1496095475186", 
+  "result": {
+    "parameters": {}, 
+    "contexts": [
+      {
+        "name": "requ", 
+        "parameters": {
+          "PrayerName.original": "maghrib", 
+          "PrayerName": "Maghrib", 
+          "geo-state-us.original": "", 
+          "geo-state-us": "", 
+          "MasjidName.original": "", 
+          "MasjidName": "", 
+          "user-current-location": "", 
+          "geo-country.original": "", 
+          "user-current-location.original": "", 
+          "geo-country": "", 
+          "date": "", 
+          "geo-city.original": "", 
+          "date.original": "", 
+          "geo-city": []
+        }, 
+        "lifespan": 4
+      }, 
+      {
+        "name": "actions_capability_screen_output", 
+        "parameters": {}, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "actions_intent_permission", 
+        "parameters": {
+          "PERMISSION": "false"
+        }, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "actions_capability_audio_output", 
+        "parameters": {}, 
+        "lifespan": 0
+      }, 
+      {
+        "name": "google_assistant_input_type_keyboard", 
+        "parameters": {}, 
+        "lifespan": 0
+      }
+    ], 
+    "resolvedQuery": "actions_intent_PERMISSION", 
+    "source": "agent", 
+    "score": 1.0, 
+    "speech": "", 
+    "fulfillment": {
+      "messages": [
+        {
+          "speech": "", 
+          "type": 0
+        }
+      ], 
+      "speech": ""
+    }, 
+    "actionIncomplete": false, 
+    "action": "", 
+    "metadata": {
+      "intentId": "c3e4b7bd-65f9-4859-99d3-4ee0432ba996", 
+      "nluResponseTime": 2, 
+      "webhookForSlotFillingUsed": "false", 
+      "intentName": "PERMISSION_INTENT", 
+      "webhookUsed": "true"
+    }
+  }, 
+  "id": "c4fb6186-01a5-4920-8df5-d3f42c7eeb4c", 
+  "originalRequest": {
+    "source": "google", 
+    "version": "2", 
+    "data": {
+      "inputs": [
+        {
+          "rawInputs": [
+            {
+              "query": "no", 
+              "inputType": "KEYBOARD"
+            }
+          ], 
+          "intent": "actions.intent.PERMISSION", 
+          "arguments": [
+            {
+              "rawText": "no", 
+              "textValue": "false", 
+              "name": "PERMISSION"
+            }
+          ]
+        }
+      ], 
+      "isInSandbox": true, 
+      "surface": {
+        "capabilities": [
+          {
+            "name": "actions.capability.AUDIO_OUTPUT"
+          }, 
+          {
+            "name": "actions.capability.SCREEN_OUTPUT"
+          }
+        ]
+      }, 
+      "conversation": {
+        "conversationId": "1496095475186", 
+        "type": "ACTIVE", 
+        "conversationToken": "[\"requ\"]"
+      }, 
+      "user": {
+        "locale": "en-US", 
+        "userId": "6CVWkb0YHEhrcxsP6nh4LQm1iHD1+T6jv2we7VVLaz0="
+      }, 
+      "device": {}
+    }
+  }
+}
+

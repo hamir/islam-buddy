@@ -6,6 +6,7 @@ import gmaps_API
 import util
 from prayer_info import PrayerInfo
 from iqama_fetcher import GetIqamaTime
+from common import Locality
 
 class StartTimeIntentHandler(object):
 
@@ -69,7 +70,8 @@ class StartTimeIntentHandler(object):
       canonical_prayer = util.StringToDailyPrayer(desired_prayer)
       iqama_time = GetIqamaTime(desired_prayer,masjid)
       print 'iqama_time[', desired_prayer, "] = ", iqama_time
-      return self._MakeSpeechResponse(canonical_prayer, desired_prayer, iqama_time, [masjid,"Masjid"])
+      return self._MakeSpeechResponse(canonical_prayer, desired_prayer, iqama_time, 
+        (Locality.MASJID, masjid))
     
     # if there is no city or location, we won't be able to do anything
     # so request the user for permissions to use their location
@@ -158,7 +160,8 @@ class StartTimeIntentHandler(object):
        all_prayer_times.get(canonical_prayer)
     print 'prayer_times[', desired_prayer, "] = ", prayer_time 
 
-    return self._MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, [city,"City"])
+    return self._MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, 
+      (Locality.CITY, city))
 
 
   def _MakeSpeechResponse(self, canonical_prayer, desired_prayer, prayer_time, locality):
@@ -171,12 +174,12 @@ class StartTimeIntentHandler(object):
     speech = ''
     if prayer_time:
       if locality:
-        if locality[1] == "City":
+        if locality[0] == Locality.CITY:
           loc = "in"
-        elif locality[1] == "Masjid":
+        elif locality[0] == Locality.MASJID:
           loc = "at"
-        speech = 'The time for %s is %s %s %s.' % (util.GetPronunciation(canonical_prayer), prayer_time, loc, locality[0])
-        display_text = 'The time for %s is %s %s %s.' % (util.GetDisplayText(canonical_prayer), prayer_time, loc, locality[0])
+        speech = 'The time for %s is %s %s %s.' % (util.GetPronunciation(canonical_prayer), prayer_time, loc, locality[1])
+        display_text = 'The time for %s is %s %s %s.' % (util.GetDisplayText(canonical_prayer), prayer_time, loc, locality[1])
       else:
         speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), prayer_time)
         display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
@@ -185,4 +188,5 @@ class StartTimeIntentHandler(object):
       display_text = 'Sorry, Prayer Pal is unable to respond at the moment. Please try again later.'
 
     return {'speech': speech, 'displayText': display_text}
+
 

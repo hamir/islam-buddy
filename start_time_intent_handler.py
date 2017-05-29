@@ -6,6 +6,8 @@ import gmaps_API
 from prayer_info import PrayerInfo
 import util
 
+from iqama_fetcher import GetIqamaTime
+from common import Locality
 
 class StartTimeIntentHandler(object):
 
@@ -61,6 +63,15 @@ class StartTimeIntentHandler(object):
     # this should also always be available
     user_id = post_params.get('originalRequest').get('data').get('user').get('userId')
 
+    # if we have a masjid name then call GetIqamaTime to obtain it from scraper
+    if masjid:
+      print 'masjid: ',masjid
+      canonical_prayer = util.StringToDailyPrayer(desired_prayer)
+      iqama_time = GetIqamaTime(desired_prayer,masjid)
+      print 'iqama_time[', desired_prayer, "] = ", iqama_time
+      return self._MakeSpeechResponse(canonical_prayer, desired_prayer, iqama_time, 
+        (Locality.MASJID, masjid))
+    
     # if there is no city or location, we won't be able to do anything
     # so request the user for permissions to use their location
     if not (city or has_location):
@@ -148,7 +159,8 @@ class StartTimeIntentHandler(object):
        all_prayer_times.get(canonical_prayer)
     print 'prayer_times[', desired_prayer, "] = ", prayer_time 
 
-    return self._MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, city)
+    return self._MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, 
+      (Locality.CITY, city))
 
 
   def _MakeSpeechResponse(self, canonical_prayer, desired_prayer, prayer_time, city):
@@ -159,12 +171,21 @@ class StartTimeIntentHandler(object):
       return {'speech': 'Today, iftar is at %s in %s' % (prayer_time, city)}
     
     speech = ''
-    if city:
-      speech = 'The time for %s is %s in %s.' % (util.GetPronunciation(canonical_prayer), prayer_time, city)
-      display_text = 'The time for %s is %s in %s.' % (util.GetDisplayText(canonical_prayer), prayer_time, city)
+    if prayer_time:
+      if locality:
+        if locality[0] == Locality.CITY:
+          loc = "in"
+        elif locality[0] == Locality.MASJID:
+          loc = "at"
+        speech = 'The time for %s is %s %s %s.' % (util.GetPronunciation(canonical_prayer), prayer_time, loc, locality[1])
+        display_text = 'The time for %s is %s %s %s.' % (util.GetDisplayText(canonical_prayer), prayer_time, loc, locality[1])
+      else:
+        speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), prayer_time)
+        display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
     else:
       speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), prayer_time)
       display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
 
     return {'speech': speech, 'displayText': display_text}
+
 

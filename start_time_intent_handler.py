@@ -74,6 +74,8 @@ class StartTimeIntentHandler(object):
         print 'iqama_time[', desired_prayer, "] = ", iqama_time
         return self._MakeSpeechResponse(canonical_prayer, desired_prayer, iqama_time, 
           (Locality.MASJID, masjid))
+      else:
+        return {'speech': 'Sorry, suhur time is not supported for masjids.'}
     
     # if there is no city or location, we won't be able to do anything
     # so request the user for permissions to use their location

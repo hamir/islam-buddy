@@ -38,7 +38,7 @@ def GetDailyPrayerTimes(lat, lng):
     'lg': lng,
   }
   print 'post_data = ', post_data
-  request = requests.post(_SALAH_API_URL, data=post_data)
+  request = requests.post(_SALAH_API_URL, data=post_data, timeout=15)
   if request.status_code == 500:
     return {}
   print 'here = ', request.text

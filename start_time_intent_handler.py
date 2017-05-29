@@ -69,7 +69,7 @@ class StartTimeIntentHandler(object):
     if masjid:
       print 'masjid: ',masjid
       canonical_prayer = util.StringToDailyPrayer(desired_prayer)
-      iqama_time = GetIqamaTime(desired_prayer,masjid)
+      iqama_time = GetIqamaTime(canonical_prayer, masjid)
       print 'iqama_time[', desired_prayer, "] = ", iqama_time
       return self._MakeSpeechResponse(canonical_prayer, desired_prayer, iqama_time, 
         (Locality.MASJID, masjid))
@@ -171,17 +171,18 @@ class StartTimeIntentHandler(object):
     speech = ''
     if prayer_time:
       if locality:
-        if desired_prayer.lower() == 'suhur':
-          return {'speech': 'Suhur ends at %s in %s' % (prayer_time, locality[1])}
-        elif desired_prayer.lower() == 'iftar':
-          return {'speech': 'Today, iftar is at %s in %s' % (prayer_time, locality[1])}
+        preposition = "in" if locality[0] == Locality.CITY else "at"
 
-        if locality[0] == Locality.CITY:
-          loc = "in"
-        elif locality[0] == Locality.MASJID:
-          loc = "at"
-        speech = 'The time for %s is %s %s %s.' % (util.GetPronunciation(canonical_prayer), prayer_time, loc, locality[1])
-        display_text = 'The time for %s is %s %s %s.' % (util.GetDisplayText(canonical_prayer), prayer_time, loc, locality[1])
+        # time string (ex: "5:30 PM at MCA" or "2:30 PM in Santa Clara"
+        time_str = '%s %s %s' % (prayer_time, preposition, locality[1])
+
+        if desired_prayer.lower() == 'suhur':
+          return {'speech': 'Suhur ends at %s.' % time_str}
+        elif desired_prayer.lower() == 'iftar':
+          return {'speech': 'Today, iftar is at %s.' % time_str}
+
+        speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), time_str)
+        display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), time_str)
       else:
         speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), prayer_time)
         display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
@@ -190,3 +191,4 @@ class StartTimeIntentHandler(object):
       display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
 
     return {'speech': speech, 'displayText': display_text}
+

@@ -165,14 +165,15 @@ class StartTimeIntentHandler(object):
 
   def _MakeSpeechResponse(self, canonical_prayer, desired_prayer, prayer_time, city):
     print '_MakeSpeechResponse: ', canonical_prayer, desired_prayer, prayer_time, city
-    if desired_prayer.lower() == 'suhur':
-      return {'speech': 'Suhur ends at %s in %s' % (prayer_time, city)}
-    elif desired_prayer.lower() == 'iftar':
-      return {'speech': 'Today, iftar is at %s in %s' % (prayer_time, city)}
     
     speech = ''
     if prayer_time:
       if locality:
+        if desired_prayer.lower() == 'suhur':
+          return {'speech': 'Suhur ends at %s in %s' % (prayer_time, locality[1])}
+        elif desired_prayer.lower() == 'iftar':
+          return {'speech': 'Today, iftar is at %s in %s' % (prayer_time, locality[1])}
+
         if locality[0] == Locality.CITY:
           loc = "in"
         elif locality[0] == Locality.MASJID:
@@ -187,5 +188,4 @@ class StartTimeIntentHandler(object):
       display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
 
     return {'speech': speech, 'displayText': display_text}
-
 

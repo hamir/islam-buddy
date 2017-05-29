@@ -13,5 +13,6 @@ class Intent(object):
   WHEN_IS_PRAYER_NAME = 2
 
 class Locality(object):
-  CITY = 0
-  MASJID = 1
+  UNSPECIFIED = 0
+  CITY = 1
+  MASJID = 2

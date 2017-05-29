@@ -167,9 +167,9 @@ class StartTimeIntentHandler(object):
       (Locality.CITY, city))
 
 
-  def _MakeSpeechResponse(self, canonical_prayer, desired_prayer, prayer_time, city):
-    print '_MakeSpeechResponse: ', canonical_prayer, desired_prayer, prayer_time, city
-    
+  def _MakeSpeechResponse(self, canonical_prayer, desired_prayer, prayer_time, locality):
+    print '_MakeSpeechResponse: ', canonical_prayer, desired_prayer, prayer_time, locality
+
     speech = ''
     if prayer_time:
       if locality:

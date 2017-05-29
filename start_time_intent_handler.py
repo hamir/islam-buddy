@@ -3,10 +3,10 @@
 import json
 import response_builder
 import gmaps_API
-import util
 from prayer_info import PrayerInfo
 from iqama_fetcher import GetIqamaTime
 from common import Locality
+import util
 
 class StartTimeIntentHandler(object):
 
@@ -39,10 +39,7 @@ class StartTimeIntentHandler(object):
     city = params.get('geo-city')
     country = params.get('geo-country')
     state = params.get('geo-state-us')
-    
-    # filled if the user calls for a masjid
-    masjid = params.get('MasjidName')
-    
+
     # filled if we have the user's lat/lng
     device_params = {}
     if 'originalRequest' in post_params:
@@ -59,11 +56,12 @@ class StartTimeIntentHandler(object):
       # this should be filled on PERMISSION_REQUEST intents in the relevant context
       permission_context = self._GetContext(post_params, 'requ')
       print 'permission context = ', permission_context 
-      desired_prayer = permission_context.get('parameters').get('PrayerName')  
-    
+      desired_prayer = permission_context.get('parameters').get('PrayerName')
+      
+
     # this should also always be available
     user_id = post_params.get('originalRequest').get('data').get('user').get('userId')
-
+    
     # if we have a masjid name then call GetIqamaTime to obtain it from scraper
     if masjid:
       print 'masjid: ',masjid
@@ -142,7 +140,7 @@ class StartTimeIntentHandler(object):
         lng = location.get('coordinates').get('longitude')
         city = location.get('city')
         if not city:
-          city = gmaps_API.ReverseGeocodeCity(lat, lng)
+          city = gmaps_API.LatLngToCity(lat, lng)
         user_info = {'city': city, 'lat': lat, 'lng': lng}
         print 'caching user location for ', user_id, ' as ', json.dumps(user_info)
         self.fake_db_.AddOrUpdateUser(user_id, user_info)
@@ -151,7 +149,7 @@ class StartTimeIntentHandler(object):
         print 'Could not find relevant context!'
 
     return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city)
-  
+
 
   def _ComputePrayerTimeAndRespond(self, desired_prayer, lat, lng, city):
     all_prayer_times = self.prayer_info_.GetPrayerTimes(lat, lng)
@@ -164,8 +162,8 @@ class StartTimeIntentHandler(object):
       (Locality.CITY, city))
 
 
-  def _MakeSpeechResponse(self, canonical_prayer, desired_prayer, prayer_time, locality):
-    print '_MakeSpeechResponse: ', canonical_prayer, desired_prayer, prayer_time, locality
+  def _MakeSpeechResponse(self, canonical_prayer, desired_prayer, prayer_time, city):
+    print '_MakeSpeechResponse: ', canonical_prayer, desired_prayer, prayer_time, city
     if desired_prayer.lower() == 'suhur':
       return {'speech': 'Suhur ends at %s in %s' % (prayer_time, locality[0])}
     elif desired_prayer.lower() == 'iftar':
@@ -184,8 +182,8 @@ class StartTimeIntentHandler(object):
         speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), prayer_time)
         display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
     else:
-      speech = 'Sorry, Prayer Pal is unable to respond at the moment. Please try again later.'
-      display_text = 'Sorry, Prayer Pal is unable to respond at the moment. Please try again later.'
+      speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), prayer_time)
+      display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
 
     return {'speech': speech, 'displayText': display_text}
 

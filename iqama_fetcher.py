@@ -25,36 +25,9 @@ def GetIqamaTime(desired_prayer,masjid):
     response = json.loads(request.text)
     print 'response from scraper service = ', response
 
-    # checks if the size of the prayer and iqama time lists are equivalent
-    if len(response[0]['Prayer']) != len(response[0]['IqamaTime']):
-      print 'Prayer and IqamaTime lists don\'t match'
-      return None
-
-    for idx, prayer in enumerate(response[0]['Prayer']):
-      if desired_prayer.lower() in GetEquivalentPrayer(prayer).lower():
-        iqama_time = response[0]['IqamaTime'][idx]
-        if 'fajr' in desired_prayer.lower():
-          iqama_time = iqama_time + " AM"
-        else:
-          iqama_time = iqama_time + " PM"
-        break 
-
+    iqama_time = response[desired_prayer]
+    
     return iqama_time
   else:
     print 'bad response from scraper service = ', request.status_code
-    return None
-
-def GetEquivalentPrayer(prayer):
-  """Returns the prayer equivalent to the defined prayer-name entity"""
-  if(re.match(r'(^f)', prayer.lower(), flags=0)):
-    return 'Fajr'
-  elif(re.match(r'(^d)|(^z)', prayer.lower(), flags=0)):
-    return 'Dhuhr'
-  elif(re.match(r'(^a)', prayer.lower(), flags=0)):
-    return 'Asr'
-  elif(re.match(r'(^m)', prayer.lower(), flags=0)):
-    return 'Maghrib'
-  elif(re.match(r'(^i)', prayer.lower(), flags=0)):
-    return 'Isha'
-  else:
     return None

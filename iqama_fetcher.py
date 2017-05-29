@@ -1,13 +1,15 @@
 import re
+import util
 import requests
 import json
 
 _SCRAPER_URL = 'https://islam-buddy-staging.herokuapp.com/iqama'
 
-def GetIqamaTime(desired_prayer,masjid):
+def GetIqamaTime(desired_prayer, masjid):
   """Gets the iqama time from the heruko scraper service by peforming a POST.
 
   Args:
+    desired_prayer: DailyPrayer enum representing desired salah
     masjid: a string representing the masjid of intereset
 
   Returns: a dict containing the prayers and iqama times
@@ -25,9 +27,14 @@ def GetIqamaTime(desired_prayer,masjid):
     response = json.loads(request.text)
     print 'response from scraper service = ', response
 
-    iqama_time = response[desired_prayer]
-    
-    return iqama_time
+    # translate the dict keys to enums
+    iqama_times = {}
+    for key in response:
+      prayer = util.StringToDailyPrayer(key)
+      if prayer:
+        iqama_times[prayer] = response[key]
+
+    return iqama_times[desired_prayer]
   else:
     print 'bad response from scraper service = ', request.status_code
     return None

@@ -93,7 +93,7 @@ class StartTimeIntentHandler(object):
 
       # however, do not use the user's cached location if user has explicitly requested
       # that their current location be used
-      explicit_location_requested = 'user-current-location' in params
+      explicit_location_requested = params.get('user-current-location')
 
       user_info = self.fake_db_.GetUserInfo(user_id)
       print 'user info for ', user_id, ' is ', user_info
@@ -185,3 +185,4 @@ class StartTimeIntentHandler(object):
       display_text = 'Sorry, Prayer Pal is unable to respond at the moment. Please try again later.'
 
     return {'speech': speech, 'displayText': display_text}
+

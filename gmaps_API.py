@@ -4,10 +4,10 @@ import json
 _GMAPS_API_GEOCODE_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
 
 # Use for Staging GAE
-_GMAPS_API_GEOCODE_KEY = 'AIzaSyBC9cKscPGfI0Ge0uPJxO29ru0qLvxfcdA'
+#_GMAPS_API_GEOCODE_KEY = 'AIzaSyBC9cKscPGfI0Ge0uPJxO29ru0qLvxfcdA'
 
 # Use for Production GAE
-#_GMAPS_API_GEOCODE_KEY = 'AIzaSyBTm8Tq2_27EHG9sylGxpcwZk2B4ynjiJU'
+_GMAPS_API_GEOCODE_KEY = 'AIzaSyBTm8Tq2_27EHG9sylGxpcwZk2B4ynjiJU'
 
 def GetGeocode(city, state, country):
   """Gets the longitude and latitude from the Google Maps API.

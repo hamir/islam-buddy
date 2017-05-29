@@ -5,7 +5,7 @@ import json
 _SCRAPER_URL = 'https://islam-buddy-staging.herokuapp.com/iqama'
 
 def GetIqamaTime(desired_prayer,masjid):
-  """Gets the iqama time from the heruko scraper service by peforming a GET.
+  """Gets the iqama time from the heruko scraper service by peforming a POST.
 
   Args:
     masjid: a string representing the masjid of intereset
@@ -14,11 +14,11 @@ def GetIqamaTime(desired_prayer,masjid):
   """
 
   # set up the parameters in the format expected by the scraper service
-  get_params = {
+  post_params = {
     'masjid': masjid,
   }
-  print 'scraper get_params = ', get_params
-  request = requests.post(_SCRAPER_URL, params=get_params, timeout=15)
+  print 'scraper get_params = ', post_params
+  request = requests.post(_SCRAPER_URL, params=post_params, timeout=15)
   
   # checks if request isn't bad
   if(request.status_code == requests.codes.ok):

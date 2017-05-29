@@ -1,6 +1,7 @@
 # Intent handler for 'WHEN_IS_START_TIME_INTENT'
 
 import json
+import util
 import response_builder
 import gmaps_API
 from prayer_info import PrayerInfo
@@ -40,6 +41,9 @@ class StartTimeIntentHandler(object):
     city = params.get('geo-city')
     country = params.get('geo-country')
     state = params.get('geo-state-us')
+
+    # filled if the user calls for a masjid
+    masjid = params.get('MasjidName')
 
     # filled if we have the user's lat/lng
     device_params = {}

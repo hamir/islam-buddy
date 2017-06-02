@@ -87,7 +87,6 @@ def BuildJSON(prayer_name, raw_query, resolved_query, intent, masjid_name="", ge
   original_request_data = {'inputs': inputs, 'isInSandbox': 'true', 'surface': {'capabilities': capabilities}, 'conversation': {'type': conversation_type}}
   data['originalRequest'] = {'source': 'google', 'version':2, 'data': original_request_data}
   metadata = {'intentName': intent}
-
  
   data['result'] = {'parameters': parameters, 'contexts': contexts, 'resolved_query': resolved_query, 'source': 'agent', 'score': 1, 'metadata': metadata}
   json_data = json.dumps(data)

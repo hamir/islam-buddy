@@ -11,6 +11,8 @@ def test_JSON_builder():
   print '\n when is isha in fremont', salah_com_fetcher.BuildJSON('isha', 'when is isha in fremont', 'when is isha in fremont', 'WHEN_IS_START_TIME_INTENT', geo_city='fremont')
   print '\n yes for permission', salah_com_fetcher.BuildJSON('maghrib', 'yes', 'actions_intent_PERMISSION', 'PERMISSION_INTENT', conversation_type='ACTIVE', permission='true')
   print '\n no for permission', salah_com_fetcher.BuildJSON('fajr', 'no', 'actions_intent_PERMISSION', 'PERMISSION_INTENT', conversation_type='ACTIVE', permission='false')
+  print '\n what time is fajr today in union city', salah_com_fetcher.BuildJSON('fajr', 'what time is fajr today in union city', 'what time is fajr today in union city', \
+        'WHEN_IS_START_TIME_INTENT', geo_city='union city')
 
 test_fetcher()
 test_JSON_builder()

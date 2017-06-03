@@ -38,7 +38,7 @@ def GetIqamaTime(desired_prayer, masjid):
         iqama_time = tree[1][index].text
         break
 
-    if not (re.match(r'($M)|($m)', iqama_time, flags=0)):
+    if not (re.match(r'(M$)|(m$)', iqama_time, flags=0)):
       iqama_time = AddAMPM(desired_prayer, str(iqama_time)) 
     return iqama_time
   else:

@@ -143,7 +143,7 @@ class StartTimeIntentHandler(object):
         lng = location.get('coordinates').get('longitude')
         city = location.get('city')
         if not city:
-          city = gmaps_API.LatLngToCity(lat, lng)
+          city = gmaps_API.ReverseGeocodeCity(lat, lng)
         user_info = {'city': city, 'lat': lat, 'lng': lng}
         print 'caching user location for ', user_id, ' as ', json.dumps(user_info)
         self.fake_db_.AddOrUpdateUser(user_id, user_info)

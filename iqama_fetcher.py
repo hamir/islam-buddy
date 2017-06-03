@@ -1,7 +1,8 @@
-import re
+"""Fetches iqama times from our heroku server."""
+
+import json
 import util
 import requests
-import json
 
 _SCRAPER_URL = 'https://islam-buddy-staging.herokuapp.com/iqama'
 
@@ -24,7 +25,8 @@ def GetIqamaTime(desired_prayer, masjid):
   request = requests.post(_SCRAPER_URL, params=post_params, timeout=15)
 
   # checks if request isn't bad
-  if (request.status_code == requests.codes.ok):
+  # pylint: disable=no-member
+  if request.status_code == requests.codes.ok:
     response = json.loads(request.text)
     print 'response from scraper service = ', response
 
@@ -36,6 +38,5 @@ def GetIqamaTime(desired_prayer, masjid):
         iqama_times[prayer] = response[key]
 
     return iqama_times[desired_prayer]
-  else:
-    print 'bad response from scraper service = ', request.status_code
-    return None
+  print 'bad response from scraper service = ', request.status_code
+  return None

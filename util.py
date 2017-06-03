@@ -1,3 +1,5 @@
+"""Utility functions."""
+
 import json
 from flask import make_response
 from common import DailyPrayer
@@ -81,8 +83,7 @@ def _StringToEnum(str_value, str_to_enum, default):
   str_value = str(str_value).lower()
   if str_value in str_to_enum:
     return str_to_enum[str_value]
-  else:
-    return default
+  return default
 
 
 def StringToDailyPrayer(prayer_str):
@@ -90,14 +91,15 @@ def StringToDailyPrayer(prayer_str):
   prayer_str = str(prayer_str).lower()
   if prayer_str in _KEY_NAME_TO_PRAYER:
     return _KEY_NAME_TO_PRAYER[prayer_str]
-  else:
-    return ''
+  return ''
 
 
 def GetPronunciation(daily_prayer):
+  """Gets TTS for a daily prayer."""
   print 'GetPronunciation: ', _PRAYER_METADATA[daily_prayer]
   return _PRAYER_METADATA[daily_prayer].get('pronunciation')
 
 
 def GetDisplayText(daily_prayer):
+  """Gets display text for a daily prayer."""
   return _PRAYER_METADATA[daily_prayer].get('display_name')

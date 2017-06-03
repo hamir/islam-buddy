@@ -7,10 +7,11 @@ from xml.etree import ElementTree
 
 _IQAMAH_NET_URL = 'http://feed.iqamah.net/IQ'
 
-def GetIqamaTime(desired_prayer,masjid):
+def GetIqamaTime(desired_prayer, masjid):
   """Gets the iqama time from the iqamah.net service by peforming a POST.
 
   Args:
+    desired_prayer: DailyPrayer enum representing desired salah
     masjid: a string representing the masjid of intereset
 
   Returns: a dict containing the prayers and iqama times

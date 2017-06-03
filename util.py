@@ -2,6 +2,11 @@ import json
 from flask import make_response
 from common import DailyPrayer 
 
+def _EncodeParameter(param, spaced):
+  if spaced:
+    return ' '.join(param).encode('utf-8')
+  else:
+    return ''.join(param).encode('utf-8')
 
 def JsonResponse(response_dict):
   """Constructs a JSON response object."""

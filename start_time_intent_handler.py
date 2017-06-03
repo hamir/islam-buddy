@@ -172,7 +172,7 @@ class StartTimeIntentHandler(object):
     if prayer_time:
       if locality:
         if desired_prayer.lower() == 'suhur':
-          return {'speech': 'Suhur ends at %s in %s' % (prayer_time, locality[1])}
+          return {'speech': 'Suhur ends at %s' % (prayer_time)}
         elif desired_prayer.lower() == 'iftar':
           return {'speech': 'Today, iftar is at %s in %s' % (prayer_time, locality[1])}
 

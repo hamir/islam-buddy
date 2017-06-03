@@ -1,8 +1,13 @@
 """Utility functions."""
-
 import json
 from flask import make_response
 from common import DailyPrayer
+
+def EncodeParameter(param, spaced):
+  """Returns param encoded to utf-8"""
+  if spaced:
+    return ' '.join(param).encode('utf-8')
+  return ''.join(param).encode('utf-8')
 
 
 def JsonResponse(response_dict):

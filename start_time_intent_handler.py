@@ -6,12 +6,8 @@ import response_builder
 import gmaps_client
 from iqama_fetcher import GetIqamaTime
 from common import Locality
+from masjid_util import GetMasjidDisplayName
 
-
-def _EncodeParameter(param):
-  if not param:
-    return None
-  return ' '.join(param).encode('utf-8')
 
 
 def _GetContext(post_params, context_name):
@@ -29,9 +25,10 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time,
   if prayer_time:
     if locality:
       preposition = "in" if locality[0] == Locality.CITY else "at"
+      location = locality[1] if locality[0] == Locality.CITY else GetMasjidDisplayName(locality[1])
 
       # time string (ex: "5:30 PM at MCA" or "2:30 PM in Santa Clara"
-      time_str = '%s %s %s' % (prayer_time, preposition, locality[1])
+      time_str = '%s %s %s' % (prayer_time, preposition, location)
 
       if desired_prayer.lower() == 'suhur':
         return {'speech': 'Suhur ends at %s.' % time_str}
@@ -195,9 +192,9 @@ class StartTimeIntentHandler(object):
     return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city)
 
   def _RespondToCityRequest(self, params, desired_prayer):
-    city = _EncodeParameter(params.get('geo-city'))
-    country = _EncodeParameter(params.get('geo-country'))
-    state = _EncodeParameter(params.get('geo-state-us'))
+    city = util.EncodeParameter(params.get('geo-city'), 1)
+    country = util.EncodeParameter(params.get('geo-country'), 1)
+    state = util.EncodeParameter(params.get('geo-state-us'), 1)
 
     location_coordinates = gmaps_client.GetGeocode(city, country, state)
     lat = location_coordinates.get('lat')

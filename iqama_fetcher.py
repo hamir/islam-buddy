@@ -37,18 +37,22 @@ def GetIqamaTime(desired_prayer, masjid):
       if(desired_prayer.lower() == (tree[1][index].tag).lower()):
         iqama_time = tree[1][index].text
         break
+    
+    print 'Iqama Time: ', iqama_time
 
-    if not (re.match(r'(M$)|(m$)', iqama_time, flags=0)):
-      iqama_time = AddAMPM(desired_prayer, str(iqama_time)) 
-    return iqama_time
+    if iqama_time:
+      return AddAMPM(desired_prayer, str(iqama_time))
+    else:
+      return None  
   else:
     print 'bad response from iqamah service = ', request.status_code
     return None
 
 def AddAMPM(prayer, time):
   if(re.match(r'(\d+:\d+)', time, flags=0)):
+    time = re.findall(r'(\d+:\d+)', time)
     if(re.match(r'(^f)', prayer.lower(), flags=0)):
-      return time + ' AM'
-    return time + ' PM'
+      return time[0] + ' AM'
+    return time[0] + ' PM'
   else:
     return time 

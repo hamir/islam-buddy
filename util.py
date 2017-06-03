@@ -1,6 +1,6 @@
 import json
 from flask import make_response
-from common import DailyPrayer 
+from common import DailyPrayer
 
 
 def JsonResponse(response_dict):
@@ -21,54 +21,53 @@ def JsonError(error_text):
 
 
 _PRAYER_METADATA = {
-  DailyPrayer.FAJR: {
-    'key_name': 'fajr',
-    'display_name': 'Fajr',
-    'pronunciation': 'Fajer',
-  },
-  DailyPrayer.DHUHR: {
-    'key_name': 'dhuhr',
-    'display_name': 'Dhuhr',
-    'pronunciation': 'Dhuhr',
-  },
-  DailyPrayer.ASR: {
-    'key_name': 'asr',
-    'display_name': 'Asr',
-    'pronunciation': 'Usser',
-  },
-  DailyPrayer.MAGHRIB: {
-    'key_name': 'maghrib',
-    'display_name': 'Maghrib',
-    'pronunciation': 'Mugreb',
-  },
-  DailyPrayer.ISHA: {
-    'key_name': 'isha',
-    'display_name': 'Isha',
-    'pronunciation': 'Isha',
-  },
-  DailyPrayer.QIYAM: {
-    'key_name': 'qiyam',
-    'display_name': 'Qiyam',
-    'pronunciation': 'Qiyam',
-  },
-  DailyPrayer.UNSPECIFIED: {
-    'key_name': 'unpsecified',
-    'display_name': 'unspecified',
-    'pronunciation': 'unspecified',
-  },
+    DailyPrayer.FAJR: {
+        'key_name': 'fajr',
+        'display_name': 'Fajr',
+        'pronunciation': 'Fajer',
+    },
+    DailyPrayer.DHUHR: {
+        'key_name': 'dhuhr',
+        'display_name': 'Dhuhr',
+        'pronunciation': 'Dhuhr',
+    },
+    DailyPrayer.ASR: {
+        'key_name': 'asr',
+        'display_name': 'Asr',
+        'pronunciation': 'Usser',
+    },
+    DailyPrayer.MAGHRIB: {
+        'key_name': 'maghrib',
+        'display_name': 'Maghrib',
+        'pronunciation': 'Mugreb',
+    },
+    DailyPrayer.ISHA: {
+        'key_name': 'isha',
+        'display_name': 'Isha',
+        'pronunciation': 'Isha',
+    },
+    DailyPrayer.QIYAM: {
+        'key_name': 'qiyam',
+        'display_name': 'Qiyam',
+        'pronunciation': 'Qiyam',
+    },
+    DailyPrayer.UNSPECIFIED: {
+        'key_name': 'unpsecified',
+        'display_name': 'unspecified',
+        'pronunciation': 'unspecified',
+    },
 }
 
-
 _KEY_NAME_TO_PRAYER = {
-  'suhur': DailyPrayer.FAJR,
-  'fajr': DailyPrayer.FAJR,
-  'dhuhr': DailyPrayer.DHUHR,
-  'asr': DailyPrayer.ASR,
-  'maghrib': DailyPrayer.MAGHRIB,
-  'iftar': DailyPrayer.MAGHRIB,
-  'isha': DailyPrayer.ISHA,
-  'qiyam': DailyPrayer.QIYAM,
-  'unspecified': DailyPrayer.UNSPECIFIED,
+    'suhur': DailyPrayer.FAJR,
+    'fajr': DailyPrayer.FAJR,
+    'dhuhr': DailyPrayer.DHUHR,
+    'asr': DailyPrayer.ASR,
+    'maghrib': DailyPrayer.MAGHRIB,
+    'iftar': DailyPrayer.MAGHRIB,
+    'isha': DailyPrayer.ISHA,
+    'qiyam': DailyPrayer.QIYAM,
+    'unspecified': DailyPrayer.UNSPECIFIED,
 }
 
 
@@ -94,10 +93,11 @@ def StringToDailyPrayer(prayer_str):
   else:
     return ''
 
+
 def GetPronunciation(daily_prayer):
   print 'GetPronunciation: ', _PRAYER_METADATA[daily_prayer]
   return _PRAYER_METADATA[daily_prayer].get('pronunciation')
 
+
 def GetDisplayText(daily_prayer):
   return _PRAYER_METADATA[daily_prayer].get('display_name')
-

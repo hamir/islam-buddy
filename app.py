@@ -42,7 +42,7 @@ def salah():
       return util.JsonError('Please provide a lat and lng.')
 
     prayer_times = \
-      _prayer_info.GetPrayerTimes(params.get('lat'), params.get('lng'))
+      PrayerInfo.GetPrayerTimes(params.get('lat'), params.get('lng'))
     if prayer_times == {}:
       return util.JsonResponse(
           "Error, the latitude and longitude entered might be wrong..")

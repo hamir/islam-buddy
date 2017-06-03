@@ -1,13 +1,15 @@
 """Computes daily salah times based on location."""
 
 import salah_com_fetcher
-from common import DailyPrayer
 import util
 
 
+# pylint: disable-msg=r0903
 class PrayerInfo(object):
+  """Gets and packages prayer information."""
 
-  def GetPrayerTimes(self, lat, lng):
+  @classmethod
+  def GetPrayerTimes(cls, lat, lng):
     """Gets the daily prayer times for a given lat/lng.
 
     Args:

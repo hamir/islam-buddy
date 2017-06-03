@@ -171,19 +171,19 @@ class StartTimeIntentHandler(object):
     speech = ''
     if prayer_time:
       if locality:
-        if desired_prayer.lower() == 'suhur':
-          return {'speech': 'Suhur ends at %s' % (prayer_time)}
-        elif desired_prayer.lower() == 'iftar':
-          return {'speech': 'Today, iftar is at %s in %s' % (prayer_time, locality[1])}
+        preposition = "in" if locality[0] == Locality.CITY else "at"
+        location = locality[1] if locality[0] == Locality.CITY else GetMasjidDisplayName(locality[1])
 
-        if locality[0] == Locality.CITY:
-          loc_prepos = "in"
-          location = locality[1]
-        elif locality[0] == Locality.MASJID:
-          loc_prepos = "at"
-          location = GetMasjidDisplayName(locality[1])
-        speech = 'The time for %s is %s %s %s.' % (util.GetPronunciation(canonical_prayer), prayer_time, loc_prepos, location)
-        display_text = 'The time for %s is %s %s %s.' % (util.GetDisplayText(canonical_prayer), prayer_time, loc_prepos, location)
+        # time string (ex: "5:30 PM at MCA" or "2:30 PM in Santa Clara"
+        time_str = '%s %s %s' % (prayer_time, preposition, locality[1])
+
+        if desired_prayer.lower() == 'suhur':
+          return {'speech': 'Suhur ends at %s.' % time_str}
+        elif desired_prayer.lower() == 'iftar':
+          return {'speech': 'Today, iftar is at %s.' % time_str}
+
+        speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), time_str)
+        display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), time_str)
       else:
         speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), prayer_time)
         display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
@@ -192,3 +192,4 @@ class StartTimeIntentHandler(object):
       display_text = 'Sorry. Prayer Pal is unable to process your request at the moment. Please try again later.'
 
     return {'speech': speech, 'displayText': display_text}
+

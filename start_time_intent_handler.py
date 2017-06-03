@@ -175,7 +175,7 @@ class StartTimeIntentHandler(object):
         location = locality[1] if locality[0] == Locality.CITY else GetMasjidDisplayName(locality[1])
 
         # time string (ex: "5:30 PM at MCA" or "2:30 PM in Santa Clara"
-        time_str = '%s %s %s' % (prayer_time, preposition, locality[1])
+        time_str = '%s %s %s' % (prayer_time, preposition, location)
 
         if desired_prayer.lower() == 'suhur':
           return {'speech': 'Suhur ends at %s.' % time_str}

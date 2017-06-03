@@ -24,7 +24,7 @@ _MASJID_METADATA = {
     'display_name': 'SBIA',
     'id': 10,
   },
-  'West_Valley': {
+  'WVMA': {
     'key_name': 'West Valley',
     'display_name': 'West Valley Muslim Association',
     'id': 15,

@@ -3,7 +3,7 @@
 import json
 import util
 import response_builder
-import gmaps_API
+import gmaps_client
 from prayer_info import PrayerInfo
 from iqama_fetcher import GetIqamaTime
 from common import Locality
@@ -133,7 +133,7 @@ class StartTimeIntentHandler(object):
       if state:
         state = self._EncodeParameter(params.get('geo-state-us'))
 
-      location_coordinates = gmaps_API.GetGeocode(city, country, state)
+      location_coordinates = gmaps_client.GetGeocode(city, country, state)
       lat = location_coordinates.get('lat')
       lng = location_coordinates.get('lng')
 
@@ -146,7 +146,7 @@ class StartTimeIntentHandler(object):
         lng = location.get('coordinates').get('longitude')
         city = location.get('city')
         if not city:
-          city = gmaps_API.ReverseGeocodeCity(lat, lng)
+          city = gmaps_client.ReverseGeocodeCity(lat, lng)
         user_info = {'city': city, 'lat': lat, 'lng': lng}
         print 'caching user location for ', user_id, ' as ', json.dumps(user_info)
         self.fake_db_.AddOrUpdateUser(user_id, user_info)

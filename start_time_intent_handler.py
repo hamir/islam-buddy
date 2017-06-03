@@ -7,6 +7,7 @@ import gmaps_API
 from prayer_info import PrayerInfo
 from iqama_fetcher import GetIqamaTime
 from common import Locality
+from masjid_util import GetMasjidDisplayName
 
 class StartTimeIntentHandler(object):
 
@@ -18,11 +19,7 @@ class StartTimeIntentHandler(object):
   def __init__(self, prayer_info, fake_db):
     self.prayer_info_ = prayer_info
     self.fake_db_ = fake_db
-
-
-  def _EncodeParameter(self, param):
-    return ' '.join(param).encode('utf-8')
-
+ 
 
   def _GetContext(self, post_params, context_name):
     for candidate in post_params.get('result').get('contexts'):
@@ -125,13 +122,13 @@ class StartTimeIntentHandler(object):
       print 'city:', city 
       print 'country:', country 
       print 'state:', state 
-      city = self._EncodeParameter(params.get('geo-city'))
+      city = util._EncodeParameter(params.get('geo-city'),1)
 
       if country:
-        country = self._EncodeParameter(params.get('geo-country'))
+        country = util._EncodeParameter(params.get('geo-country'),1)
 
       if state:
-        state = self._EncodeParameter(params.get('geo-state-us'))
+        state = util._EncodeParameter(params.get('geo-state-us'),1)
 
       location_coordinates = gmaps_API.GetGeocode(city, country, state)
       lat = location_coordinates.get('lat')
@@ -175,9 +172,10 @@ class StartTimeIntentHandler(object):
     if prayer_time:
       if locality:
         preposition = "in" if locality[0] == Locality.CITY else "at"
+        location = locality[1] if locality[0] == Locality.CITY else GetMasjidDisplayName(locality[1])
 
         # time string (ex: "5:30 PM at MCA" or "2:30 PM in Santa Clara"
-        time_str = '%s %s %s' % (prayer_time, preposition, locality[1])
+        time_str = '%s %s %s' % (prayer_time, preposition, location)
 
         if desired_prayer.lower() == 'suhur':
           return {'speech': 'Suhur ends at %s.' % time_str}
@@ -190,8 +188,8 @@ class StartTimeIntentHandler(object):
         speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), prayer_time)
         display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
     else:
-      speech = 'The time for %s is %s.' % (util.GetPronunciation(canonical_prayer), prayer_time)
-      display_text = 'The time for %s is %s.' % (util.GetDisplayText(canonical_prayer), prayer_time)
+      speech = 'Sorry. Prayer Pal is unable to process your request at the moment. Please try again later.'
+      display_text = 'Sorry. Prayer Pal is unable to process your request at the moment. Please try again later.'
 
     return {'speech': speech, 'displayText': display_text}
 

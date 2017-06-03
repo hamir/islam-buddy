@@ -45,10 +45,10 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time,
       display_text = 'The time for %s is %s.' % (
           util.GetDisplayText(canonical_prayer), prayer_time)
   else:
-    speech = 'The time for %s is %s.' % (
-        util.GetPronunciation(canonical_prayer), prayer_time)
-    display_text = 'The time for %s is %s.' % (
-        util.GetDisplayText(canonical_prayer), prayer_time)
+    speech = 'Sorry. Prayer Pal is unable to process your request at the moment.'\
+        'Please try again later.'
+    display_text = 'Sorry. Prayer Pal is unable to process your request at'\
+        ' the moment. Please try again later.'
 
   return {'speech': speech, 'displayText': display_text}
 

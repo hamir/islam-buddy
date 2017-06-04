@@ -53,21 +53,20 @@ def GetIqamaTime(desired_prayer, masjid):
 
     print 'Iqama Time ', iqama_time
 
-    # if iqama time was found then add AM or PM to the time
+    # if iqama time was found then format time to ##:##
     if iqama_time:
-      return AddAMPM(desired_prayer, str(iqama_time))
+      return FormatTime(str(iqama_time))
     return None
   print 'bad response from iqamah service = ', request.status_code
   return None
 
-def AddAMPM(prayer, time):
-  """Returns the time variable back with AM/PM added
+def FormatTime(time):
+  """Returns the time variable back in ##:## format
 
   Args:
-    prayer: a string representing desired salah
     time: a string representing the iqamah time
 
-  Returns: a string containing the iqamah time along with AM/PM
+  Returns: a string containing the iqamah time in ##:## format
   """
 
   # if the time input is in a format where it contains integers
@@ -80,12 +79,8 @@ def AddAMPM(prayer, time):
     # the second character from the right
     # example: 1000 becomes 10:00 and 5 stays 5
     if len(time) > 2:
-      time = time[:1] + ':' + time[1:] 
-    # add PM by default except if the prayer is Fajr
-    if re.match(r'((^f)(.+)(r$))', prayer.lower(), flags=0):
-      return time + ' AM'
-    return time + ' PM'
-  return time
+      return time[:1] + ':' + time[1:] 
+    return time + ':00' 
 
 def GetEquivalentPrayer(prayer):
   """Returns the prayer equivalent to the defined prayer-name entity

@@ -91,24 +91,32 @@ def GetEquivalentPrayer(prayer):
   Returns: a string containing prayer-name entity equivalent to the desired
   input prayer
   """
+  prayer = prayer.lower()
   eq_prayer = None
-
+  
+  _FAJR = re.compile(r'((^f)(.+)(r$))')
+  _DHUHR = re.compile(r'((^d)(.+)(r$))|((^z)(.+)(r$))')
+  _ASR = re.compile(r'((^a)(.+)(r$))')
+  _MAGHRIB = re.compile(r'((^m)(.+)(b$))')
+  _ISHA = re.compile(r'((^i)(.+)(a$))')
+  _JUMMA = re.compile(r'((^g))|((^j))')
+  
   # if prayer matches an 'f' at the beginning and an 'r' at the end
-  if re.match(r'((^f)(.+)(r$))', prayer.lower(), flags=0):
+  if _FAJR.match(prayer):
     eq_prayer = 'Fajr'
   # if prayer matches an 'd' or 'z' at the beginning and an 'r' at the end
-  elif re.match(r'((^d)(.+)(r$))|((^z)(.+)(r$))', prayer.lower(), flags=0):
+  elif _DHUHR.match(prayer):
     eq_prayer = 'Dhuhr'
   # if prayer matches an 'a' at the beginning and an 'r' at the end
-  elif re.match(r'((^a)(.+)(r$))', prayer.lower(), flags=0):
+  elif _ASR.match(prayer):
     eq_prayer = 'Asr'
   # if prayer matches an 'm' at the beginning and an 'b' at the end
-  elif re.match(r'((^m)(.+)(b$))', prayer.lower(), flags=0):
+  elif _MAGHRIB.match(prayer):
     eq_prayer = 'Maghrib'
   # if prayer matches an 'i' at the beginning and an 'a' at the end
-  elif re.match(r'((^i)(.+)(a$))', prayer.lower(), flags=0):
+  elif _ISHA.match(prayer):
     eq_prayer = 'Isha'
   # if prayer matches an 'g' or 'j' at the beginning
-  elif re.match(r'((^g))|((^j))', prayer.lower(), flags=0):
+  elif _JUMMA.match(prayer):
     eq_prayer = 'Jumma'
   return eq_prayer

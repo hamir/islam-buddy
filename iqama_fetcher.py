@@ -4,7 +4,7 @@ import re
 from xml.etree import ElementTree
 import util
 import requests
-from masjid_util import GetIqamaID
+from masjid_util import GetMasjidID
 
 _IQAMAH_NET_URL = 'http://feed.iqamah.net/IQ'
 
@@ -19,9 +19,9 @@ def GetIqamaTime(desired_prayer, masjid):
   """
 
   # making sure the masjid input is in UTF-8 format
-  masjid_encoded = util.EncodeParameter(masjid, 0)
+  masjid_encoded = util.EncodeParameter(masjid)
   # getting the id from the _MASJID_METADATA
-  masjid_id = GetIqamaID(masjid_encoded)
+  masjid_id = GetMasjidID(masjid_encoded)
 
   desired_prayer = util.GetPrayerKeyName(desired_prayer)
 
@@ -44,11 +44,11 @@ def GetIqamaTime(desired_prayer, masjid):
     iqamah_element = tree.findall('IqDay')[0]
 
     # looping through the IqDay tags (prayer names)
-    for index in range(0, len(iqamah_element)):
+    for iqamah in iqamah_element:
       # convert the prayer names in the IqDay element to a known format
-      iqamah_name = GetEquivalentPrayer(str(iqamah_element[index].tag))
+      iqamah_name = GetEquivalentPrayer(str(iqamah.tag))
       if desired_prayer.lower() == (iqamah_name).lower():
-        iqama_time = iqamah_element[index].text
+        iqama_time = iqamah.text
         break
 
     print 'Iqama Time ', iqama_time
@@ -70,16 +70,21 @@ def AddAMPM(prayer, time):
   Returns: a string containing the iqamah time along with AM/PM
   """
 
-  # if the time input is in a format where it contains ##:##
+  # if the time input is in a format where it contains integers
   # then proceed forward otherwise return None
-  if re.match(r'(\d+:\d+)', time, flags=0):
+  if re.match(r'(\d+)', time, flags=0):
     # strip the time variable from anything added to it
-    # example: 10:00 PM becomes 10:00
-    time = re.findall(r'(\d+:\d+)', time)
+    # example: 10:00 PM becomes 1000 and 5 AM becomes 5
+    time = ''.join(re.findall(r'(\d+)', time))
+    # if time length is more than 2 characters then add a : after
+    # the second character from the right
+    # example: 1000 becomes 10:00 and 5 stays 5
+    if len(time) > 2:
+      time = time[:1] + ':' + time[1:] 
     # add PM by default except if the prayer is Fajr
     if re.match(r'((^f)(.+)(r$))', prayer.lower(), flags=0):
-      return time[0] + ' AM'
-    return time[0] + ' PM'
+      return time + ' AM'
+    return time + ' PM'
   return time
 
 def GetEquivalentPrayer(prayer):

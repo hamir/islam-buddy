@@ -1,5 +1,7 @@
 """Masjid Utility functions."""
 
+# The following METADATA maps to the masjid-name entity
+# Changes in the masjid-name entity are to be reflected here
 _MASJID_METADATA = {
     'MCA': {
         'key_name': 'MCA',
@@ -34,8 +36,8 @@ _MASJID_METADATA = {
 }
 
 
-def GetIqamaID(masjid):
-  """Gets the masjid id from _MASJID_METADATA obtained from Iqamah.net
+def GetMasjidID(masjid):
+  """Gets the masjid id from Iqamah.net for a given masjid
 
   Args:
     masjid: a string representing the masjid of intereset from the

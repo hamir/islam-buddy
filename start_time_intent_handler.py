@@ -192,9 +192,9 @@ class StartTimeIntentHandler(object):
     return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city)
 
   def _RespondToCityRequest(self, params, desired_prayer):
-    city = util.EncodeParameter(params.get('geo-city'), 1)
-    country = util.EncodeParameter(params.get('geo-country'), 1)
-    state = util.EncodeParameter(params.get('geo-state-us'), 1)
+    city = util.EncodeParameter(params.get('geo-city'), True)
+    country = util.EncodeParameter(params.get('geo-country'), True)
+    state = util.EncodeParameter(params.get('geo-state-us'), True)
 
     location_coordinates = gmaps_client.GetGeocode(city, country, state)
     lat = location_coordinates.get('lat')

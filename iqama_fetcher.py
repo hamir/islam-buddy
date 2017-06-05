@@ -96,7 +96,7 @@ def FormatTime(time):
     # the second character from the right
     # example: 1000 becomes 10:00 and 5 stays 5
     if len(time) > 2:
-      return time[:1] + ':' + time[1:]
+      return time[:-2] + ':' + time[-2:]
     return time + ':00'
 
 

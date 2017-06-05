@@ -47,7 +47,7 @@ def GetIqamaTime(desired_prayer, masjid):
     for iqamah in iqamah_element:
       # convert the prayer names in the IqDay element to a known format
       iqamah_name = GetEquivalentPrayer(str(iqamah.tag))
-      if desired_prayer.lower() == (iqamah_name).lower():
+      if desired_prayer.lower() == iqamah_name.lower():
         iqama_time = iqamah.text
         break
 
@@ -71,7 +71,7 @@ def FormatTime(time):
 
   # if the time input is in a format where it contains integers
   # then proceed forward otherwise return None
-  if re.match(r'(\d+)', time, flags=0):
+  if re.match(r'(\d+)', time):
     # strip the time variable from anything added to it
     # example: 10:00 PM becomes 1000 and 5 AM becomes 5
     time = ''.join(re.findall(r'(\d+)', time))
@@ -79,8 +79,23 @@ def FormatTime(time):
     # the second character from the right
     # example: 1000 becomes 10:00 and 5 stays 5
     if len(time) > 2:
-      return time[:1] + ':' + time[1:] 
-    return time + ':00' 
+      return time[:1] + ':' + time[1:]
+    return time + ':00'
+
+
+# Fajr prayer matches an 'f' at the beginning and an 'r' at the end
+_FAJR = re.compile(r'((^f)(.+)(r$))')
+# Dhuhr prayer matches an 'd' or 'z' at the beginning and an 'r' at the end
+_DHUHR = re.compile(r'((^d)(.+)(r$))|((^z)(.+)(r$))')
+# Asr prayer matches an 'a' at the beginning and an 'r' at the end
+_ASR = re.compile(r'((^a)(.+)(r$))')
+# Maghrib prayer matches an 'm' at the beginning and an 'b' at the end
+_MAGHRIB = re.compile(r'((^m)(.+)(b$))')
+# Isha prayer matches an 'i' at the beginning and an 'a' at the end
+_ISHA = re.compile(r'((^i)(.+)(a$))')
+# Jumma prayer matches an 'g' or 'j' at the beginning
+_JUMMA = re.compile(r'((^g))|((^j))')
+
 
 def GetEquivalentPrayer(prayer):
   """Returns the prayer equivalent to the defined prayer-name entity
@@ -93,30 +108,17 @@ def GetEquivalentPrayer(prayer):
   """
   prayer = prayer.lower()
   eq_prayer = None
-  
-  _FAJR = re.compile(r'((^f)(.+)(r$))')
-  _DHUHR = re.compile(r'((^d)(.+)(r$))|((^z)(.+)(r$))')
-  _ASR = re.compile(r'((^a)(.+)(r$))')
-  _MAGHRIB = re.compile(r'((^m)(.+)(b$))')
-  _ISHA = re.compile(r'((^i)(.+)(a$))')
-  _JUMMA = re.compile(r'((^g))|((^j))')
-  
-  # if prayer matches an 'f' at the beginning and an 'r' at the end
+
   if _FAJR.match(prayer):
     eq_prayer = 'Fajr'
-  # if prayer matches an 'd' or 'z' at the beginning and an 'r' at the end
   elif _DHUHR.match(prayer):
     eq_prayer = 'Dhuhr'
-  # if prayer matches an 'a' at the beginning and an 'r' at the end
   elif _ASR.match(prayer):
     eq_prayer = 'Asr'
-  # if prayer matches an 'm' at the beginning and an 'b' at the end
   elif _MAGHRIB.match(prayer):
     eq_prayer = 'Maghrib'
-  # if prayer matches an 'i' at the beginning and an 'a' at the end
   elif _ISHA.match(prayer):
     eq_prayer = 'Isha'
-  # if prayer matches an 'g' or 'j' at the beginning
   elif _JUMMA.match(prayer):
     eq_prayer = 'Jumma'
   return eq_prayer

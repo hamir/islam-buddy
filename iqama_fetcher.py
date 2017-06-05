@@ -8,6 +8,14 @@ from masjid_util import GetMasjidID
 
 _IQAMAH_NET_URL = 'http://feed.iqamah.net/IQ'
 
+_NUMERIC_STRINGS = {
+    'First' : 0,
+    'Second' : 1,
+    'Third' : 2,
+    'Fourth' : 3,
+    'Fifth': 4,
+}
+
 def GetIqamaTime(desired_prayer, masjid):
   """Gets the iqama time from the iqamah.net service by peforming a GET.
 
@@ -15,7 +23,7 @@ def GetIqamaTime(desired_prayer, masjid):
     desired_prayer: DailyPrayer enum representing desired salah
     masjid: a string representing the masjid of intereset
 
-  Returns: a string containing the iqama time along with AM/PM
+  Returns: a string containing the iqamah time along with AM/PM
   """
 
   # making sure the masjid input is in UTF-8 format
@@ -47,15 +55,24 @@ def GetIqamaTime(desired_prayer, masjid):
     for iqamah in iqamah_element:
       # convert the prayer names in the IqDay element to a known format
       iqamah_name = GetEquivalentPrayer(str(iqamah.tag))
-      if desired_prayer.lower() == iqamah_name.lower():
-        iqama_time = iqamah.text
+      if iqamah_name.lower() in desired_prayer.lower():
+        # for the Jumma case, the timings is in the following format
+        # <Juma><JumaAdhan>##:##,##:##</JumaAdhan></Juma>
+        if 'Jumma' in desired_prayer:
+          # get the index based on the entity name
+          # example: First Jumma will return 0, Second Jumma will return 1
+          jumma_index = _NUMERIC_STRINGS[desired_prayer.split(' ')[0]]
+          if (iqamah[0].text).split(',')[jumma_index]:
+            iqamah_time = (iqamah[0].text).split(',')[jumma_index]
+        else:
+          iqamah_time = iqamah.text
         break
 
-    print 'Iqama Time ', iqama_time
+    print 'Iqamah Time ', iqamah_time
 
     # if iqama time was found then format time to ##:##
-    if iqama_time:
-      return FormatTime(str(iqama_time))
+    if iqamah_time:
+      return FormatTime(str(iqamah_time))
     return None
   print 'bad response from iqamah service = ', request.status_code
   return None

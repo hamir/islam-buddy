@@ -8,6 +8,7 @@ from flask import Flask, request, render_template, redirect
 from oauth2.tokengenerator import URandomTokenGenerator
 
 from fake_db import FakeDb
+import db
 from prayer_info import PrayerInfo
 from start_time_intent_handler import StartTimeIntentHandler
 
@@ -24,6 +25,22 @@ _start_time_handler = StartTimeIntentHandler(_prayer_info, _fake_db)
 def home():
   """GET handler for home page."""
   return 'Welcome to the Islam Buddy API!'
+
+
+@app.route('/table', methods=['GET'])
+def table():
+  id = request.args.get('id')
+  command = request.args.get('command')
+  response = {}
+  if command == 'add':
+    db.AddOrUpdateUser(id, {'foo': id})
+    response = 'user ', id, ' was added'
+  elif command == 'get':
+    response = db.GetUserInfo(id)
+  elif command == 'delete':
+    db.DeleteUser(id)
+    response = 'user ', id, ' was deleted'
+  return util.JsonResponse(response)
 
 
 @app.route('/salah', methods=['POST', 'GET'])

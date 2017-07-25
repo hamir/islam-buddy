@@ -16,6 +16,19 @@ _NUMERIC_STRINGS = {
     'Fifth': 4,
 }
 
+# Fajr prayer matches an 'f' at the beginning and an 'r' at the end
+_FAJR = re.compile(r'((^f)(.+)(r$))')
+# Dhuhr prayer matches an 'd' or 'z' at the beginning and an 'r' at the end
+_DHUHR = re.compile(r'((^d)(.+)(r$))|((^z)(.+)(r$))')
+# Asr prayer matches an 'a' at the beginning and an 'r' at the end
+_ASR = re.compile(r'((^a)(.+)(r$))')
+# Maghrib prayer matches an 'm' at the beginning and an 'b' at the end
+_MAGHRIB = re.compile(r'((^m)(.+)(b$))')
+# Isha prayer matches an 'i' at the beginning and an 'a' at the end
+_ISHA = re.compile(r'((^i)(.+)(a$))')
+# Jumma prayer matches an 'g' or 'j' at the beginning
+_JUMMA = re.compile(r'((^g))|((^j))')
+
 def GetIqamaTime(desired_prayer, masjid):
   """Gets the iqama time from the iqamah.net service by peforming a GET.
 
@@ -26,10 +39,9 @@ def GetIqamaTime(desired_prayer, masjid):
   Returns: a string containing the iqamah time along with AM/PM
   """
 
-  # making sure the masjid input is in UTF-8 format
-  masjid_encoded = util.EncodeParameter(masjid)
+  # making sure the masjid input is in UTF-8 format and
   # getting the id from the _MASJID_METADATA
-  masjid_id = GetMasjidID(masjid_encoded)
+  masjid_id = GetMasjidID(util.EncodeParameter(masjid))
 
   desired_prayer = util.GetPrayerKeyName(desired_prayer)
 
@@ -98,21 +110,6 @@ def FormatTime(time):
     if len(time) > 2:
       return time[:-2] + ':' + time[-2:]
     return time + ':00'
-
-
-# Fajr prayer matches an 'f' at the beginning and an 'r' at the end
-_FAJR = re.compile(r'((^f)(.+)(r$))')
-# Dhuhr prayer matches an 'd' or 'z' at the beginning and an 'r' at the end
-_DHUHR = re.compile(r'((^d)(.+)(r$))|((^z)(.+)(r$))')
-# Asr prayer matches an 'a' at the beginning and an 'r' at the end
-_ASR = re.compile(r'((^a)(.+)(r$))')
-# Maghrib prayer matches an 'm' at the beginning and an 'b' at the end
-_MAGHRIB = re.compile(r'((^m)(.+)(b$))')
-# Isha prayer matches an 'i' at the beginning and an 'a' at the end
-_ISHA = re.compile(r'((^i)(.+)(a$))')
-# Jumma prayer matches an 'g' or 'j' at the beginning
-_JUMMA = re.compile(r'((^g))|((^j))')
-
 
 def GetEquivalentPrayer(prayer):
   """Returns the prayer equivalent to the defined prayer-name entity

@@ -17,7 +17,7 @@ def AddOrUpdateUser(google_id, user_info):
 def GetUserInfo(google_id):
   """Gets user info for the specified google ID."""
   key = ndb.Key(User, google_id)
-  return key.get()
+  return key.get().user_info
 
 
 def DeleteUser(google_id):

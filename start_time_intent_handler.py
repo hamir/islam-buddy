@@ -95,7 +95,7 @@ class StartTimeIntentHandler(object):
     if 'originalRequest' in post_params:
       device_params = post_params.get('originalRequest').get('data').get(
           'device')
-    has_location = 'location' in device_params
+    has_location = device_params and 'location' in device_params
     # this will only be populated if the intent type is PERMISSION_REQUEST
     permission_context = None
 

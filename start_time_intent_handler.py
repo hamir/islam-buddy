@@ -73,9 +73,10 @@ class StartTimeIntentHandler(object):
       'PERMISSION_INTENT',
   ]
 
-  def __init__(self, prayer_info, fake_db):
+  def __init__(self, prayer_info, fake_db, db):
     self.prayer_info_ = prayer_info
     self.fake_db_ = fake_db
+    self.db_ = db
 
   def HandleIntent(self, post_params):
     """Returns a server response as a dictionary."""
@@ -157,7 +158,7 @@ class StartTimeIntentHandler(object):
     # that their current location be used
     explicit_location_requested = params.get('user-current-location')
 
-    user_info = self.fake_db_.GetUserInfo(user_id)
+    user_info = self.db_.GetUserInfo(user_id)
     print 'user info for ', user_id, ' is ', user_info
     if (not explicit_location_requested and user_info and
         user_info.get('lat') and user_info.get('lng') and
@@ -184,7 +185,7 @@ class StartTimeIntentHandler(object):
         city = gmaps_client.ReverseGeocodeCity(lat, lng)
       user_info = {'city': city, 'lat': lat, 'lng': lng}
       print 'caching user location for ', user_id, ' as ', json.dumps(user_info)
-      self.fake_db_.AddOrUpdateUser(user_id, user_info)
+      self.db_.AddOrUpdateUser(user_id, user_info)
 
     else:
       print 'Could not find relevant context!'

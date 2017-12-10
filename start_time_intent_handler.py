@@ -158,8 +158,9 @@ class StartTimeIntentHandler(object):
     # that their current location be used
     explicit_location_requested = params.get('user-current-location')
 
-    user_info = self.db_.GetUserInfo(user_id)
-    print 'user info for ', user_id, ' is ', user_info
+    user = self.db_.GetUser(user_id)
+    print 'user info for ', user_id, ' is ', user
+    user_info = user.get('user_info')
     if (not explicit_location_requested and user_info and
         user_info.get('lat') and user_info.get('lng') and
         user_info.get('city')):
@@ -183,9 +184,12 @@ class StartTimeIntentHandler(object):
       city = location.get('city')
       if not city:
         city = gmaps_client.ReverseGeocodeCity(lat, lng)
-      user_info = {'city': city, 'lat': lat, 'lng': lng}
-      print 'caching user location for ', user_id, ' as ', json.dumps(user_info)
-      self.db_.AddOrUpdateUser(user_id, user_info)
+      user = {
+          'user_info': {'city': city, 'lat': lat, 'lng': lng},
+          'city': city
+      }
+      print 'caching user location for ', user_id, ' as ', json.dumps(user)
+      self.db_.AddOrUpdateUser(user_id, user)
 
     else:
       print 'Could not find relevant context!'

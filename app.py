@@ -28,25 +28,23 @@ def home():
   return 'Welcome to the Islam Buddy API!'
 
 
-"""
-This is just a debug endpoint and should *not* be exposed 
-in prod.
-
 @app.route('/table', methods=['GET'])
 def table():
   id = request.args.get('id')
   command = request.args.get('command')
   response = {}
   if command == 'add':
-    _db.AddOrUpdateUser(id, {'foo': id})
+    _db.AddOrUpdateUser(id, {
+        'user_info': {'foo': id},
+        'city': request.args.get('city')
+    })
     response = 'user ', id, ' was added'
   elif command == 'get':
-    response = _db.GetUserInfo(id)
+    response = _db.GetUser(id)
   elif command == 'delete':
     _db.DeleteUser(id)
     response = 'user ', id, ' was deleted'
   return util.JsonResponse(response)
-"""
 
 
 @app.route('/salah', methods=['POST', 'GET'])

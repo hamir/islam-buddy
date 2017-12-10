@@ -8,7 +8,7 @@ from flask import Flask, request, render_template, redirect
 from oauth2.tokengenerator import URandomTokenGenerator
 
 from fake_db import FakeDb
-import db
+from db import Database
 from prayer_info import PrayerInfo
 from start_time_intent_handler import StartTimeIntentHandler
 
@@ -17,8 +17,9 @@ from start_time_intent_handler import StartTimeIntentHandler
 app = Flask(__name__)
 _prayer_info = PrayerInfo()
 _fake_db = FakeDb()
+_db = Database()
 _token_generator = URandomTokenGenerator(20)
-_start_time_handler = StartTimeIntentHandler(_prayer_info, _fake_db)
+_start_time_handler = StartTimeIntentHandler(_prayer_info, _fake_db, _db)
 
 
 @app.route('/')
@@ -27,20 +28,25 @@ def home():
   return 'Welcome to the Islam Buddy API!'
 
 
+"""
+This is just a debug endpoint and should *not* be exposed 
+in prod.
+
 @app.route('/table', methods=['GET'])
 def table():
   id = request.args.get('id')
   command = request.args.get('command')
   response = {}
   if command == 'add':
-    db.AddOrUpdateUser(id, {'foo': id})
+    _db.AddOrUpdateUser(id, {'foo': id})
     response = 'user ', id, ' was added'
   elif command == 'get':
-    response = db.GetUserInfo(id)
+    response = _db.GetUserInfo(id)
   elif command == 'delete':
-    db.DeleteUser(id)
+    _db.DeleteUser(id)
     response = 'user ', id, ' was deleted'
   return util.JsonResponse(response)
+"""
 
 
 @app.route('/salah', methods=['POST', 'GET'])

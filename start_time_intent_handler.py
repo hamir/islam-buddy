@@ -145,7 +145,7 @@ class StartTimeIntentHandler(object):
 
     # the user has specified a state or country but not a city, then we should
     # instruct them to tell us a city name.
-    if params.get('geo-state') or params.get('geo-country'):
+    if params.get('geo-state-us') or params.get('geo-country'):
       return {
           'speech': ('Sorry, I don\'t have enough information. Please try '
                      'again with a city next time.')

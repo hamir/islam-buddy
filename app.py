@@ -34,11 +34,14 @@ def table():
   command = request.args.get('command')
   response = {}
   if command == 'add':
+    response = 'add is disabled'
+    """
     _db.AddOrUpdateUser(id, {
         'user_info': {'foo': id},
         'city': request.args.get('city')
     })
     response = 'user ', id, ' was added'
+    """
   elif command == 'get':
     response = _db.GetUser(id)
   elif command == 'delete':

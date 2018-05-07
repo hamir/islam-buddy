@@ -8,11 +8,11 @@ _GMAPS_API_GEOCODE_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
 _GMAPS_API_TIMEZONE_URL = 'https://maps.googleapis.com/maps/api/timezone/json'
 
 # Use for Staging GAE
-_GMAPS_API_KEY = 'AIzaSyDSyoJU5z8L5Y2OBE7m79Cex5lCa4Cet_c'
+#_GMAPS_API_KEY = 'AIzaSyDSyoJU5z8L5Y2OBE7m79Cex5lCa4Cet_c'
 
 # Use for Production GAE
 #_GMAPS_API_KEY = 'AIzaSyBTm8Tq2_27EHG9sylGxpcwZk2B4ynjiJU'
-#_GMAPS_API_KEY = 'AIzaSyB0q4g_n43g75VmiwdQVTbnnngbE-cwWVw'
+_GMAPS_API_KEY = 'AIzaSyB0q4g_n43g75VmiwdQVTbnnngbE-cwWVw'
 
 def GetGeocode(city, state, country):
   """Gets the longitude and latitude from the Google Maps API.

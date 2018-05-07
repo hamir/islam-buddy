@@ -7,11 +7,12 @@ class DailyPrayer(object):
   """Server-wide canonical representation for daily prayers."""
   UNSPECIFIED = 0
   FAJR = 1
-  DHUHR = 2
-  ASR = 3
-  MAGHRIB = 4
-  ISHA = 5
-  QIYAM = 6
+  SUNRISE = 2
+  DHUHR = 3
+  ASR = 4
+  MAGHRIB = 5
+  ISHA = 6
+  QIYAM = 7
 
 
 class Intent(object):
@@ -26,3 +27,4 @@ class Locality(object):
   UNSPECIFIED = 0
   CITY = 1
   MASJID = 2
+

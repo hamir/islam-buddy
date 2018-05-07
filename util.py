@@ -1,7 +1,12 @@
 """Utility functions."""
 import json
+from datetime import datetime, timedelta
+import pytz
 from flask import make_response
 from common import DailyPrayer
+from gmaps_client import GetTimezone
+
+_GEONAMES_URL = 'http://api.geonames.org/timezoneJSON?formatted=true'
 
 def EncodeParameter(param, spaced=False):
   """Returns param encoded to utf-8"""
@@ -12,11 +17,11 @@ def EncodeParameter(param, spaced=False):
 
 def JsonResponse(response_dict):
   """Constructs a JSON response object."""
-  print 'JsonResponse'
+  #print 'JsonResponse'
   response = make_response(json.dumps(response_dict, indent=4))
-  print 'JsonResponse'
+  #print 'JsonResponse'
   response.headers['Content-Type'] = 'application/json'
-  print 'JsonResponse'
+  #print 'JsonResponse'
   return response
 
 
@@ -32,6 +37,11 @@ _PRAYER_METADATA = {
         'key_name': 'fajr',
         'display_name': 'Fajr',
         'pronunciation': 'Fajer',
+    },
+    DailyPrayer.SUNRISE: {
+        'key_name': 'sunrise',
+        'display_name': 'Sunrise',
+        'pronunciation': 'Sunrise',
     },
     DailyPrayer.DHUHR: {
         'key_name': 'dhuhr',
@@ -68,6 +78,7 @@ _PRAYER_METADATA = {
 _KEY_NAME_TO_PRAYER = {
     'suhur': DailyPrayer.FAJR,
     'fajr': DailyPrayer.FAJR,
+    'sunrise': DailyPrayer.SUNRISE,
     'dhuhr': DailyPrayer.DHUHR,
     'asr': DailyPrayer.ASR,
     'maghrib': DailyPrayer.MAGHRIB,
@@ -101,10 +112,36 @@ def StringToDailyPrayer(prayer_str):
 
 def GetPronunciation(daily_prayer):
   """Gets TTS for a daily prayer."""
-  print 'GetPronunciation: ', _PRAYER_METADATA[daily_prayer]
+  #print 'GetPronunciation: ', _PRAYER_METADATA[daily_prayer]
   return _PRAYER_METADATA[daily_prayer].get('pronunciation')
 
 
 def GetDisplayText(daily_prayer):
   """Gets display text for a daily prayer."""
   return _PRAYER_METADATA[daily_prayer].get('display_name')
+
+
+def GetCurrentUserTime(user_lat, user_lng):
+  """Returns the current time in the user's timezone."""
+  gmaps_timezone_str = GetTimezone(user_lat, user_lng)
+  if gmaps_timezone_str is None:
+    return None
+  user_timezone = pytz.timezone(gmaps_timezone_str)
+  user_time = datetime.now(user_timezone)
+  return user_time
+
+
+def GetTimeDifference(user_time_datetime, prayer_time):
+  """Returns the time difference in hours and minutes
+  between the current user time and the given prayer time."""
+  prayer_time_format = '%I:%M %p'
+  prayer_time_datetime = datetime.strptime(prayer_time, prayer_time_format)
+  start_time = datetime.combine(datetime.min, user_time_datetime.time())
+  end_time = datetime.combine(datetime.min, prayer_time_datetime.time())
+  if start_time > end_time:
+    end_time += timedelta(1)
+  time_diff = (end_time - start_time).total_seconds()
+  result = {}
+  result['HOURS'] = int(time_diff//3600)
+  result['MINUTES'] = int((time_diff%3600) // 60)
+  return result

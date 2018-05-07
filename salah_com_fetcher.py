@@ -36,14 +36,15 @@ def GetDailyPrayerTimes(lat, lng):
       'lt': lat,
       'lg': lng,
   }
-  print 'post_data = ', post_data
+  #print 'post_data = ', post_data
   request = requests.post(_SALAH_API_URL, data=post_data, timeout=15)
   if request.status_code == 500:
     return {}
-  print 'here = ', request.text
+  #print 'here = ', request.text
   response = json.loads(request.text).get("Prayers")
-  print 'response from salah.com API', response
+  #print 'response from salah.com API', response
   # dig into the response until we find the prayer times
   for _ in range(_PRAYER_TIMES_RESPONSE_DEPTH):
     response = response.itervalues().next()
   return response
+

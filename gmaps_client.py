@@ -1,16 +1,18 @@
 """Client to Google Maps APIs."""
 
 import json
+import time
 import requests
 
 _GMAPS_API_GEOCODE_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
+_GMAPS_API_TIMEZONE_URL = 'https://maps.googleapis.com/maps/api/timezone/json'
 
 # Use for Staging GAE
-#_GMAPS_API_GEOCODE_KEY = 'AIzaSyBC9cKscPGfI0Ge0uPJxO29ru0qLvxfcdA'
+_GMAPS_API_KEY = 'AIzaSyDSyoJU5z8L5Y2OBE7m79Cex5lCa4Cet_c'
 
 # Use for Production GAE
-_GMAPS_API_GEOCODE_KEY = 'AIzaSyBTm8Tq2_27EHG9sylGxpcwZk2B4ynjiJU'
-
+#_GMAPS_API_KEY = 'AIzaSyBTm8Tq2_27EHG9sylGxpcwZk2B4ynjiJU'
+#_GMAPS_API_KEY = 'AIzaSyB0q4g_n43g75VmiwdQVTbnnngbE-cwWVw'
 
 def GetGeocode(city, state, country):
   """Gets the longitude and latitude from the Google Maps API.
@@ -37,15 +39,15 @@ def GetGeocode(city, state, country):
   # set up the parameters in the format expected by the Google Maps Geocode API
   post_params = {
       'address': address_params,
-      'key': _GMAPS_API_GEOCODE_KEY,
+      'key': _GMAPS_API_KEY,
   }
-  print 'GMAPS Geocode post_params = ', post_params
+  #print 'GMAPS Geocode post_params = ', post_params
   request = requests.post(
       _GMAPS_API_GEOCODE_URL, params=post_params, timeout=15)
-  print 'here = ', request.text
+  #print 'here = ', request.text
   response = json.loads(
       request.text).get("results")[0].get("geometry").get("location")
-  print 'response from GMAPS Geocode', response
+  #print 'response from GMAPS Geocode', response
   return response
 
 
@@ -67,18 +69,49 @@ def ReverseGeocodeCity(lat, lng):
   # set up the parameters in the format expected by the Google Maps Geocode API
   post_params = {
       'latlng': address_params,
-      'key': _GMAPS_API_GEOCODE_KEY,
+      'key': _GMAPS_API_KEY,
   }
-  print 'GMAPS Reverse Geocode post_params = ', post_params
+  #print 'GMAPS Reverse Geocode post_params = ', post_params
   request = requests.post(
       _GMAPS_API_GEOCODE_URL, params=post_params, timeout=15)
-  print 'GMAPS Reverse Geocode response = ', request.text
+  #print 'GMAPS Reverse Geocode response = ', request.text
   response = json.loads(
       request.text).get("results")[0].get("address_components")
 
   for address in response:
     if address.get("types")[0] == "locality":
-      print 'response from GMAPS Reverse Geocode', address
+      #print 'response from GMAPS Reverse Geocode', address
       return address.get("long_name")
   # if no address returned, return None
   return None
+
+
+def GetTimezone(lat, lng):
+  """Returns timezone from the Google Maps API based on Lat and Lng.
+
+  Performs a POST request on the Google Maps API
+  to get the timezone from the provided latitude and longitude
+
+  Args:
+    lat: a double representing the latitude
+    lng: a double representing the longitude
+
+  Returns: a string containing the timezone
+  """
+
+  address_params = ('%.16f' % lat) + ',' + ('%.16f' % lng)
+
+  # set up the parameters in the format expected by the Google Maps Geocode API
+  post_params = {
+      'location': address_params,
+      'timestamp': time.time(),
+      'key': _GMAPS_API_KEY,
+  }
+  #print 'GMAPS timezone post_params = ', post_params
+  request = requests.post(
+      _GMAPS_API_TIMEZONE_URL, params=post_params, timeout=15)
+  #print 'GMAPS timezone response = ', request.text
+  response = json.loads(
+      request.text).get("timeZoneId")
+
+  return str(response)

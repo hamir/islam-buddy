@@ -47,16 +47,29 @@ def GetIqamaTime(desired_prayer, masjid):
   # if masjid_id doesn't exist then return None
   if not masjid_id:
     return None
-  request = requests.get(_IQAMAH_NET_URL + str(masjid_id) + ".xml", timeout=15)
+  for request_try in range(3):
+    try:
+      request = requests.get(_IQAMAH_NET_URL + str(masjid_id) + ".xml", timeout=15)
+      if request.status_code == requests.codes.ok:
+        break
+      elif request_try == 2:
+        return None
+    except:
+      if request_try == 2:
+        return None
+      continue
   # checks if request isn't bad
   # pylint: disable=no-member
   if request.status_code == requests.codes.ok:
-    # setting a tree node to the beginning of request xml content
-    tree = ElementTree.fromstring(request.content)
-    # setting an element node to element 'IqDay' which contains the
-    # prayer names and timings
-    # <IqDay><Fajr>##:##</Fajr>.....</IqDay>
-    iqamah_element = tree.findall('IqDay')[0]
+    try:
+      # setting a tree node to the beginning of request xml content
+      tree = ElementTree.fromstring(request.content)
+      # setting an element node to element 'IqDay' which contains the
+      # prayer names and timings
+      # <IqDay><Fajr>##:##</Fajr>.....</IqDay>
+      iqamah_element = tree.findall('IqDay')[0]
+    except:
+      return None
     # looping through the IqDay tags (prayer names)
     for iqamah in iqamah_element:
       # convert the prayer names in the IqDay element to a known format

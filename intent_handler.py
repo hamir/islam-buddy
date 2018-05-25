@@ -39,10 +39,20 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
       if not isinstance(prayer_time[0], dict):
         return _DefaultErrorResponse()
 
+      hour_string = 'Hours'
+      minute_string = 'Minutes'
+
+      if prayer_time[0]['HOURS'] == 1:
+        hour_string = 'Hour'
+      if prayer_time[0]['MINUTES'] == 1:
+        minute_string = 'Minute'
+
       if prayer_time[0]['HOURS'] > 0:
-        time_str = '%s Hours and %s Minutes' % (prayer_time[0]['HOURS'], prayer_time[0]['MINUTES'])
-      else:
-        time_str = '%s Minutes' % (prayer_time[0]['MINUTES'])
+        time_str = '%s %s and %s %s' % (
+            prayer_time[0]['HOURS'], hour_string, prayer_time[0]['MINUTES'], minute_string)
+      elif prayer_time[0]['Minutes'] > 1:
+        time_str = '%s %s' % (
+            prayer_time[0]['MINUTES'], minute_string)
 
       if desired_prayer.lower() == 'suhur':
         pronunciation_prayer = 'Suhur'
@@ -52,13 +62,15 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
         display_prayer = 'Iftar'
 
       # if the indices of the desired prayer and the next prayer are one apart
-      # or at a difference of -5 (Isha's index is 6 and Fajr's index is 1) then
+      # or at a difference of -5 (Isha's index is 6 and Fajr's index is 1)
+      # or the time difference is 0 Hours and 0 Minutes then
       # it is currently time for the desired prayer;
       # otherwise return the time left for the desired prayer
       if not prayer_time[1]:
         return _DefaultErrorResponse()
 
-      if (prayer_time[1] - canonical_prayer == 1) or (prayer_time[1] - canonical_prayer == -5):
+      if ((prayer_time[1] - canonical_prayer == 1) or (prayer_time[1] - canonical_prayer == -5)
+          or (prayer_time[0]['HOURS'] == 0 and prayer_time[0]['MINUTES'] == 0)):
         if desired_prayer.lower() == 'suhur':
           speech = 'The time for %s %s %s has ended.' % (
               pronunciation_prayer, preposition, location)
@@ -70,10 +82,6 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
 
           pronunciation_next_prayer = util.GetPronunciation(next_prayer)
           display_next_prayer = util.GetDisplayText(next_prayer)
-          # speech = 'It is currently time for %s %s %s.' % (
-          #     pronunciation_prayer, preposition, location)
-          # display_text = 'It is currently time for %s %s %s.' % (
-          #     display_prayer, preposition, location)
           speech = 'It is currently time for %s %s %s. %s is coming up at %s.' % (
               pronunciation_prayer, preposition, location,
               pronunciation_next_prayer, next_prayer_time)
@@ -293,6 +301,9 @@ class IntentHandler(object):
     state = util.EncodeParameter(params.get('geo-state-us'), True)
 
     location_coordinates = gmaps_client.GetGeocode(city, country, state)
+    if not location_coordinates:
+      return _MakeSpeechResponse(None, None, None, None,
+                                 (None, None))
     lat = location_coordinates.get('lat')
     lng = location_coordinates.get('lng')
 
@@ -337,6 +348,8 @@ class IntentHandler(object):
       return None
 
   def _ComputePrayerTimeAndRespond(self, desired_prayer, lat, lng, city, prayer_time_prop):
+    if not city:
+      city = 'your current location'
     all_prayer_times = self.prayer_info_.GetPrayerTimes(lat, lng)
     canonical_prayer = 'NA'
     if desired_prayer:

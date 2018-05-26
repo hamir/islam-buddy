@@ -26,6 +26,11 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
     preposition = "in" if locality[0] == Locality.CITY else "at"
     location = locality[1] if locality[0] == Locality.CITY else GetMasjidDisplayName(locality[1])
 
+    try:
+      location.decode('ascii')
+    except:
+      location = location.decode('utf-8')
+
     if prayer_time_prop and prayer_time_prop.lower() == 'time until':
       if (not canonical_prayer or canonical_prayer == 'NA' or not desired_prayer or
           not locality[0] == Locality.CITY):
@@ -48,11 +53,9 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
         minute_string = 'Minute'
 
       if prayer_time[0]['HOURS'] > 0:
-        time_str = '%s %s and %s %s' % (
-            prayer_time[0]['HOURS'], hour_string, prayer_time[0]['MINUTES'], minute_string)
-      elif prayer_time[0]['Minutes'] > 1:
-        time_str = '%s %s' % (
-            prayer_time[0]['MINUTES'], minute_string)
+        time_str = '%s %s and %s %s' % (prayer_time[0]['HOURS'], hour_string, prayer_time[0]['MINUTES'], minute_string)
+      elif prayer_time[0]['MINUTES'] > 1:
+        time_str = '%s %s' % (prayer_time[0]['MINUTES'], minute_string)
 
       if desired_prayer.lower() == 'suhur':
         pronunciation_prayer = 'Suhur'
@@ -62,7 +65,7 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
         display_prayer = 'Iftar'
 
       # if the indices of the desired prayer and the next prayer are one apart
-      # or at a difference of -5 (Isha's index is 6 and Fajr's index is 1)
+      # or at a difference of -5 (Isha's index is 6 and Fajr's index is 1) 
       # or the time difference is 0 Hours and 0 Minutes then
       # it is currently time for the desired prayer;
       # otherwise return the time left for the desired prayer
@@ -303,7 +306,7 @@ class IntentHandler(object):
     location_coordinates = gmaps_client.GetGeocode(city, country, state)
     if not location_coordinates:
       return _MakeSpeechResponse(None, None, None, None,
-                                 (None, None))
+                               (None, None))
     lat = location_coordinates.get('lat')
     lng = location_coordinates.get('lng')
 
@@ -349,7 +352,7 @@ class IntentHandler(object):
 
   def _ComputePrayerTimeAndRespond(self, desired_prayer, lat, lng, city, prayer_time_prop):
     if not city:
-      city = 'your current location'
+      city = 'your location'
     all_prayer_times = self.prayer_info_.GetPrayerTimes(lat, lng)
     canonical_prayer = 'NA'
     if desired_prayer:

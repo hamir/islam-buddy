@@ -105,7 +105,10 @@ def ReverseGeocodeCity(lat, lng):
 
   for address in response:
     if address.get("types")[0] == "locality":
-      #print 'response from GMAPS Reverse Geocode', address
+      return address.get("long_name")
+    elif address.get("types")[0] == "administrative_area_level_2":
+      return address.get("long_name")
+    elif address.get("types")[0] == "administrative_area_level_1":
       return address.get("long_name")
   # if no address returned, return None
   return None

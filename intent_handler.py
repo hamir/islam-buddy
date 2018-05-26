@@ -27,9 +27,9 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
     location = locality[1] if locality[0] == Locality.CITY else GetMasjidDisplayName(locality[1])
 
     try:
-      location.decode('ascii')
-    except:
       location = location.decode('utf-8')
+    except:
+      location = 'your location'
 
     if prayer_time_prop and prayer_time_prop.lower() == 'time until':
       if (not canonical_prayer or canonical_prayer == 'NA' or not desired_prayer or

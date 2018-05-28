@@ -111,6 +111,14 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
           pronunciation_prayer, time_str)
       display_text = '%s is coming up at %s.' % (
           display_prayer, time_str)
+    elif prayer_time_prop and prayer_time_prop.lower() == 'fasting times':
+      if not prayer_time[0] or not prayer_time[1] or not locality[0] == Locality.CITY:
+        return _DefaultErrorResponse()
+
+      speech = 'Fasting starts from %s and ends at %s in %s.'  % (
+          prayer_time[0], prayer_time[1], location)
+      display_text = 'Fasting starts from %s and ends at %s in %s.'  % (
+          prayer_time[0], prayer_time[1], location)
     elif canonical_prayer and not canonical_prayer == 'NA':
       time_str = '%s %s %s' % (prayer_time, preposition, location)
 
@@ -160,12 +168,13 @@ def _RespondWithIqamaTime(masjid, desired_prayer):
 # pylint: disable=too-few-public-methods
 class IntentHandler(object):
   """Handles the core intents WHEN_IS_START_TIME_INTENT,
-  HOW_LONG_PRAYER_TIME_INTENT, and NEXT_PRAYER_INTENT."""
+  HOW_LONG_PRAYER_TIME_INTENT, FASTING_TIMES_INTENT, and NEXT_PRAYER_INTENT."""
 
   INTENTS_HANDLED = [
       'WHEN_IS_START_TIME_INTENT',
       'HOW_LONG_PRAYER_TIME_INTENT',
       'NEXT_PRAYER_INTENT',
+      'FASTING_TIMES_INTENT',
       'PERMISSION_INTENT',
   ]
 
@@ -357,12 +366,21 @@ class IntentHandler(object):
     canonical_prayer = 'NA'
     if desired_prayer:
       canonical_prayer = util.StringToDailyPrayer(desired_prayer)
-    if prayer_time_prop:
+    if prayer_time_prop and prayer_time_prop.lower() != 'fasting times':
       computed_prayer_time_property = self._ComputePrayerTimeProperty(canonical_prayer,
                                                                       all_prayer_times, lat, lng)
       return _MakeSpeechResponse(canonical_prayer, desired_prayer, computed_prayer_time_property,
                                  prayer_time_prop, (Locality.CITY, city))
+    if prayer_time_prop and prayer_time_prop.lower() == 'fasting times':
+      fasting_times = []
+      suhur_canonical_prayer = util.StringToDailyPrayer('suhur')
+      iftar_canonical_prayer = util.StringToDailyPrayer('iftar')
+      fasting_times.append(all_prayer_times.get(suhur_canonical_prayer))
+      fasting_times.append(all_prayer_times.get(iftar_canonical_prayer))
+      return _MakeSpeechResponse(canonical_prayer, desired_prayer, fasting_times, prayer_time_prop,
+                               (Locality.CITY, city))  
     prayer_time = all_prayer_times.get(canonical_prayer)
     #print 'prayer_times[', desired_prayer, "] = ", prayer_time
     return _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_time_prop,
                                (Locality.CITY, city))
+

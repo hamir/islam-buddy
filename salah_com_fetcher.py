@@ -18,6 +18,33 @@ The depth of the useful information (prayer times) is at level 4
 _PRAYER_TIMES_RESPONSE_DEPTH = 3
 
 
+def GetCalcMethod(lat, lng):
+  """Returns the Calculation method based on given region
+
+  MWL: Europe and Far East
+  ISNA: North America
+  Egypt: Africa, Syria, Lebanon
+  Umm Al Qura: Arabian Peninsula
+  U. of Islamic Sciences: Pakistan, Afganistan, India, Bangladesh
+
+  Args:
+    lat: a double representing the latitude
+    lng: a double representing the longitude
+
+  Returns: calculation method"""
+  
+  if lng >= -180 and lng < -30:
+    return 'ISN'
+  elif lng >= -30 and lng < 35 and lat >= -35 and lat <= 35:
+    return 'EGO'
+  elif lng >= 35 and lng < 60 and lat >= 10 and lat <= 30:
+    return 'UAQ'
+  elif lng >= 60 and lng < 95 and lat >= 5 and lat <= 40:
+    return 'KAR'
+  else:
+    return 'MWL'
+
+
 def GetDailyPrayerTimes(lat, lng):
   """Gets the daily prayer times from 'salah.com'.
 
@@ -35,6 +62,7 @@ def GetDailyPrayerTimes(lat, lng):
   post_data = {
       'lt': lat,
       'lg': lng,
+      'm' : GetCalcMethod(lat, lng),
   }
   #print 'post_data = ', post_data
   for request_try in range(3):
@@ -56,3 +84,4 @@ def GetDailyPrayerTimes(lat, lng):
   for _ in range(_PRAYER_TIMES_RESPONSE_DEPTH):
     response = response.itervalues().next()
   return response
+

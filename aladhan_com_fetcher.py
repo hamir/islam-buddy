@@ -23,7 +23,7 @@ def GetCalcMethod(lat, lng):
   Qatar: Qatar
   Majlis Ugama Islam Singapura, Singapore: Singapore
   Union Organization islamic de France: France
-  Diyanet İşleri Başkanlığı, Turkey: Turkey
+  Diyanet Isleri Baskanligi, Turkey: Turkey
 
   Args:
     lat: a double representing the latitude
@@ -73,7 +73,10 @@ def GetDailyPrayerTimes(lat, lng, date_str):
   if date_str:
     user_time_str = user_requested_time.strftime("%H:%M:%S")
     user_requested_time_str = date_str+' '+user_time_str
-    user_requested_time = datetime.strptime(user_requested_time_str, date_time_format)
+    try:
+      user_requested_time = datetime.strptime(user_requested_time_str, date_time_format)
+    except:
+      pass
   
   user_requested_time_UTC = str(int(time.mktime(user_requested_time.timetuple())))
 

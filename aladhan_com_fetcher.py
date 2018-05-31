@@ -78,7 +78,10 @@ def GetDailyPrayerTimes(lat, lng, date_str):
     except:
       pass
   
-  user_requested_time_UTC = str(int(time.mktime(user_requested_time.timetuple())))
+  try:
+    user_requested_time_UTC = str(int(time.mktime(user_requested_time.timetuple())))
+  except:
+    user_requested_time_UTC = 0
 
   #print 'post_data = ', post_data
   for request_try in range(3):

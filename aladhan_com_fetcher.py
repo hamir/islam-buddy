@@ -8,18 +8,6 @@ import time
 from gmaps_client import GetTimezone
 
 _ALADHAN_API_URL = 'http://api.aladhan.com/v1/timings/'
-'''
-The 'salah.com' API provides a response in the following format:
-"Prayers": {
-  "2017": { "5": { 17": {
-    # actual prayer times yere
-    "Fajr": "5 AM"
-    ...
-  }}}
-}
-The depth of the useful information (prayer times) is at level 4
-'''
-_PRAYER_TIMES_RESPONSE_DEPTH = 1
 
 
 def GetCalcMethod(lat, lng):
@@ -27,9 +15,15 @@ def GetCalcMethod(lat, lng):
 
   MWL: Europe and Far East
   ISNA: North America
-  Egypt: Africa, Syria, Lebanon
+  Egypt: Africa, Syria, Lebanon, Malaysia
   Umm Al Qura: Arabian Peninsula
   U. of Islamic Sciences: Pakistan, Afganistan, India, Bangladesh
+  Institute of Geophysics, University of Tehran: Iran
+  Kuwait: Kuwait
+  Qatar: Qatar
+  Majlis Ugama Islam Singapura, Singapore: Singapore
+  Union Organization islamic de France: France
+  Diyanet İşleri Başkanlığı, Turkey: Turkey
 
   Args:
     lat: a double representing the latitude
@@ -55,19 +49,18 @@ def GetCalcMethod(lat, lng):
 
 
 def GetDailyPrayerTimes(lat, lng, date_str):
-  """Gets the daily prayer times from 'salah.com'.
+  """Gets the daily prayer times from 'aladhan.com'.
 
-  Performs a POST request on the salah.com prayer times API
-  to get today's prayer times (local to timezone of provided
-  location).
+  Performs a POST request on the aladhan.com prayer times API
 
   Args:
     lat: a double representing the latitude
     lng: a double representing the longitude
+    date_str: a string representing the requested date in YYYY-MM-DD
 
   Returns: a dict containing of daily prayer times
   """
-  # set up the parameters in the format expected by 'salah.com'
+  # set up the parameters in the format expected by 'aladhan.com'
   post_data = { 
       'latitude': lat,
       'longitude': lng,

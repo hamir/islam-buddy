@@ -2,8 +2,6 @@
 
 import json
 import time
-from datetime import datetime
-import math
 import requests
 
 _GMAPS_API_GEOCODE_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
@@ -130,12 +128,11 @@ def GetTimezone(lat, lng):
   """
 
   address_params = ('%.16f' % lat) + ',' + ('%.16f' % lng)
-  time_stamp = time.time()
 
   # set up the parameters in the format expected by the Google Maps Geocode API
   post_params = {
       'location': address_params,
-      'timestamp': time_stamp,
+      'timestamp': time.time(),
       'key': _GMAPS_API_KEY,
   }
   #print 'GMAPS timezone post_params = ', post_params
@@ -152,9 +149,8 @@ def GetTimezone(lat, lng):
       continue
   #print 'GMAPS timezone response = ', request.text
   try:
-    time_zone_id = json.loads(request.text).get("timeZoneId")
+    response = json.loads(request.text).get("timeZoneId")
   except:
     return None
 
-  return str(time_zone_id)
-
+  return str(response)

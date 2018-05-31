@@ -110,14 +110,6 @@ def StringToDailyPrayer(prayer_str):
   return ''
 
 
-def ConvertTimeToAMPM(time_str):
-  """Converts Time from 24H to 12H AM/PM"""
-  org_time_format = '%H:%M'
-  convert_time_format = '%I:%M %p'
-
-  return datetime.strptime(time_str, org_time_format).strftime(convert_time_format)
-
-
 def GetPronunciation(daily_prayer):
   """Gets TTS for a daily prayer."""
   #print 'GetPronunciation: ', _PRAYER_METADATA[daily_prayer]
@@ -131,8 +123,8 @@ def GetDisplayText(daily_prayer):
 
 def GetCurrentUserTime(user_lat, user_lng):
   """Returns the current time in the user's timezone."""
-  gmaps_timezone_str = GetTimezone(user_lat, user_lng)
-  if gmaps_timezone_str is None or gmaps_timezone_str == 'None':
+  (gmaps_timezone_str, user_time_stamp) = GetTimezone(user_lat, user_lng)
+  if gmaps_timezone_str is None:
     return None
   user_timezone = pytz.timezone(gmaps_timezone_str)
   user_time = datetime.now(user_timezone)

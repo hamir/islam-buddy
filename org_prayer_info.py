@@ -1,7 +1,6 @@
 """Computes daily salah times based on location."""
 
-#import salah_com_fetcher
-import aladhan_com_fetcher
+import salah_com_fetcher
 import util
 
 
@@ -10,7 +9,7 @@ class PrayerInfo(object):
   """Gets and packages prayer information."""
 
   @classmethod
-  def GetPrayerTimes(cls, lat, lng, date_str):
+  def GetPrayerTimes(cls, lat, lng):
     """Gets the daily prayer times for a given lat/lng.
 
     Args:
@@ -22,7 +21,7 @@ class PrayerInfo(object):
     """
     #print "[enter][GetPrayerTimes]"
 
-    prayer_times = aladhan_com_fetcher.GetDailyPrayerTimes(lat, lng, date_str)
+    prayer_times = salah_com_fetcher.GetDailyPrayerTimes(lat, lng)
     if prayer_times == {}:
       return {}
     #print '[GetPrayerTimes] salah.com scrape result = ', prayer_times
@@ -31,7 +30,7 @@ class PrayerInfo(object):
     for key in prayer_times:
       prayer = util.StringToDailyPrayer(key)
       if prayer:
-        result[prayer] = util.ConvertTimeToAMPM(prayer_times[key])
+        result[prayer] = prayer_times[key]
 
     #print '[GetPrayerTimes] prayer times = ', result
 

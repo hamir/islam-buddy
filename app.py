@@ -66,7 +66,7 @@ def salah():
       return util.JsonError('Please provide a lat and lng.')
 
     prayer_times = \
-      PrayerInfo.GetPrayerTimes(params.get('lat'), params.get('lng'))
+      PrayerInfo.GetPrayerTimes(params.get('lat'), params.get('lng'), None)
     if prayer_times == {}:
       return util.JsonResponse(
           "Error, the latitude and longitude entered might be wrong..")
@@ -129,4 +129,5 @@ def render_privacy():
 
 if __name__ == '__main__':
   app.run()
+
 

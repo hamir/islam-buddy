@@ -2,8 +2,8 @@
 
 import re
 from xml.etree import ElementTree
-import util
 import requests
+import util
 from masjid_util import GetMasjidID
 
 _IQAMAH_NET_URL = 'http://feed.iqamah.net/IQ'
@@ -36,33 +36,40 @@ def GetIqamaTime(desired_prayer, masjid):
     desired_prayer: DailyPrayer enum representing desired salah
     masjid: a string representing the masjid of intereset
 
-  Returns: a string containing the iqamah time along with AM/PM
+  Returns: a string containing the iqamah time
   """
 
   # making sure the masjid input is in UTF-8 format and
   # getting the id from the _MASJID_METADATA
   masjid_id = GetMasjidID(util.EncodeParameter(masjid))
-
   desired_prayer = util.GetPrayerKeyName(desired_prayer)
-
-  print 'Iqamah.net Masjid ID ', masjid_id
-
+  #print 'Iqamah.net Masjid ID ', masjid_id
   # if masjid_id doesn't exist then return None
   if not masjid_id:
     return None
-
-  request = requests.get(_IQAMAH_NET_URL + str(masjid_id) + ".xml", timeout=15)
-
+  for request_try in range(3):
+    try:
+      request = requests.get(_IQAMAH_NET_URL + str(masjid_id) + ".xml", timeout=15)
+      if request.status_code == requests.codes.ok:
+        break
+      elif request_try == 2:
+        return None
+    except:
+      if request_try == 2:
+        return None
+      continue
   # checks if request isn't bad
   # pylint: disable=no-member
   if request.status_code == requests.codes.ok:
-    # setting a tree node to the beginning of request xml content
-    tree = ElementTree.fromstring(request.content)
-    # setting an element node to element 'IqDay' which contains the
-    # prayer names and timings
-    # <IqDay><Fajr>##:##</Fajr>.....</IqDay>
-    iqamah_element = tree.findall('IqDay')[0]
-
+    try:
+      # setting a tree node to the beginning of request xml content
+      tree = ElementTree.fromstring(request.content)
+      # setting an element node to element 'IqDay' which contains the
+      # prayer names and timings
+      # <IqDay><Fajr>##:##</Fajr>.....</IqDay>
+      iqamah_element = tree.findall('IqDay')[0]
+    except:
+      return None
     # looping through the IqDay tags (prayer names)
     for iqamah in iqamah_element:
       # convert the prayer names in the IqDay element to a known format
@@ -79,14 +86,10 @@ def GetIqamaTime(desired_prayer, masjid):
         else:
           iqamah_time = iqamah.text
         break
-
-    print 'Iqamah Time ', iqamah_time
-
-    # if iqama time was found then format time to ##:##
     if iqamah_time:
       return FormatTime(str(iqamah_time))
     return None
-  print 'bad response from iqamah service = ', request.status_code
+  #print 'bad response from iqamah service = ', request.status_code
   return None
 
 def FormatTime(time):

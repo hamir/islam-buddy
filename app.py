@@ -7,7 +7,6 @@ import util
 from flask import Flask, request, render_template, redirect
 from oauth2.tokengenerator import URandomTokenGenerator
 
-from fake_db import FakeDb
 from db import Database
 from prayer_info import PrayerInfo
 from intent_handler import IntentHandler
@@ -16,10 +15,9 @@ from intent_handler import IntentHandler
 # pylint: disable-msg=C0103
 app = Flask(__name__)
 _prayer_info = PrayerInfo()
-_fake_db = FakeDb()
 _db = Database()
 _token_generator = URandomTokenGenerator(20)
-_intent_handler = IntentHandler(_prayer_info, _fake_db, _db)
+_intent_handler = IntentHandler(_prayer_info, _db)
 
 
 @app.route('/')
@@ -79,21 +77,18 @@ def salah():
     return util.JsonResponse(output_prayer_times)
 
   elif request.method == 'POST':
-    #print 'received POST request'
-
     post_params = request.get_json(silent=True, force=True)
-    #print 'post_params = \n', json.dumps(post_params, indent=2)
+    print 'post_params = \n', json.dumps(post_params, indent=2)
 
     post_intent_name = post_params.get('result').get('metadata').get(
         'intentName')
-    #print 'intent_name = ', post_intent_name
 
     if post_intent_name in IntentHandler.INTENTS_HANDLED:
       server_response = _intent_handler.HandleIntent(post_params)
     elif post_intent_name == 'CLEAR_LOCATION':
       user_id = post_params.get('originalRequest').get('data').get('user').get(
           'userId')
-      _fake_db.DeleteUser(user_id)
+      _db.DeleteUser(user_id)
       server_response = {
           "speech": "OK, your location has been cleared.",
       }
@@ -103,7 +98,8 @@ def salah():
                     " Please try again later.",
       }
 
-    #print 'server response = ', server_response
+    print 'hi'
+    print 'response = ', server_response
     return util.JsonResponse(server_response)
 
 

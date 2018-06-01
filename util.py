@@ -17,11 +17,8 @@ def EncodeParameter(param, spaced=False):
 
 def JsonResponse(response_dict):
   """Constructs a JSON response object."""
-  #print 'JsonResponse'
   response = make_response(json.dumps(response_dict, indent=4))
-  #print 'JsonResponse'
   response.headers['Content-Type'] = 'application/json'
-  #print 'JsonResponse'
   return response
 
 

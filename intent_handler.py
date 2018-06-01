@@ -178,9 +178,8 @@ class IntentHandler(object):
       'PERMISSION_INTENT',
   ]
 
-  def __init__(self, prayer_info, fake_db, db):
+  def __init__(self, prayer_info, db):
     self.prayer_info_ = prayer_info
-    self.fake_db_ = fake_db
     self.db_ = db
 
   def HandleIntent(self, post_params):
@@ -289,7 +288,6 @@ class IntentHandler(object):
   def _RespondToLocationRequest(self, device_params, permission_context,
                                 user_id, desired_prayer, prayer_time_prop):
     if permission_context:
-      #print 'permission context'
       location = device_params.get('location')
       lat = location.get('coordinates').get('latitude')
       lng = location.get('coordinates').get('longitude')
@@ -300,10 +298,7 @@ class IntentHandler(object):
           'user_info': {'city': city, 'lat': lat, 'lng': lng},
           'city': city
       }
-      #print 'caching user location for ', user_id, ' as ', json.dumps(user)
       self.db_.AddOrUpdateUser(user_id, user)
-    #else:
-    #  print 'Could not find relevant context!'
 
     return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city, prayer_time_prop)
 

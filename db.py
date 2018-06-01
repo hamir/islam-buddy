@@ -20,6 +20,7 @@ class Database(object):
 
   def GetUser(self, google_id):
     """Gets user info for the specified google ID."""
+    print 'fetching user for ID = ', google_id
     key = ndb.Key(User, google_id).get()
     return key.to_dict() if key else {}
 

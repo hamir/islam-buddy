@@ -11,19 +11,19 @@
 
 
 class FakeDb(object):
-  """In-memory store of user ID to user info."""
+    """In-memory store of user ID to user info."""
 
-  USER_TABLE_ = {}
+    USER_TABLE_ = {}
 
-  def GetUserInfo(self, user_id):
-    """Gets info for a user."""
-    return self.USER_TABLE_.get(user_id)
+    def GetUserInfo(self, user_id):
+        """Gets info for a user."""
+        return self.USER_TABLE_.get(user_id)
 
-  def AddOrUpdateUser(self, user_id, user_info):
-    """Adds new user (or updates existing one) in the database."""
-    self.USER_TABLE_[user_id] = user_info
+    def AddOrUpdateUser(self, user_id, user_info):
+        """Adds new user (or updates existing one) in the database."""
+        self.USER_TABLE_[user_id] = user_info
 
-  def DeleteUser(self, user_id):
-    """Deletes a user from the database."""
-    if user_id in self.USER_TABLE_:
-      del self.USER_TABLE_[user_id]
+    def DeleteUser(self, user_id):
+        """Deletes a user from the database."""
+        if user_id in self.USER_TABLE_:
+            del self.USER_TABLE_[user_id]

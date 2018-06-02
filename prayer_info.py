@@ -23,6 +23,8 @@ class PrayerInfo(object):
     """
     #print "[enter][GetPrayerTimes]"
 
+
+
     (prayer_times, day_difference) = aladhan_com_fetcher.GetDailyPrayerTimes(lat, lng, date_str)
     if prayer_times == {}:
       return {}

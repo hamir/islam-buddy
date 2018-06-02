@@ -5,7 +5,7 @@ import requests
 import util
 from datetime import datetime
 import time
-from gmaps_client import GetTimezone
+from gmaps_client import GetTimezone, ReverseGeocodeCountry
 
 _ALADHAN_API_URL = 'http://api.aladhan.com/v1/timings/'
 
@@ -30,7 +30,43 @@ def GetCalcMethod(lat, lng):
     lng: a double representing the longitude
 
   Returns: calculation method"""
-  
+
+  country = ReverseGeocodeCountry(lat, lng)
+
+  print country
+
+  if country:
+    if (country.lower() == 'pakistan' or country.lower() == 'afghanistan' 
+        or country.lower() == 'india' or country.lower() == 'bangladesh'):
+      #KAR
+      return 1
+    elif (country.lower() == 'syria' or country.lower() == 'lebanon' 
+          or country.lower() == 'malaysia'):
+      #EGYPT
+      return 5
+    elif country.lower() == 'iran':
+      #TEHRAN
+      return 7
+    elif (country.lower() == 'bahrain' or country.lower() == 'iraq' 
+          or country.lower() == 'oman' or country.lower() == 'yemen' or country.lower() == 'united arab emirates'):
+      #Gulf
+      return 8
+    elif country.lower() == 'kuwait':
+      #Kuwait
+      return 9
+    elif country.lower() == 'qatar':
+      #Qatar
+      return 10
+    elif country.lower() == 'singapore':
+      #Singapore
+      return 11
+    elif country.lower() == 'france':
+      #France
+      return 12
+    elif country.lower() == 'turkey':
+      #Turkey
+      return 13
+
   if lng >= -180 and lng < -30:
     #ISNA
     return 2
@@ -66,6 +102,8 @@ def GetDailyPrayerTimes(lat, lng, date_str):
       'longitude': lng,
       'method' : GetCalcMethod(lat, lng),
   }
+
+  print post_data['method']
 
   current_user_timestamp = util.GetCurrentUserTime(lat, lng)
   timestamp = current_user_timestamp

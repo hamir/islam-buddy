@@ -66,7 +66,7 @@ def GetGeocode(city, state, country):
   return response
 
 
-def ReverseGeocodeCity(lat, lng):
+def ReverseGeocode(lat, lng):
   """Returns city from the Google Maps API based on Lat and Lng.
 
   Performs a POST request on the Google Maps API
@@ -76,7 +76,7 @@ def ReverseGeocodeCity(lat, lng):
     lat: a double representing the latitude
     lng: a double representing the longitude
 
-  Returns: a string containing the city
+  Returns: API response
   """
 
   address_params = ('%.16f' % lat) + ',' + ('%.16f' % lng)
@@ -105,13 +105,57 @@ def ReverseGeocodeCity(lat, lng):
   except:
     return None
 
-  for address in response:
-    if address.get("types")[0] == "locality":
-      return address.get("long_name")
-    elif address.get("types")[0] == "administrative_area_level_2":
-      return address.get("long_name")
-    elif address.get("types")[0] == "administrative_area_level_1":
-      return address.get("long_name")
+  return response
+
+
+def ReverseGeocodeCountry(lat, lng):
+  """Returns city from the Google Maps API based on Lat and Lng.
+
+  Performs a POST request on the Google Maps API
+  to get the city from the provided latitude and longitude
+
+  Args:
+    lat: a double representing the latitude
+    lng: a double representing the longitude
+
+  Returns: a string containing the country
+  """
+
+  response = ReverseGeocode(lat, lng)
+
+  if response:
+    for address in response:
+      if address.get("types")[0] == "country":
+        return address.get("long_name")
+  
+  # if no address returned, return None
+  return None
+
+
+def ReverseGeocodeCity(lat, lng):
+  """Returns city from the Google Maps API based on Lat and Lng.
+
+  Performs a POST request on the Google Maps API
+  to get the city from the provided latitude and longitude
+
+  Args:
+    lat: a double representing the latitude
+    lng: a double representing the longitude
+
+  Returns: a string containing the city
+  """
+
+  response = ReverseGeocode(lat, lng)
+
+  if response:
+    for address in response:
+      if address.get("types")[0] == "locality":
+        return address.get("long_name")
+      elif address.get("types")[0] == "administrative_area_level_2":
+        return address.get("long_name")
+      elif address.get("types")[0] == "administrative_area_level_1":
+        return address.get("long_name")
+  
   # if no address returned, return None
   return None
 

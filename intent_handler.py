@@ -17,7 +17,7 @@ def _GetContext(post_params, context_name):
 
 
 def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_time_prop,
-                        locality):
+                        day_difference, locality):
   # prayer_time contains [0] desired prayer time diff, [1] next prayer, [2] next prayer time,
   # [3] next prayer time diff if prayer_time_prop is set; otherwise it is desired prayer time
 
@@ -25,6 +25,18 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
   if prayer_time and locality:
     preposition = "in" if locality[0] == Locality.CITY else "at"
     location = locality[1] if locality[0] == Locality.CITY else GetMasjidDisplayName(locality[1])
+
+    try:
+      day_difference
+    except:
+      return _DefaultErrorResponse()
+    else:
+      if day_difference == 1:
+        day_str = 'Tomorrow, '
+      elif day_difference > 1:
+        day_str = str(day_difference)+' days from now, '
+      else:
+        day_str = ''
 
     try:
       location = location.decode('utf-8')
@@ -115,25 +127,44 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
       if not prayer_time[0] or not prayer_time[1] or not locality[0] == Locality.CITY:
         return _DefaultErrorResponse()
 
-      speech = 'Fasting starts from %s and ends at %s in %s.'  % (
-          prayer_time[0], prayer_time[1], location)
-      display_text = 'Fasting starts from %s and ends at %s in %s.'  % (
-          prayer_time[0], prayer_time[1], location)
+      if day_str and day_str != '':
+        start_str = 'will start'
+        end_str = 'will end'
+      else:
+        start_str = 'starts'
+        end_str = 'ends'
+
+      speech = '%sFasting %s from %s and %s at %s in %s.'  % (
+          day_str, start_str, prayer_time[0], end_str, prayer_time[1], location)
+      display_text = '%sFasting %s from %s and %s at %s in %s.'  % (
+          day_str, start_str, prayer_time[0], end_str, prayer_time[1], location)
     elif canonical_prayer and not canonical_prayer == 'NA':
       time_str = '%s %s %s' % (prayer_time, preposition, location)
 
       pronunciation_prayer = util.GetPronunciation(canonical_prayer)
       display_prayer = util.GetDisplayText(canonical_prayer)
 
-      if desired_prayer.lower() == 'suhur':
-        return {'speech': 'Suhur ends at %s.' % time_str}
-      elif desired_prayer.lower() == 'iftar':
-        return {'speech': 'Today, Iftar is at %s.' % time_str}
+      if day_str and day_str != '':
+        if desired_prayer.lower() == 'suhur':
+          return {'speech': '%sSuhur will end at %s.' % (day_str, time_str)}
+        elif desired_prayer.lower() == 'iftar':
+          return {'speech': '%sIftar will be at %s.' % (day_str, time_str)}
 
-      speech = 'The time for %s is %s.' % (
-          pronunciation_prayer, time_str)
-      display_text = 'The time for %s is %s.' % (
-          display_prayer, time_str)
+        speech = '%sthe time for %s will be %s.' % (
+            day_str, pronunciation_prayer, time_str)
+        display_text = '%sthe time for %s will be %s.' % (
+            day_str, display_prayer, time_str)
+      else:
+        if desired_prayer.lower() == 'suhur':
+          return {'speech': 'Suhur ends at %s.' % time_str}
+        elif desired_prayer.lower() == 'iftar':
+          return {'speech': 'Today, Iftar is at %s.' % time_str}
+
+        speech = 'The time for %s is %s.' % (
+            pronunciation_prayer, time_str)
+        display_text = 'The time for %s is %s.' % (
+            display_prayer, time_str)
+
     else:
       return _DefaultErrorResponse()
   else:
@@ -155,13 +186,13 @@ def _RespondWithIqamaTime(masjid, desired_prayer):
   #print 'masjid: ', masjid
   if not desired_prayer or not masjid:
     return _MakeSpeechResponse(None, None, None, None,
-                               (None, None))
+                               None, (None, None))
   canonical_prayer = util.StringToDailyPrayer(desired_prayer)
   if desired_prayer and not desired_prayer.lower() == 'suhur':
     iqama_time = GetIqamaTime(canonical_prayer, masjid)
     #print 'iqama_time[', desired_prayer, "] = ", iqama_time
     return _MakeSpeechResponse(canonical_prayer, desired_prayer, iqama_time, None,
-                               (Locality.MASJID, masjid))
+                               None, (Locality.MASJID, masjid))
   return {'speech': 'Sorry, suhur time is not supported for masjids.'}
 
 
@@ -206,6 +237,9 @@ class IntentHandler(object):
     # the next prayer
     prayer_time_prop = params.get('prayer-time-prop')
 
+    # filled if the user would like to know the prayer time on a specific date
+    date_str = params.get('date')
+
     if not has_location:
       # this should always be filled since its a required parameter to the intent
       # the only time it won't be filled is on PERMISSION_REQUEST intents
@@ -216,6 +250,7 @@ class IntentHandler(object):
       #print 'permission context = ', permission_context
       desired_prayer = permission_context.get('parameters').get('PrayerName')
       prayer_time_prop = permission_context.get('parameters').get('prayer-time-prop')
+      date_str = params.get('date')
 
     # this should also always be available
     user_id = post_params.get('originalRequest').get('data').get('user').get(
@@ -229,19 +264,19 @@ class IntentHandler(object):
     # so request the user for permissions to use their location
     if not (city or has_location):
       return self._LookupOrRequestInformation(post_params, params,
-                                              desired_prayer, user_id, prayer_time_prop)
+                                              desired_prayer, user_id, date_str, prayer_time_prop)
 
     # if we have a city, then use this
     if city:
-      return self._RespondToCityRequest(params, desired_prayer, prayer_time_prop)
+      return self._RespondToCityRequest(params, desired_prayer, date_str, prayer_time_prop)
 
     # if we have a device location, then use it
     elif has_location:
       return self._RespondToLocationRequest(device_params, permission_context,
-                                            user_id, desired_prayer, prayer_time_prop)
+                                            user_id, desired_prayer, date_str, prayer_time_prop)
 
   def _LookupOrRequestInformation(self, post_params, params, desired_prayer,
-                                  user_id, prayer_time_prop):
+                                  user_id, date_str, prayer_time_prop):
     # do not ask for permission if we've already asked for it before
     permission_context = _GetContext(post_params, 'actions_intent_permission')
     if (permission_context and
@@ -280,14 +315,14 @@ class IntentHandler(object):
       lat = user_info.get('lat')
       lng = user_info.get('lng')
       city = user_info.get('city')
-      return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city, prayer_time_prop)
+      return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city, date_str, prayer_time_prop)
 
     #print('Could not find location in request, '
     #      'so responding with a permission request.')
     return response_builder.RequestLocationPermission()
 
   def _RespondToLocationRequest(self, device_params, permission_context,
-                                user_id, desired_prayer, prayer_time_prop):
+                                user_id, desired_prayer, date_str, prayer_time_prop):
     if permission_context:
       #print 'permission context'
       location = device_params.get('location')
@@ -305,9 +340,9 @@ class IntentHandler(object):
     #else:
     #  print 'Could not find relevant context!'
 
-    return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city, prayer_time_prop)
+    return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city, date_str, prayer_time_prop)
 
-  def _RespondToCityRequest(self, params, desired_prayer, prayer_time_prop):
+  def _RespondToCityRequest(self, params, desired_prayer, date_str, prayer_time_prop):
     city = util.EncodeParameter(params.get('geo-city'), True)
     country = util.EncodeParameter(params.get('geo-country'), True)
     state = util.EncodeParameter(params.get('geo-state-us'), True)
@@ -315,11 +350,11 @@ class IntentHandler(object):
     location_coordinates = gmaps_client.GetGeocode(city, country, state)
     if not location_coordinates:
       return _MakeSpeechResponse(None, None, None, None,
-                               (None, None))
+                               None, (None, None))
     lat = location_coordinates.get('lat')
     lng = location_coordinates.get('lng')
 
-    return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city, prayer_time_prop)
+    return self._ComputePrayerTimeAndRespond(desired_prayer, lat, lng, city, date_str, prayer_time_prop)
 
   def _ComputePrayerTimeProperty(self, canonical_prayer, all_prayer_times, lat, lng):
     """Computes the desired prayer's time difference as well as the
@@ -359,18 +394,20 @@ class IntentHandler(object):
     else:
       return None
 
-  def _ComputePrayerTimeAndRespond(self, desired_prayer, lat, lng, city, prayer_time_prop):
+  def _ComputePrayerTimeAndRespond(self, desired_prayer, lat, lng, city, date_str, prayer_time_prop):
     if not city:
       city = 'your location'
-    all_prayer_times = self.prayer_info_.GetPrayerTimes(lat, lng)
+    if prayer_time_prop and prayer_time_prop.lower() != 'fasting times':
+      date_str = None
+    (all_prayer_times, day_difference) = self.prayer_info_.GetPrayerTimes(lat, lng, date_str)
     canonical_prayer = 'NA'
     if desired_prayer:
       canonical_prayer = util.StringToDailyPrayer(desired_prayer)
-    if prayer_time_prop and prayer_time_prop.lower() != 'fasting times':
+    if prayer_time_prop and (prayer_time_prop.lower() == 'next prayer' or prayer_time_prop.lower() == 'time until'):
       computed_prayer_time_property = self._ComputePrayerTimeProperty(canonical_prayer,
                                                                       all_prayer_times, lat, lng)
       return _MakeSpeechResponse(canonical_prayer, desired_prayer, computed_prayer_time_property,
-                                 prayer_time_prop, (Locality.CITY, city))
+                                 prayer_time_prop, 0, (Locality.CITY, city))
     if prayer_time_prop and prayer_time_prop.lower() == 'fasting times':
       fasting_times = []
       suhur_canonical_prayer = util.StringToDailyPrayer('suhur')
@@ -378,9 +415,9 @@ class IntentHandler(object):
       fasting_times.append(all_prayer_times.get(suhur_canonical_prayer))
       fasting_times.append(all_prayer_times.get(iftar_canonical_prayer))
       return _MakeSpeechResponse(canonical_prayer, desired_prayer, fasting_times, prayer_time_prop,
-                               (Locality.CITY, city))  
+                               day_difference, (Locality.CITY, city))  
     prayer_time = all_prayer_times.get(canonical_prayer)
     #print 'prayer_times[', desired_prayer, "] = ", prayer_time
     return _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_time_prop,
-                               (Locality.CITY, city))
+                               day_difference, (Locality.CITY, city))
 

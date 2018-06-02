@@ -58,7 +58,7 @@ def GetDailyPrayerTimes(lat, lng, date_str):
     lng: a double representing the longitude
     date_str: a string representing the requested date in YYYY-MM-DD
 
-  Returns: a dict containing of daily prayer times
+  Returns: a dict containing of daily prayer times and an day difference integer
   """
   # set up the parameters in the format expected by 'aladhan.com'
   post_data = { 
@@ -67,26 +67,32 @@ def GetDailyPrayerTimes(lat, lng, date_str):
       'method' : GetCalcMethod(lat, lng),
   }
 
-  user_requested_time = util.GetCurrentUserTime(lat, lng)
+  current_user_timestamp = util.GetCurrentUserTime(lat, lng)
+  timestamp = current_user_timestamp
   date_time_format = "%Y-%m-%d %H:%M:%S"
+  day_difference = 0
   
-  if date_str:
-    user_time_str = user_requested_time.strftime("%H:%M:%S")
-    user_requested_time_str = date_str+' '+user_time_str
+  if date_str and date_str != "None":
+    user_time_str = current_user_timestamp.strftime("%H:%M:%S")
+    user_requested_date_time_str = date_str+' '+user_time_str
     try:
-      user_requested_time = datetime.strptime(user_requested_time_str, date_time_format)
+      current_user_date_time = datetime.strptime(current_user_timestamp.strftime(date_time_format), date_time_format)
+      user_requested_date_time = datetime.strptime(user_requested_date_time_str, date_time_format)
+      day_difference = int((user_requested_date_time - current_user_date_time).days)
+      if day_difference > 0:
+        timestamp = user_requested_date_time
     except:
       pass
   
   try:
-    user_requested_time_UTC = str(int(time.mktime(user_requested_time.timetuple())))
+    timestamp_UTC = str(int(time.mktime(timestamp.timetuple())))
   except:
-    user_requested_time_UTC = 0
+    timestamp_UTC = 0
 
   #print 'post_data = ', post_data
   for request_try in range(3):
     try:
-      request = requests.get(_ALADHAN_API_URL+user_requested_time_UTC, params=post_data, timeout=15)
+      request = requests.get(_ALADHAN_API_URL+timestamp_UTC, params=post_data, timeout=15)
       if request.status_code == requests.codes.ok:
         break
       elif request_try == 2:
@@ -98,5 +104,5 @@ def GetDailyPrayerTimes(lat, lng, date_str):
 
   #print 'here = ', request.text
   response = json.loads(request.text).get("data").get("timings")
-  return response
+  return (response, day_difference)
 

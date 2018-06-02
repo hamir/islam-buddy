@@ -16,13 +16,14 @@ class PrayerInfo(object):
     Args:
       lat: a double representing the latitude
       lng: a double representing the longitude
+      date_str: a string representing the requested date in YYYY-MM-DD
 
     Returns: a dict containing (DailyPrayer -> string) of daily
         prayer times
     """
     #print "[enter][GetPrayerTimes]"
 
-    prayer_times = aladhan_com_fetcher.GetDailyPrayerTimes(lat, lng, date_str)
+    (prayer_times, day_difference) = aladhan_com_fetcher.GetDailyPrayerTimes(lat, lng, date_str)
     if prayer_times == {}:
       return {}
     #print '[GetPrayerTimes] salah.com scrape result = ', prayer_times
@@ -36,5 +37,5 @@ class PrayerInfo(object):
     #print '[GetPrayerTimes] prayer times = ', result
 
     #print "[exit][GetPrayerTimes]"
-    return result
+    return (result, day_difference)
 

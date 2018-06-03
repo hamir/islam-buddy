@@ -152,5 +152,6 @@ def GetTimeDifference(user_time_datetime, prayer_time):
   result = {}
   result['HOURS'] = int(time_diff//3600)
   result['MINUTES'] = int((time_diff%3600) // 60)
+  result['SECONDS'] = int((time_diff%60))
   return result
 

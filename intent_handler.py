@@ -61,13 +61,15 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
 
       if prayer_time[0]['HOURS'] == 1:
         hour_string = 'Hour'
-      if prayer_time[0]['MINUTES'] == 1:
+      if prayer_time[0]['MINUTES'] <= 1:
         minute_string = 'Minute'
 
       if prayer_time[0]['HOURS'] > 0:
         time_str = '%s %s and %s %s' % (prayer_time[0]['HOURS'], hour_string, prayer_time[0]['MINUTES'], minute_string)
       elif prayer_time[0]['MINUTES'] > 1:
         time_str = '%s %s' % (prayer_time[0]['MINUTES'], minute_string)
+      elif prayer_time[0]['SECONDS'] >= 1:
+        time_str = '%s %s' % ('1', minute_string)
 
       if desired_prayer.lower() == 'suhur':
         pronunciation_prayer = 'Suhur'
@@ -85,7 +87,7 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
         return _DefaultErrorResponse()
 
       if ((prayer_time[1] - canonical_prayer == 1) or (prayer_time[1] - canonical_prayer == -5)
-          or (prayer_time[0]['HOURS'] == 0 and prayer_time[0]['MINUTES'] == 0)):
+          or (prayer_time[0]['HOURS'] == 0 and prayer_time[0]['MINUTES'] == 0 and prayer_time[0]['SECONDS'] == 0)):
         if desired_prayer.lower() == 'suhur':
           speech = 'The time for %s %s %s has ended.' % (
               pronunciation_prayer, preposition, location)
@@ -217,44 +219,48 @@ class IntentHandler(object):
   def HandleIntent(self, post_params):
     """Returns a server response as a dictionary."""
 
-    # filled if we have the user's city, country and/or state
-    params = post_params.get('result').get('parameters')
-    city = params.get('geo-city')
+    try:
+      # filled if we have the user's city, country and/or state
+      params = post_params.get('result').get('parameters')
+      city = params.get('geo-city')
 
-    # filled if the user calls for a masjid
-    masjid = params.get('MasjidName')
+      # filled if the user calls for a masjid
+      masjid = params.get('MasjidName')
 
-    # filled if we have the user's lat/lng
-    device_params = {}
-    if 'originalRequest' in post_params:
-      device_params = post_params.get('originalRequest').get('data').get(
-          'device')
-    has_location = device_params and 'location' in device_params
-    # this will only be populated if the intent type is PERMISSION_REQUEST
-    permission_context = None
+      # filled if we have the user's lat/lng
+      device_params = {}
+      if 'originalRequest' in post_params:
+        device_params = post_params.get('originalRequest').get('data').get(
+            'device')
+      has_location = device_params and 'location' in device_params
+      # this will only be populated if the intent type is PERMISSION_REQUEST
+      permission_context = None
 
-    # filled if the user would like to know the time before a prayer or the time for
-    # the next prayer
-    prayer_time_prop = params.get('prayer-time-prop')
+      # filled if the user would like to know the time before a prayer or the time for
+      # the next prayer
+      prayer_time_prop = params.get('prayer-time-prop')
 
-    # filled if the user would like to know the prayer time on a specific date
-    date_str = params.get('date')
-
-    if not has_location:
-      # this should always be filled since its a required parameter to the intent
-      # the only time it won't be filled is on PERMISSION_REQUEST intents
-      desired_prayer = params.get('PrayerName')
-    else:
-      # this should be filled on PERMISSION_REQUEST intents in the relevant context
-      permission_context = _GetContext(post_params, 'requ')
-      #print 'permission context = ', permission_context
-      desired_prayer = permission_context.get('parameters').get('PrayerName')
-      prayer_time_prop = permission_context.get('parameters').get('prayer-time-prop')
+      # filled if the user would like to know the prayer time on a specific date
       date_str = params.get('date')
 
-    # this should also always be available
-    user_id = post_params.get('originalRequest').get('data').get('user').get(
-        'userId')
+      if not has_location:
+        # this should always be filled since its a required parameter to the intent
+        # the only time it won't be filled is on PERMISSION_REQUEST intents
+        desired_prayer = params.get('PrayerName')
+      else:
+        # this should be filled on PERMISSION_REQUEST intents in the relevant context
+        permission_context = _GetContext(post_params, 'requ')
+        #print 'permission context = ', permission_context
+        desired_prayer = permission_context.get('parameters').get('PrayerName')
+        prayer_time_prop = permission_context.get('parameters').get('prayer-time-prop')
+        date_str = params.get('date')
+
+      # this should also always be available
+      user_id = post_params.get('originalRequest').get('data').get('user').get(
+          'userId')
+    except:
+      return _MakeSpeechResponse(None, None, None, None,
+                                 None, (None, None))
 
     # if we have a masjid name then call GetIqamaTime to obtain it from scraper
     if masjid:

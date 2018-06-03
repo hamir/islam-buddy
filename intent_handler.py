@@ -211,9 +211,8 @@ class IntentHandler(object):
       'PERMISSION_INTENT',
   ]
 
-  def __init__(self, prayer_info, fake_db, db):
+  def __init__(self, prayer_info, db):
     self.prayer_info_ = prayer_info
-    self.fake_db_ = fake_db
     self.db_ = db
 
   def HandleIntent(self, post_params):

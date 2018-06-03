@@ -30,8 +30,6 @@ def GetCalcMethod(lat, lng):
 
     country = ReverseGeocodeCountry(lat, lng)
 
-    print country
-
     if country:
         country_calc_method = util.CountryToCalculationMethod(country)
         if country_calc_method > 0:
@@ -70,8 +68,6 @@ def GetDailyPrayerTimes(lat, lng, date_str):
     (current_user_timestamp, dst_UTC_offset, raw_UTC_offset) = util.GetCurrentUserTime(lat, lng)
     timezone_offset = raw_UTC_offset/(3600 * 1.0)
     dst_flag = 1 if dst_UTC_offset > 0 else 0
-
-    print method
 
     timestamp = current_user_timestamp
     day_difference = 0

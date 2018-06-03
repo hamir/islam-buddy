@@ -13,8 +13,6 @@ _GMAPS_API_TIMEZONE_URL = 'https://maps.googleapis.com/maps/api/timezone/json'
 #_GMAPS_API_KEY = 'AIzaSyDSyoJU5z8L5Y2OBE7m79Cex5lCa4Cet_c'
 
 # Use for Production GAE
-#_GMAPS_API_KEY = 'AIzaSyBTm8Tq2_27EHG9sylGxpcwZk2B4ynjiJU'
-#_GMAPS_API_KEY = 'AIzaSyB0q4g_n43g75VmiwdQVTbnnngbE-cwWVw'
 _GMAPS_API_KEY = 'AIzaSyCfOgYzn3P5hg_L7nK_IM2Qfb-v-bHLpHQ'
 
 def GetGeocode(city, state, country):
@@ -52,7 +50,7 @@ def GetGeocode(city, state, country):
         break
       elif request_try == 2:
         return None
-    except:
+    except BaseException:
       if request_try == 2:
         return None
       continue
@@ -60,7 +58,7 @@ def GetGeocode(city, state, country):
   try:
     response = json.loads(
         request.text).get("results")[0].get("geometry").get("location")
-  except:
+  except BaseException:
     return None
   #print 'response from GMAPS Geocode', response
   return response
@@ -94,7 +92,7 @@ def ReverseGeocode(lat, lng):
         break
       elif request_try == 2:
         return None
-    except:
+    except BaseException:
       if request_try == 2:
         return None
       continue
@@ -102,7 +100,7 @@ def ReverseGeocode(lat, lng):
   try:
     response = json.loads(
         request.text).get("results")[0].get("address_components")
-  except:
+  except BaseException:
     return None
 
   return response
@@ -190,14 +188,14 @@ def GetTimezone(lat, lng):
         break
       elif request_try == 2:
         return None
-    except:
+    except BaseException:
       if request_try == 2:
         return None
       continue
   #print 'GMAPS timezone response = ', request.text
   try:
     time_zone_id = json.loads(request.text).get("timeZoneId")
-  except:
+  except BaseException:
     return None
 
   return str(time_zone_id)

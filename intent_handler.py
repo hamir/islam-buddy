@@ -28,7 +28,7 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
 
     try:
       day_difference
-    except:
+    except BaseException:
       return _DefaultErrorResponse()
     else:
       if day_difference == 1:
@@ -40,7 +40,7 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
 
     try:
       location = location.decode('utf-8')
-    except:
+    except BaseException:
       location = 'your location'
 
     if prayer_time_prop and prayer_time_prop.lower() == 'time until':
@@ -258,7 +258,7 @@ class IntentHandler(object):
       # this should also always be available
       user_id = post_params.get('originalRequest').get('data').get('user').get(
           'userId')
-    except:
+    except BaseException:
       return _MakeSpeechResponse(None, None, None, None,
                                  None, (None, None))
 

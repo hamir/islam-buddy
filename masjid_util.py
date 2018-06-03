@@ -37,30 +37,31 @@ _MASJID_METADATA = {
 
 
 def GetMasjidID(masjid):
-  """Gets the masjid id from Iqamah.net for a given masjid
+    """Gets the masjid id from Iqamah.net for a given masjid
 
-  Args:
-    masjid: a string representing the masjid of intereset from the
-    masjid-entity
+    Args:
+      masjid: a string representing the masjid of intereset from the
+      masjid-entity
 
-  Returns: an integer containing the masjid id
-  """
+    Returns: an integer containing the masjid id
+    """
 
-  if _MASJID_METADATA.get(masjid):
-    return _MASJID_METADATA.get(masjid).get('id')
-  return None
+    if _MASJID_METADATA.get(masjid):
+        return _MASJID_METADATA.get(masjid).get('id')
+    return None
 
 
 def GetMasjidDisplayName(masjid):
-  """Gets the masjid display_name from _MASJID_METADATA
+    """Gets the masjid display_name from _MASJID_METADATA
 
-  Args:
-    masjid: a string representing the masjid of intereset from the
-    masjid-entity
+    Args:
+      masjid: a string representing the masjid of intereset from the
+      masjid-entity
 
-  Returns: a string containing the masjid name to be displayed to the user
-  """
+    Returns: a string containing the masjid name to be displayed to the user
+    """
 
-  if _MASJID_METADATA.get(masjid):
-    return _MASJID_METADATA.get(masjid).get('display_name')
-  return None
+    if _MASJID_METADATA.get(masjid):
+        return _MASJID_METADATA.get(masjid).get('display_name')
+    return None
+

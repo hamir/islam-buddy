@@ -4,7 +4,7 @@ import json
 import requests
 import util
 from common import CalculationMethod
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 from gmaps_client import GetTimezone, ReverseGeocodeCountry
 
@@ -76,19 +76,19 @@ def GetDailyPrayerTimes(lat, lng, date_str):
     }
 
     current_user_timestamp = util.GetCurrentUserTime(lat, lng)
+
     timestamp = current_user_timestamp
     date_time_format = "%Y-%m-%d %H:%M:%S"
     day_difference = 0
     
     if date_str and date_str != "None":
-        user_time_str = current_user_timestamp.strftime("%H:%M:%S")
-        user_requested_date_time_str = date_str+' '+user_time_str
         try:
-            current_user_date_time = datetime.strptime(current_user_timestamp.strftime(date_time_format), date_time_format)
-            user_requested_date_time = datetime.strptime(user_requested_date_time_str, date_time_format)
-            day_difference = int((user_requested_date_time - current_user_date_time).days)
+            agent_date = datetime.now().date()
+            requested_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+            day_difference = int((requested_date - agent_date).days)
+
             if day_difference > 0:
-                timestamp = user_requested_date_time
+                timestamp = current_user_timestamp + timedelta(days=day_difference)
         except BaseException:
             pass
     

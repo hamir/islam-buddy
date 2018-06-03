@@ -33,8 +33,6 @@ def GetCalcMethod(lat, lng):
 
   country = ReverseGeocodeCountry(lat, lng)
 
-  print country
-
   if country:
     if (country.lower() == 'pakistan' or country.lower() == 'afghanistan' 
         or country.lower() == 'india' or country.lower() == 'bangladesh'):
@@ -47,8 +45,8 @@ def GetCalcMethod(lat, lng):
     elif country.lower() == 'iran':
       #TEHRAN
       return 7
-    elif (country.lower() == 'bahrain' or country.lower() == 'iraq' 
-          or country.lower() == 'oman' or country.lower() == 'yemen' or country.lower() == 'united arab emirates'):
+    elif (country.lower() == 'bahrain' or country.lower() == 'iraq' or country.lower() == 'oman' 
+          or country.lower() == 'yemen' or country.lower() == 'united arab emirates'):
       #Gulf
       return 8
     elif country.lower() == 'kuwait':
@@ -103,8 +101,6 @@ def GetDailyPrayerTimes(lat, lng, date_str):
       'method' : GetCalcMethod(lat, lng),
   }
 
-  print post_data['method']
-
   current_user_timestamp = util.GetCurrentUserTime(lat, lng)
   timestamp = current_user_timestamp
   date_time_format = "%Y-%m-%d %H:%M:%S"
@@ -134,10 +130,10 @@ def GetDailyPrayerTimes(lat, lng, date_str):
       if request.status_code == requests.codes.ok:
         break
       elif request_try == 2:
-        return {}
+        return (None, None)
     except:
       if request_try == 2:
-        return {}
+        return (None, None)
       continue
 
   #print 'here = ', request.text

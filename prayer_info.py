@@ -26,8 +26,8 @@ class PrayerInfo(object):
 
 
     (prayer_times, day_difference) = aladhan_com_fetcher.GetDailyPrayerTimes(lat, lng, date_str)
-    if prayer_times == {}:
-      return {}
+    if not prayer_times or prayer_times == {}:
+      return (None, None)
     #print '[GetPrayerTimes] salah.com scrape result = ', prayer_times
     result = {}
 

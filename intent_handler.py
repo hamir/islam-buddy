@@ -400,6 +400,9 @@ class IntentHandler(object):
     if prayer_time_prop and prayer_time_prop.lower() != 'fasting times':
       date_str = None
     (all_prayer_times, day_difference) = self.prayer_info_.GetPrayerTimes(lat, lng, date_str)
+    if not all_prayer_times:
+      return _MakeSpeechResponse(None, None, None, None,
+                                 None, (None, None))
     canonical_prayer = 'NA'
     if desired_prayer:
       canonical_prayer = util.StringToDailyPrayer(desired_prayer)

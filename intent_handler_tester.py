@@ -7,9 +7,9 @@ _prayer_info = PrayerInfo()
 _intent_handler = IntentHandler(_prayer_info, None, None)
 
 desired_prayer = 'fajr'
-lat = 37
-lng = -121
-city = 'Santa Clara'
+lat = 40.715856
+lng = -73.8300517
+city = 'Queens County'
 date_str = None
 prayer_time_prop = None
 

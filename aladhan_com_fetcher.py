@@ -5,6 +5,7 @@ import requests
 import util
 from common import CalculationMethod
 from datetime import datetime, timedelta
+import pytz
 import time
 from gmaps_client import GetTimezone, ReverseGeocodeCountry
 
@@ -83,7 +84,7 @@ def GetDailyPrayerTimes(lat, lng, date_str):
     
     if date_str and date_str != "None":
         try:
-            agent_date = datetime.now().date()
+            agent_date = util.GetCurrentUserTime(37, -121).date()
             requested_date = datetime.strptime(date_str, "%Y-%m-%d").date()
             day_difference = int((requested_date - agent_date).days)
 

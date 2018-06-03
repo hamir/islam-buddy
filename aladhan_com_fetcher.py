@@ -5,7 +5,6 @@ import requests
 import util
 from common import CalculationMethod
 from datetime import datetime, timedelta
-import pytz
 import time
 from gmaps_client import GetTimezone, ReverseGeocodeCountry
 

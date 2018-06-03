@@ -1,15 +1,11 @@
 """Fetches prayer times from 'www.aladhan.com'."""
 
-import json
-import requests
 import util
+import praytimes_org
 from common import CalculationMethod
 from datetime import datetime, timedelta
 import time
-from gmaps_client import GetTimezone, ReverseGeocodeCountry
-
-_ALADHAN_API_URL = 'http://api.aladhan.com/v1/timings/'
-
+from gmaps_client import ReverseGeocodeCountry
 
 def GetCalcMethod(lat, lng):
     """Returns the Calculation method based on given region
@@ -34,6 +30,8 @@ def GetCalcMethod(lat, lng):
 
     country = ReverseGeocodeCountry(lat, lng)
 
+    print country
+
     if country:
         country_calc_method = util.CountryToCalculationMethod(country)
         if country_calc_method > 0:
@@ -57,9 +55,7 @@ def GetCalcMethod(lat, lng):
 
 
 def GetDailyPrayerTimes(lat, lng, date_str):
-    """Gets the daily prayer times from 'aladhan.com'.
-
-    Performs a POST request on the aladhan.com prayer times API
+    """Gets the daily prayer times using the praytimes.org codebase.
 
     Args:
       lat: a double representing the latitude
@@ -68,22 +64,21 @@ def GetDailyPrayerTimes(lat, lng, date_str):
 
     Returns: a dict containing of daily prayer times and an day difference integer
     """
-    # set up the parameters in the format expected by 'aladhan.com'
-    post_data = { 
-        'latitude': lat,
-        'longitude': lng,
-        'method' : GetCalcMethod(lat, lng),
-    }
+    
+    location = (lat, lng)
+    method = GetCalcMethod(lat, lng)
+    (current_user_timestamp, dst_UTC_offset, raw_UTC_offset) = util.GetCurrentUserTime(lat, lng)
+    timezone_offset = raw_UTC_offset/(3600 * 1.0)
+    dst_flag = 1 if dst_UTC_offset > 0 else 0
 
-    (current_user_timestamp, o, f) = util.GetCurrentUserTime(lat, lng)
+    print method
 
     timestamp = current_user_timestamp
-    date_time_format = "%Y-%m-%d %H:%M:%S"
     day_difference = 0
     
     if date_str and date_str != "None":
         try:
-            agent_date = (util.GetCurrentUserTime(37, -121))[0].date()
+            agent_date = (util.GetCurrentUserTime(37.2359, -122.0638))[0].date()
             requested_date = datetime.strptime(date_str, "%Y-%m-%d").date()
             day_difference = int((requested_date - agent_date).days)
 
@@ -91,28 +86,14 @@ def GetDailyPrayerTimes(lat, lng, date_str):
                 timestamp = current_user_timestamp + timedelta(days=day_difference)
         except BaseException:
             pass
-    
-    try:
-        timestamp_UTC = str(int(time.mktime(timestamp.timetuple())))
-    except BaseException:
-        timestamp_UTC = 0
-
-    #print 'post_data = ', post_data
-    for request_try in range(2):
-        try:
-            request = requests.get(_ALADHAN_API_URL+timestamp_UTC, params=post_data, timeout=15)
-            if request.status_code == requests.codes.ok:
-                break
-            elif request_try == 2:
-                return (None, None)
-        except BaseException:
-            if request_try == 2:
-                return (None, None)
-            continue
 
     try:
-        response = json.loads(request.text).get("data").get("timings")
-        return (response, day_difference)
+        timestamp_date = (timestamp.year, timestamp.month, timestamp.day)
+        p = praytimes_org.PrayTimes()
+        p.setMethod(method)
+        prayer_times = p.getTimes(timestamp_date, location, timezone_offset, dst_flag)
+
+        return (prayer_times, day_difference)
     except BaseException:
         return (None, None)
 

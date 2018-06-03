@@ -364,7 +364,7 @@ class IntentHandler(object):
   def _ComputePrayerTimeProperty(self, canonical_prayer, all_prayer_times, lat, lng):
     """Computes the desired prayer's time difference as well as the
     next prayer, next prayer's time, and next prayer's time difference"""
-    current_user_time = util.GetCurrentUserTime(lat, lng)
+    (current_user_time, dst_UTC_offset, raw_UTC_offset) = util.GetCurrentUserTime(lat, lng)
 
     if current_user_time:
       next_prayer_time_diff = {}

@@ -168,7 +168,8 @@ def GetTimezone(lat, lng):
     lat: a double representing the latitude
     lng: a double representing the longitude
 
-  Returns: a string containing the timezone
+  Returns: a string containing the timezone, an integer containing 
+           dst offset from UTC, and an interger containing raw offset from UTC
   """
 
   address_params = ('%.16f' % lat) + ',' + ('%.16f' % lng)
@@ -187,16 +188,18 @@ def GetTimezone(lat, lng):
       if request.status_code == requests.codes.ok:
         break
       elif request_try == 2:
-        return None
+        return (None, None, None)
     except BaseException:
       if request_try == 2:
-        return None
+        return (None, None, None)
       continue
   #print 'GMAPS timezone response = ', request.text
   try:
     time_zone_id = json.loads(request.text).get("timeZoneId")
+    dst_offset = json.loads(request.text).get("dstOffset")
+    raw_offset = json.loads(request.text).get("rawOffset")
   except BaseException:
-    return None
+    return (None, None, None)
 
-  return str(time_zone_id)
+  return (str(time_zone_id), dst_offset, raw_offset)
 

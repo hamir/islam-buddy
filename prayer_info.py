@@ -1,5 +1,5 @@
 """Computes daily salah times based on location."""
-import aladhan_com_fetcher
+import praytime_fetcher
 import util
 
 
@@ -20,7 +20,7 @@ class PrayerInfo(object):
             prayer times
         """
 
-        (prayer_times, day_difference) = aladhan_com_fetcher.GetDailyPrayerTimes(lat, lng, date_str)
+        (prayer_times, day_difference) = praytime_fetcher.GetDailyPrayerTimes(lat, lng, date_str)
         if not prayer_times or prayer_times == {}:
             return (None, None)
 

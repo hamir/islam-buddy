@@ -159,12 +159,12 @@ def GetDisplayText(daily_prayer):
 
 def GetCurrentUserTime(user_lat, user_lng):
     """Returns the current time in the user's timezone."""
-    gmaps_timezone_str = GetTimezone(user_lat, user_lng)
+    (gmaps_timezone_str, dst_UTC_offset, raw_UTC_offset) = GetTimezone(user_lat, user_lng)
     if gmaps_timezone_str is None or gmaps_timezone_str == 'None':
-      return None
+      return (None, None, None)
     user_timezone = pytz.timezone(gmaps_timezone_str)
     user_time = datetime.now(user_timezone)
-    return user_time
+    return (user_time, dst_UTC_offset, raw_UTC_offset)
 
 
 def GetTimeDifference(user_time_datetime, prayer_time):

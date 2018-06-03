@@ -28,3 +28,19 @@ class Locality(object):
   CITY = 1
   MASJID = 2
 
+
+class CalculationMethod(object):
+  UNSPECIFIED = 0
+  KAR = 1
+  ISNA = 2
+  MWL = 3
+  MAKKAH = 4
+  EGYPT = 5
+  TEHRAN = 7
+  GULF = 8
+  KUWAIT = 9
+  QATAR = 10
+  SINGAPORE = 11
+  FRANCE = 12
+  TURKEY = 13
+

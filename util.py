@@ -3,7 +3,7 @@ import json
 from datetime import datetime, timedelta
 import pytz
 from flask import make_response
-from common import DailyPrayer
+from common import DailyPrayer, CalculationMethod
 from gmaps_client import GetTimezone
 
 _GEONAMES_URL = 'http://api.geonames.org/timezoneJSON?formatted=true'
@@ -88,6 +88,29 @@ _KEY_NAME_TO_PRAYER = {
     'unspecified': DailyPrayer.UNSPECIFIED,
 }
 
+_COUNTRY_TO_CALCULATION_METHOD = {
+    'pakistan': CalculationMethod.KAR,
+    'india': CalculationMethod.KAR,
+    'afghanistan': CalculationMethod.KAR,
+    'bangladesh': CalculationMethod.KAR,
+    'egypt': CalculationMethod.EGYPT,
+    'syria': CalculationMethod.EGYPT,
+    'lebanon': CalculationMethod.EGYPT,
+    'malaysia': CalculationMethod.EGYPT,
+    'iran': CalculationMethod.TEHRAN,
+    'bahrain': CalculationMethod.GULF,
+    'iraq': CalculationMethod.GULF,
+    'yemen': CalculationMethod.GULF,
+    'oman': CalculationMethod.GULF,
+    'united arab emirates': CalculationMethod.GULF,
+    'kuwait': CalculationMethod.KUWAIT,
+    'qatar': CalculationMethod.QATAR,
+    'singapore': CalculationMethod.SINGAPORE,
+    'france': CalculationMethod.FRANCE,
+    'turkey': CalculationMethod.TURKEY,
+    'unspecified': CalculationMethod.UNSPECIFIED,
+}
+
 
 def GetPrayerKeyName(daily_prayer):
   """Gets the name of a daily prayer (ex: "fajr")."""
@@ -108,6 +131,14 @@ def StringToDailyPrayer(prayer_str):
   if prayer_str in _KEY_NAME_TO_PRAYER:
     return _KEY_NAME_TO_PRAYER[prayer_str]
   return ''
+
+
+def CountryToCalculationMethod(country_str):
+  """Infers a CalculationMethod out of a string."""
+  country_str = str(country_str).lower()
+  if country_str in _COUNTRY_TO_CALCULATION_METHOD:
+    return _COUNTRY_TO_CALCULATION_METHOD[country_str]
+  return 0
 
 
 def ConvertTimeToAMPM(time_str):

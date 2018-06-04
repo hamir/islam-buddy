@@ -78,7 +78,7 @@ def salah():
 
     elif request.method == 'POST':
         post_params = request.get_json(silent=True, force=True)
-        print 'post_params = \n', json.dumps(post_params, indent=2)
+        #print 'post_params = \n', json.dumps(post_params, indent=2)
 
         post_intent_name = post_params.get('result').get('metadata').get(
             'intentName')
@@ -98,8 +98,8 @@ def salah():
                           " Please try again later.",
             }
 
-        print 'hi'
-        print 'response = ', server_response
+        #print 'hi'
+        #print 'response = ', server_response
         return util.JsonResponse(server_response)
 
 

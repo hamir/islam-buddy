@@ -176,7 +176,7 @@ def _MakeSpeechResponse(canonical_prayer, desired_prayer, prayer_time, prayer_ti
 
 
 def _DefaultErrorResponse():
-  speech = 'Sorry. Prayer Pal is unable to process your request at the moment.'\
+  speech = 'Sorry. Prayer Pal is unable to process your request at the moment. '\
       'Please try again later.'
   display_text = 'Sorry. Prayer Pal is unable to process your request at'\
       ' the moment. Please try again later.'
@@ -222,6 +222,9 @@ class IntentHandler(object):
       # filled if we have the user's city, country and/or state
       params = post_params.get('result').get('parameters')
       city = params.get('geo-city')
+
+      if not city:
+        city = params.get('address')
 
       # filled if the user calls for a masjid
       masjid = params.get('MasjidName')
@@ -349,6 +352,8 @@ class IntentHandler(object):
 
   def _RespondToCityRequest(self, params, desired_prayer, date_str, prayer_time_prop):
     city = util.EncodeParameter(params.get('geo-city'), True)
+    if not city:
+        city = util.EncodeParameter(params.get('address'), False)
     country = util.EncodeParameter(params.get('geo-country'), True)
     state = util.EncodeParameter(params.get('geo-state-us'), True)
 

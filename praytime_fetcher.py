@@ -66,8 +66,11 @@ def GetDailyPrayerTimes(lat, lng, date_str):
     location = (lat, lng)
     method = GetCalcMethod(lat, lng)
     (current_user_timestamp, dst_UTC_offset, raw_UTC_offset) = util.GetCurrentUserTime(lat, lng)
-    timezone_offset = raw_UTC_offset/(3600 * 1.0)
-    dst_flag = 1 if dst_UTC_offset > 0 else 0
+    try:
+        timezone_offset = raw_UTC_offset/(3600 * 1.0)
+        dst_flag = 1 if dst_UTC_offset > 0 else 0
+    except BaseException:
+        return (None, None)
 
     timestamp = current_user_timestamp
     day_difference = 0
